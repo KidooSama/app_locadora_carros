@@ -35,7 +35,9 @@ class MarcaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Marca::Create($request->all());
+        @dd($request->all());
+        return 'OLAR (Store)';
     }
 
     /**
