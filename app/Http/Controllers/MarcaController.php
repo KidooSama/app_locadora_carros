@@ -41,13 +41,9 @@ class MarcaController extends Controller
      */
     public function store(Request $request)
     {
-
-        $request->validate([
-            'nome' => 'required',
-            'imagem' => 'required'
-        ]);
-
-       
+        
+        $request->validate($this->marca->rules(),$this->marca->feedback());
+      
         $marca= $this->marca->create($request->all());
         return response()->json(['data'=> $marca,'message' => 'Criado com sucesso'], 201);
     }
@@ -92,6 +88,7 @@ class MarcaController extends Controller
         if ($marca === null) {
             return response()->json(['message'=>'Valor Não Encontrado'], 404);
         }else{
+            $request->validate($this->marca->rules(),$this->marca->feedback());
             $marca->update($request->all());
         }
        return response()->json(['data'=>$marca], 200);
