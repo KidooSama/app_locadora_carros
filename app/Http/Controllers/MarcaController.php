@@ -7,14 +7,20 @@ use Illuminate\Http\Request;
 
 class MarcaController extends Controller
 {
+    protected $marca;
+
+    public function __construct(Marca $marca){
+        $this->marca = $marca;
+    }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        //
+    {   $marca = $this->marca->all();
+
+        return  response()->json(['data'=>$marca], 200);
     }
 
     /**
@@ -35,20 +41,31 @@ class MarcaController extends Controller
      */
     public function store(Request $request)
     {
-        Marca::Create($request->all());
-        @dd($request->all());
-        return 'OLAR (Store)';
+
+        $request->validate([
+            'nome' => 'required',
+            'imagem' => 'required'
+        ]);
+
+       
+        $marca= $this->marca->create($request->all());
+        return response()->json(['data'=> $marca,'message' => 'Criado com sucesso'], 201);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Marca  $marca
+     * @param  Integer   $marca
      * @return \Illuminate\Http\Response
      */
-    public function show(Marca $marca)
+    public function show($id)
     {
-        //
+        $marca = $this->marca->find($id);
+        if ($marca === null) {
+            return response()->json(['message'=>'Valor Não Encontrado'], 404);
+        }else{
+            return response()->json(['data'=>$marca], 200);
+        }
     }
 
     /**
@@ -69,9 +86,15 @@ class MarcaController extends Controller
      * @param  \App\Models\Marca  $marca
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Marca $marca)
+    public function update(Request $request, $id)
     {
-        //
+       $marca = $this->marca->find($id);
+        if ($marca === null) {
+            return response()->json(['message'=>'Valor Não Encontrado'], 404);
+        }else{
+            $marca->update($request->all());
+        }
+       return response()->json(['data'=>$marca], 200);
     }
 
     /**
@@ -80,8 +103,14 @@ class MarcaController extends Controller
      * @param  \App\Models\Marca  $marca
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Marca $marca)
+    public function destroy($id)
     {
-        //
+        $marca = $this->marca->find($id);
+        if ($marca === null) {
+            return response()->json(['message'=>'Valor Não Encontrado'], 404);
+        }else{
+            $marca->delete();
+        }
+        return response()->json(['data'=>$marca], 200);
     }
 }
