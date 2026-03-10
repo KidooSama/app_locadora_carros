@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateModeloRequest;
 use App\Models\Modelo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -20,7 +21,7 @@ class ModeloController extends Controller
      */
     public function index()
     {
-        return  response()->json(['data'=>$this->modelo->all()], 200);
+        return  response()->json(['data'=>$this->modelo->with('marca')->get()], 200);
     }
 
     /**
@@ -88,47 +89,20 @@ class ModeloController extends Controller
      * @param  \App\Models\Modelo  $modelo
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateModeloRequest $request, $id)
     {
         $modelo = $this->modelo->find($id);
         //dd($request->nome);
         if($modelo === null) {
             return response()->json(['erro' => 'Impossível realizar a atualização. O recurso solicitado não existe'], 404);
         }
-
-        if($request->method() === 'PATCH') {
-
-            $regrasDinamicas = [];
-
-            //percorrendo todas as regras definidas no Model
-            foreach($modelo->rules() as $input => $regra) {
-                
-                //coletar apenas as regras aplicáveis aos parâmetros parciais da requisição PATCH
-                if(array_key_exists($input, $request->all())) {
-                    $regrasDinamicas[$input] = $regra;
-                }
-            }
-            
-            $request->validate($regrasDinamicas);
-
-        } else {
-            $request->validate($modelo->rules());
-            
-        }if ($request->file('imagem')) {
+       
+        if ($request->file('imagem')) {
             Storage::disk('public')->delete($modelo->imagem);
-        }
-        
-        $imagem = $request->file('imagem')->store('imagens/modelos','public');
-        
-        $modelo->update([
-            'marca_id'=> $request->marca_id,
-            'nome'=> $request->nome,
-            'imagem'=> $imagem,
-            'numero_portas'=> $request->numero_portas,
-            'lugares'=> $request->lugares,
-            'air_bag'=> $request->air_bag,
-            'abs'=> $request->abs,
-        ]);
+            $modelo->imagem = $request->file('imagem')->store('imagens/modelos','public');
+        }  
+        $modelo->fill($request->except('imagem'));
+        $modelo->save();
         return response()->json($modelo, 200);
     }
 

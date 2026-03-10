@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateMarcaRequest;
 use App\Models\Marca;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -20,7 +21,7 @@ class MarcaController extends Controller
      */
     public function index()
     {  
-         $marca = $this->marca->all();
+         $marca = $this->marca->with('modelos')->get();
 
         return  response()->json(['data'=>$marca], 200);
     }
@@ -89,43 +90,25 @@ class MarcaController extends Controller
      * @param  \App\Models\Marca  $marca
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateMarcaRequest $request, $id)
     {
         $marca = $this->marca->find($id);
-        //dd($request->nome);
-        if($marca === null) {
-            return response()->json(['erro' => 'Impossível realizar a atualização. O recurso solicitado não existe'], 404);
+
+        if ($marca === null) {
+            return response()->json([
+                'erro' => 'Impossível realizar a atualização. O recurso solicitado não existe'
+            ], 404);
         }
 
-        if($request->method() === 'PATCH') {
-
-            $regrasDinamicas = [];
-
-            //percorrendo todas as regras definidas no Model
-            foreach($marca->rules() as $input => $regra) {
-                
-                //coletar apenas as regras aplicáveis aos parâmetros parciais da requisição PATCH
-                if(array_key_exists($input, $request->all())) {
-                    $regrasDinamicas[$input] = $regra;
-                }
-            }
-            
-            $request->validate($regrasDinamicas, $marca->feedback());
-
-        } else {
-            $request->validate($marca->rules(), $marca->feedback());
-            
-        }if ($request->file('imagem')) {
+        if ($request->file('imagem')) {
             Storage::disk('public')->delete($marca->imagem);
+            $marca->imagem = $request->file('imagem')->store('imagens', 'public');
         }
-        
-        $imagem = $request->file('imagem');
-        $imagem_urn = $imagem->store('imagens','public');
-        
-        $marca->update([
-            'nome'=> $request->nome,
-            'imagem'=>$imagem_urn
-        ]);
+
+        $marca->fill($request->except('imagem'));
+
+        $marca->save();
+
         return response()->json($marca, 200);
     }
 
