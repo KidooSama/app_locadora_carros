@@ -6,7 +6,7 @@ use App\Http\Requests\UpdateMarcaRequest;
 use App\Models\Marca;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use App\Models\Modelo;
+use App\repositories\MarcaRepository;
 
 class MarcaController extends Controller
 {
@@ -15,6 +15,7 @@ class MarcaController extends Controller
     public function __construct(Marca $marca){
         $this->marca = $marca;
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -22,37 +23,23 @@ class MarcaController extends Controller
      */
     public function index(Request $request)
     {  
-        $marcas = [];
-        if ($request->has('atributos_modelos')) {
-            $atributos_modelos = $request->atributos_modelos;
-            $marcas = $this->marca->with('modelos:id,'.$atributos_modelos);
-        }else {
-            $marcas= $this->marca->with('modelos');
-        }
 
+        $marcaRepository = new MarcaRepository($this->marca);
+
+        if ($request->has('atributos_modelos')) {
+            $atributos_modelos = 'modelos:id,'.$request->atributos_modelos;
+            $marcaRepository->selectAtributosRegistros($atributos_modelos);
+        }else {
+            $marcaRepository->selectAtributosRegistros('modelos');
+        }
         if ($request->has('filtro')) {
-            $filtro = explode(';',$request->filtro);
-            foreach ($filtro as $condicoes) {
-                
-                $condicoes = explode(':',$condicoes);
-                $marcas = $marcas->where($condicoes[0], $condicoes[1], $condicoes[2]);
-                
-            }
-            
+           $marcaRepository->filtro($request->filtro);            
         }
         if ($request->has('atributos')) {
-            $atributos = $request->atributos;
-            $marcas = $marcas->select(explode(',',$atributos))->get();
-
-
-
-        } else{
-            $marcas = $marcas->get();
+            $marcaRepository->selectAtributos($request->atributos);
         }
-
-        return  response()->json(['data'=>$marcas], 200);
+        return  response()->json(['data'=>$marcaRepository->getResultado()], 200);
     }
-
     /**
      * Show the form for creating a new resource.
      *
