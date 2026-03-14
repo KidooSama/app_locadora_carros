@@ -13,7 +13,7 @@ class UpdateCarroRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,10 @@ class UpdateCarroRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'modelo_id' => 'sometimes|exists:modelos,id',
+            'placa' => 'sometimes|required',
+            'disponivel' => 'sometimes|required',
+            'km' => 'sometimes|required',
         ];
     }
 }
