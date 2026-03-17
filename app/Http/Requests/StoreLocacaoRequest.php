@@ -13,7 +13,7 @@ class StoreLocacaoRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,14 @@ class StoreLocacaoRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'cliente_id' => 'exists:clientes,id',
+            'carro_id' => 'exists:carros,id',
+            'data_inicio_periodo' => 'required',
+            'data_final_previsto_periodo' => 'required',
+            'data_final_realizado_periodo' => 'required',
+            'valor_diaria' => 'required',
+            'km_inicial' => 'required',
+            'km_final' => 'required',
         ];
     }
 }

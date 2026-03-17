@@ -7,6 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Locacao extends Model
 {
+    protected $fillable = 
+        [
+            'cliente_id','carro_id','data_inicio_periodo',
+            'data_final_previsto_periodo','data_final_realizado_periodo',
+            'valor_diaria','km_inicial','km_final'
+        ];
     use HasFactory;
     protected $table = 'locacoes';
 }

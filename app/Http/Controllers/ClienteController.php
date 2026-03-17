@@ -22,8 +22,14 @@ class ClienteController extends Controller
      */
     public function index(Request $request)
     {
-      $clienteRepository = new ClienteRepository($this->cliente);
-      return  response()->json(['data'=>$clienteRepository->getResultado()], 200);
+        $clienteRepository = new ClienteRepository($this->cliente);
+        if ($request->has('filtro')) {
+            $clienteRepository->filtro($request->filtro);            
+        }
+        if ($request->has('atributos')) {
+            $clienteRepository->selectAtributos($request->atributos);
+        }
+        return  response()->json(['data'=>$clienteRepository->getResultado()], 200);
     }
 
 
