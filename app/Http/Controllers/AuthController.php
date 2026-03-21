@@ -28,7 +28,9 @@ class AuthController extends Controller
         $token = $auth->refresh();
         return response()->json(['token'=> $token]);
     }
+
     public function me(){
         return response()->json(['data'=>auth()->user()]);
     }
+    
 }
