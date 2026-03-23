@@ -6,13 +6,14 @@
                     <div class="card-header">Login </div>
 
                     <div class="card-body">
-                        <form method="POST" action="" @submit.prevent="login()">
+  
+                        <form method="POST" action="" @submit.prevent="login($event)">
                             <input type="hidden" name="_token" :value="csrf_token">
                             <div class="form-group row">
                                 <label for="email" class="col-md-4 col-form-label text-md-right">Email</label>
 
                                 <div class="col-md-6">
-                                    <input id="email" type="email" class="form-control " name="email" value="" required autocomplete="email" autofocus>
+                                    <input id="email" v-model="email" type="email" class="form-control " name="email" value="" required autocomplete="email" autofocus>
                                 </div>
                             </div>
 
@@ -20,7 +21,7 @@
                                 <label for="password" class="col-md-4 col-form-label text-md-right">Senha</label>
 
                                 <div class="col-md-6">
-                                    <input id="password" type="password" class="form-control" name="password" required autocomplete="current-password">
+                                    <input id="password" v-model="password" type="password" class="form-control" name="password" required autocomplete="current-password">
 
                                 </div>
                             </div>
@@ -57,19 +58,36 @@
 </template>
 
 <script>
+import { event } from 'jquery';
+
     
         export default{
             props: ['csrf_token'],
+            data(){
+                return{
+                    email: '',
+                    password: ''
+                }
+            },
             methods:{
                 login(e){
-                    let url = 'https://localhost:8000/api/login'
+                    let url = 'http://localhost:8000/api/login'
                     let config = {
                         method: 'post',
-                        body: {'email': '',
-                               'password': ''
-                        },
+                        body: new URLSearchParams({
+                            'email': this.email,
+                            'password': this.password
+                        }),
+
                     }
-                    fetch(URL,config)
+                    fetch(url,config)
+                        .then(response => response.json())
+                        .then(data => {
+                            if(data.token){
+                                document.cookie = 'token='+data.token+';SameSite=Lax'
+                            }
+                        })
+                    e.target.submit()
                 }
             }
         }
