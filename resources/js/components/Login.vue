@@ -57,10 +57,7 @@
     </div>
 </template>
 
-<script>
-import { event } from 'jquery';
-
-    
+<script>    
         export default{
             props: ['csrf_token'],
             data(){
@@ -72,22 +69,23 @@ import { event } from 'jquery';
             methods:{
                 login(e){
                     let url = 'http://localhost:8000/api/login'
-                    let config = {
-                        method: 'post',
-                        body: new URLSearchParams({
-                            'email': this.email,
-                            'password': this.password
-                        }),
 
-                    }
-                    fetch(url,config)
-                        .then(response => response.json())
-                        .then(data => {
-                            if(data.token){
-                                document.cookie = 'token='+data.token+';SameSite=Lax'
-                            }
-                        })
-                    e.target.submit()
+                    axios.post(url, {
+                        email: this.email,
+                        password: this.password
+                    })
+                    .then(response => {
+                        let token = response.data.token
+
+                        if(token){
+                            document.cookie = `token=${token}; SameSite=Lax`
+                        }
+
+                        e.target.submit()
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
                 }
             }
         }

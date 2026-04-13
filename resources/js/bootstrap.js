@@ -23,6 +23,24 @@ window.axios = require('axios');
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
+window.axios.interceptors.request.use(config => {
+
+    // pega todos os cookies
+    let cookies = document.cookie.split(';')
+
+    // procura o token
+    let token = cookies.find(c => c.trim().startsWith('token='))
+
+    if (token) {
+        // pega só o valor
+        token = token.split('=')[1]
+
+        // adiciona no header automaticamente
+        config.headers.Authorization = `Bearer ${token}`
+    }
+
+    return config
+})
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting
