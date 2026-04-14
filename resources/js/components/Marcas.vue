@@ -37,8 +37,15 @@
                         <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#modalMarca">Adicionar</button>
                     </template>
                 </card-component>
-                <!-- fim da Listagem-->
+
+
+                <!-- Modal -->
                 <modal-component id="modalMarca" title="Adicionar Marca">
+
+                    <template v-slot:alertas>
+                        <alert-component tipo="success" :detalhes="transacaoDetalhes" titulo="Marca cadastrada com sucesso!" v-if="transacaoStatus == 'adicionado'" ></alert-component>
+                        <alert-component tipo="danger" :detalhes="transacaoDetalhes" titulo="Erro ao tentar cadastrar a marca." v-if="transacaoStatus == 'erro'" ></alert-component>
+                    </template>
 
                     <template v-slot:conteudo >
                         <div class="form-group">
@@ -55,6 +62,7 @@
                             
                         </div>
                     </template>
+
                     <template v-slot:rodape>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                         <button type="button" class="btn btn-primary" @click="salvar">Salvar</button>
@@ -73,7 +81,9 @@
             return{
                 nomeMarca: '',
                 imgMarca: [],
-                urlBase: 'http://localhost:8000/api/v1/marca'
+                urlBase: 'http://localhost:8000/api/v1/marca',
+                transacaoStatus:'',
+                transacaoDetalhes:[],
             }           
         },
         methods: {
@@ -89,10 +99,16 @@
 
                 axios.post(this.urlBase, formData)
                     .then(response =>{
+                        this.transacaoStatus = 'adicionado'
+                        this.transacaoDetalhes = response
                         console.log(response)
+                        
                     })
                     .catch(errors =>{
-                        console.log(errors)
+                        this.transacaoStatus = 'erro'
+                        this.transacaoDetalhes = errors.response
+                        console.log(errors.response)
+                        //errors.response.data.message
                     })
             }
         }

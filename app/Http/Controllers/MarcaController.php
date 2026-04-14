@@ -66,7 +66,7 @@ class MarcaController extends Controller
             'nome'=> $request->nome,
             'imagem'=>$imagem_urn
         ]);
-        return response()->json(['data'=> $marca,'message' => 'Criado com sucesso'], 201);
+        return response()->json(['data'=> $marca], 201);
     }
 
     /**
