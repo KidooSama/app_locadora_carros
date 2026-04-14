@@ -2,13 +2,12 @@
 
     <div :class="estilo" role="alert">
         {{ titulo }}
-        
-        <span v-if="detalhes.data.message"><hr> {{ detalhes.data.message }}</span>
+       <hr>
         <!-- optional chaining -> detalhes?.data?.data?.id -->
-       
+         <p>{{ detalhes.mensagem }}</p>
         <!-- Caso dê erro -->
-        <ul v-if="detalhes.data.errors">
-            <li v-for="e, key in detalhes.data.errors" :key="key">
+        <ul v-if="detalhes.dados">
+            <li v-for="e, key in detalhes.dados" :key="key">
                 {{ e[0] }}
             </li>
         </ul>

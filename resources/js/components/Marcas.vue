@@ -69,6 +69,9 @@
                     </template>
                     
                 </modal-component>
+                <button type="button" @click="loadList()">
+                        Listar
+                </button>
             </div>
         </div>
     </div>
@@ -83,10 +86,19 @@
                 imgMarca: [],
                 urlBase: 'http://localhost:8000/api/v1/marca',
                 transacaoStatus:'',
-                transacaoDetalhes:[],
+                transacaoDetalhes:{},
             }           
         },
         methods: {
+            loadList(){
+                axios.get(this.urlBase)
+                .then(response =>{
+                    console.log(response)
+                })
+                .catch(errors=>{
+                    console.log(errors)
+                })
+            },
             
             imgLoad(e){
                 this.imgMarca = e.target.files
@@ -100,13 +112,18 @@
                 axios.post(this.urlBase, formData)
                     .then(response =>{
                         this.transacaoStatus = 'adicionado'
-                        this.transacaoDetalhes = response
-                        console.log(response)
+                        this.transacaoDetalhes = {
+                            mensagem: 'ID do registro: '+response.data.id 
+                        }
+                        console.log(response.data)
                         
                     })
                     .catch(errors =>{
                         this.transacaoStatus = 'erro'
-                        this.transacaoDetalhes = errors.response
+                        this.transacaoDetalhes ={
+                            mensagem:errors.response.data.message,
+                            dados: errors.response.data.errors
+                        } 
                         console.log(errors.response)
                         //errors.response.data.message
                     })

@@ -2082,7 +2082,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['tipo', 'detalhes', 'titulo'],
@@ -2406,6 +2405,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -2414,10 +2416,17 @@ __webpack_require__.r(__webpack_exports__);
       imgMarca: [],
       urlBase: 'http://localhost:8000/api/v1/marca',
       transacaoStatus: '',
-      transacaoDetalhes: []
+      transacaoDetalhes: {}
     };
   },
   methods: {
+    loadList: function loadList() {
+      axios.get(this.urlBase).then(function (response) {
+        console.log(response);
+      })["catch"](function (errors) {
+        console.log(errors);
+      });
+    },
     imgLoad: function imgLoad(e) {
       this.imgMarca = e.target.files;
     },
@@ -2429,11 +2438,16 @@ __webpack_require__.r(__webpack_exports__);
       formData.append('imagem', this.imgMarca[0]);
       axios.post(this.urlBase, formData).then(function (response) {
         _this.transacaoStatus = 'adicionado';
-        _this.transacaoDetalhes = response;
-        console.log(response);
+        _this.transacaoDetalhes = {
+          mensagem: 'ID do registro: ' + response.data.id
+        };
+        console.log(response.data);
       })["catch"](function (errors) {
         _this.transacaoStatus = 'erro';
-        _this.transacaoDetalhes = errors.response;
+        _this.transacaoDetalhes = {
+          mensagem: errors.response.data.message,
+          dados: errors.response.data.errors
+        };
         console.log(errors.response);
         //errors.response.data.message
       });
@@ -38512,15 +38526,15 @@ var render = function () {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { class: _vm.estilo, attrs: { role: "alert" } }, [
-    _vm._v("\n    " + _vm._s(_vm.titulo) + "\n    \n    "),
-    _vm.detalhes.data.message
-      ? _c("span", [_c("hr"), _vm._v(" " + _vm._s(_vm.detalhes.data.message))])
-      : _vm._e(),
+    _vm._v("\n    " + _vm._s(_vm.titulo) + "\n   "),
+    _c("hr"),
     _vm._v(" "),
-    _vm.detalhes.data.errors
+    _c("p", [_vm._v(_vm._s(_vm.detalhes.mensagem))]),
+    _vm._v(" "),
+    _vm.detalhes.dados
       ? _c(
           "ul",
-          _vm._l(_vm.detalhes.data.errors, function (e, key) {
+          _vm._l(_vm.detalhes.dados, function (e, key) {
             return _c("li", { key: key }, [
               _vm._v("\n            " + _vm._s(e[0]) + "\n        "),
             ])
@@ -39184,6 +39198,19 @@ var render = function () {
               },
             ]),
           }),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              attrs: { type: "button" },
+              on: {
+                click: function ($event) {
+                  return _vm.loadList()
+                },
+              },
+            },
+            [_vm._v("\n                    Listar\n            ")]
+          ),
         ],
         1
       ),

@@ -37,7 +37,7 @@ class MarcaController extends Controller
         if ($request->has('atributos')) {
             $marcaRepository->selectAtributos($request->atributos);
         }
-        return  response()->json(['data'=>$marcaRepository->getResultado()], 200);
+        return  response()->json($marcaRepository->getResultado(), 200);
     }
     /**
      * Show the form for creating a new resource.
@@ -66,7 +66,7 @@ class MarcaController extends Controller
             'nome'=> $request->nome,
             'imagem'=>$imagem_urn
         ]);
-        return response()->json(['data'=> $marca], 201);
+        return response()->json( $marca, 201);
     }
 
     /**
@@ -81,7 +81,7 @@ class MarcaController extends Controller
         if ($marca === null) {
             return response()->json(['message'=>'Valor Não Encontrado'], 404);
         }else{
-            return response()->json(['data'=>$marca], 200);
+            return response()->json($marca, 200);
         }
     }
 
@@ -141,6 +141,6 @@ class MarcaController extends Controller
         Storage::disk('public')->delete($marca->imagem);     
         $marca->delete();
         
-        return response()->json(['data'=>$marca], 200);
+        return response()->json($marca, 200);
     }
 }
