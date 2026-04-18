@@ -29,11 +29,30 @@
                 <!-- Inicio da Listagem -->
                 <card-component titulo="Listagem de Marcas">       
                     <template v-slot:conteudo>
-                        <div class="form-row">
-                            <table-component></table-component>  
+                        <div class="">
+                            <table-component 
+                                :titulos="
+                                    {
+                                        id: {titulo: 'ID', tipo: 'text'},
+                                        nome: {titulo: 'Nome', tipo: 'text'},
+                                        imagem: {titulo: 'Imagem', tipo: 'img'},
+                                        created_at: {titulo: 'Criação', tipo: 'data'}
+                                    }"
+
+                                :marcas="marcas.data"></table-component>  
                         </div>
                     </template>
                     <template v-slot:rodape>
+                        <paginate-component class="float-left">
+
+                            <li v-for="l,key in marcas.links" :key="key" 
+                                :class="l.active ? 'page-item active' : 'page-item'" 
+                                @click="paginacao(l)"
+                            >
+
+                                <a class="page-link" style="cursor: pointer;" v-html="l.label"></a>
+                            </li>
+                        </paginate-component>
                         <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#modalMarca">Adicionar</button>
                     </template>
                 </card-component>
@@ -51,7 +70,6 @@
                         <div class="form-group">
                             <input-component titulo="Nome da Marca"  id="novoNome" id-help="novoNomeHelp" help-text="Informe o nome da marca.">
                                 <input type="text" v-model="nomeMarca" id="novoNome" class="form-control" placeholder="Ex.Toyota">
-                               
                             </input-component>
                         </div>
                         
@@ -69,9 +87,7 @@
                     </template>
                     
                 </modal-component>
-                <button type="button" @click="loadList()">
-                        Listar
-                </button>
+
             </div>
         </div>
     </div>
@@ -87,12 +103,20 @@
                 urlBase: 'http://localhost:8000/api/v1/marca',
                 transacaoStatus:'',
                 transacaoDetalhes:{},
+                marcas: {data:[]},
             }           
         },
         methods: {
-            loadList(){
+            paginacao(l){
+                if (l.url){
+                this.urlBase = l.url
+                this.loadMarcas()
+            }
+            },
+            loadMarcas(){
                 axios.get(this.urlBase)
                 .then(response =>{
+                    this.marcas = response.data
                     console.log(response)
                 })
                 .catch(errors=>{
@@ -128,6 +152,9 @@
                         //errors.response.data.message
                     })
             }
+        },
+        mounted(){
+            this.loadMarcas()
         }
         
     }
