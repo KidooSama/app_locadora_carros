@@ -9,18 +9,18 @@
                         <div class="form-row">
                             <div class="mb-3 col">
                                 <input-component titulo="ID" id="inputId" id-help="idHelp" help-text="Informe o ID da marca.">
-                                    <input type="number" id="inputId" class="form-control" placeholder="Ex.01">
+                                    <input type="number" id="inputId" class="form-control" placeholder="Ex.01" v-model="busca.id">
                                 </input-component>                            
                             </div>
                             <div class="mb-3 col">
                                 <input-component titulo="Nome da Marca" id="inputNome" id-help="nomeHelp" help-text="Informe o nome da marca.">
-                                    <input type="text" id="inputNome" class="form-control" placeholder="Ex.Toyota">
+                                    <input type="text" id="inputNome" class="form-control" placeholder="Ex.Toyota" v-model="busca.nome">
                                 </input-component>                       
                             </div>
                         </div>
                     </template> 
                     <template v-slot:rodape>
-                         <button type="submit" class="btn btn-primary float-right">Pesquisar</button>
+                         <button @click="search" type="submit" class="btn btn-primary float-right">Pesquisar</button>
                     </template> 
                 </card-component>
                 <!-- fim da Pesquisa-->
@@ -31,6 +31,9 @@
                     <template v-slot:conteudo>
                         <div class="">
                             <table-component 
+                                :visualizar="{visivel:true, dataToggle:'modal',dataTarget:'#modalMarcaVisualizar'}"
+                                :remover="true"
+                                :atualizar="true"
                                 :titulos="
                                     {
                                         id: {titulo: 'ID', tipo: 'text'},
@@ -87,6 +90,19 @@
                     </template>
                     
                 </modal-component>
+                <!-- Modal -->
+                 <modal-component id="modalMarcaVisualizar" title="Visualizar Marca">
+                    <template v-slot:alertas>
+
+                    </template>
+                    <template v-slot:conteudo>
+
+                    </template>
+                    <template v-slot:rodape>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    </template>
+
+                 </modal-component>
 
             </div>
         </div>
@@ -101,20 +117,47 @@
                 nomeMarca: '',
                 imgMarca: [],
                 urlBase: 'http://localhost:8000/api/v1/marca',
+                urlPaginate: '',
+                urlFiltro: '',
                 transacaoStatus:'',
                 transacaoDetalhes:{},
                 marcas: {data:[]},
+                busca: {id: '', nome: ''}
             }           
         },
         methods: {
+            search(){
+                let filtro = ''
+                for (let chave in this.busca){
+
+                    if(this.busca[chave]){
+                        if (filtro != ''){
+                            filtro += ";"
+                        }
+                        filtro += chave + ':like:' + '%' +this.busca[chave]+'%'  
+                    }                    
+                }
+                if (filtro != '') {
+                    this.urlPaginate = 'page=1'
+                    this.urlFiltro = '&filtro='+filtro
+                    
+                }else{
+                    this.urlFiltro = ''
+                    
+                }
+                this.loadMarcas()
+                
+                
+            },
             paginacao(l){
                 if (l.url){
-                this.urlBase = l.url
+                this.urlPaginate = l.url.split('?')[1]
                 this.loadMarcas()
             }
             },
             loadMarcas(){
-                axios.get(this.urlBase)
+                let url = this.urlBase + '?' + this.urlPaginate + this.urlFiltro
+                axios.get(url)
                 .then(response =>{
                     this.marcas = response.data
                     console.log(response)
