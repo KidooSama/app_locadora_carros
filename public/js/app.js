@@ -3706,6 +3706,35 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -3934,6 +3963,11 @@ __webpack_require__.r(__webpack_exports__);
       return dadosFiltrados;
     }
   },
+  methods: {
+    setStore: function setStore(obj) {
+      this.$store.state.item = obj;
+    }
+  },
   mounted: function mounted() {
     console.log('Component mounted.');
   }
@@ -3964,7 +3998,7 @@ window.Vue = (__webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js
 Vue.use(Vuex__WEBPACK_IMPORTED_MODULE_0__["default"]);
 var store = new Vuex__WEBPACK_IMPORTED_MODULE_0__["default"].Store({
   state: {
-    teste: 'teste de recupereçao vuex'
+    item: {}
   }
 });
 
@@ -40559,7 +40593,11 @@ var render = function () {
                               dataToggle: "modal",
                               dataTarget: "#modalMarcaVisualizar",
                             },
-                            remover: true,
+                            remover: {
+                              visivel: true,
+                              dataToggle: "modal",
+                              dataTarget: "#modalMarcaRemover",
+                            },
                             atualizar: true,
                             titulos: {
                               id: { titulo: "ID", tipo: "text" },
@@ -40778,7 +40816,121 @@ var render = function () {
               {
                 key: "conteudo",
                 fn: function () {
+                  return [
+                    _c("input-component", { attrs: { titulo: "ID" } }, [
+                      _c("input", {
+                        staticClass: "form-control",
+                        attrs: { type: "text", disabled: "" },
+                        domProps: { value: _vm.$store.state.item.id },
+                      }),
+                    ]),
+                    _vm._v(" "),
+                    _c("input-component", { attrs: { titulo: "Marca" } }, [
+                      _c("input", {
+                        staticClass: "form-control",
+                        attrs: { type: "text", disabled: "" },
+                        domProps: { value: _vm.$store.state.item.nome },
+                      }),
+                    ]),
+                    _vm._v(" "),
+                    _c("input-component", { attrs: { titulo: "Logo: " } }, [
+                      _vm.$store.state.item.imagem
+                        ? _c("img", {
+                            attrs: {
+                              src: "storage/" + _vm.$store.state.item.imagem,
+                              alt: "",
+                            },
+                          })
+                        : _vm._e(),
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "input-component",
+                      { attrs: { titulo: "Data de criação" } },
+                      [
+                        _c("input", {
+                          staticClass: "form-control",
+                          attrs: { type: "text", disabled: "" },
+                          domProps: { value: _vm.$store.state.item.created_at },
+                        }),
+                      ]
+                    ),
+                  ]
+                },
+                proxy: true,
+              },
+              {
+                key: "rodape",
+                fn: function () {
+                  return [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-secondary",
+                        attrs: { type: "button", "data-dismiss": "modal" },
+                      },
+                      [_vm._v("Cancelar")]
+                    ),
+                  ]
+                },
+                proxy: true,
+              },
+            ]),
+          }),
+          _vm._v(" "),
+          _c("modal-component", {
+            attrs: { id: "modalMarcaRemover", title: "Remover Marca" },
+            scopedSlots: _vm._u([
+              {
+                key: "alertas",
+                fn: function () {
                   return undefined
+                },
+                proxy: true,
+              },
+              {
+                key: "conteudo",
+                fn: function () {
+                  return [
+                    _c("input-component", { attrs: { titulo: "ID" } }, [
+                      _c("input", {
+                        staticClass: "form-control",
+                        attrs: { type: "text", disabled: "" },
+                        domProps: { value: _vm.$store.state.item.id },
+                      }),
+                    ]),
+                    _vm._v(" "),
+                    _c("input-component", { attrs: { titulo: "Marca" } }, [
+                      _c("input", {
+                        staticClass: "form-control",
+                        attrs: { type: "text", disabled: "" },
+                        domProps: { value: _vm.$store.state.item.nome },
+                      }),
+                    ]),
+                    _vm._v(" "),
+                    _c("input-component", { attrs: { titulo: "Logo: " } }, [
+                      _vm.$store.state.item.imagem
+                        ? _c("img", {
+                            attrs: {
+                              src: "storage/" + _vm.$store.state.item.imagem,
+                              alt: "",
+                            },
+                          })
+                        : _vm._e(),
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "input-component",
+                      { attrs: { titulo: "Data de criação" } },
+                      [
+                        _c("input", {
+                          staticClass: "form-control",
+                          attrs: { type: "text", disabled: "" },
+                          domProps: { value: _vm.$store.state.item.created_at },
+                        }),
+                      ]
+                    ),
+                  ]
                 },
                 proxy: true,
               },
@@ -40984,9 +41136,9 @@ var render = function () {
                 ])
               }),
               _vm._v(" "),
-              _vm.visualizar.visivel || _vm.atualizar || _vm.remover
+              _vm.visualizar.visivel || _vm.atualizar || _vm.remover.visivel
                 ? _c("td", [
-                    _vm.visualizar
+                    _vm.visualizar.visivel
                       ? _c(
                           "button",
                           {
@@ -40994,6 +41146,11 @@ var render = function () {
                             attrs: {
                               "data-toggle": _vm.visualizar.dataToggle,
                               "data-target": _vm.visualizar.dataTarget,
+                            },
+                            on: {
+                              click: function ($event) {
+                                return _vm.setStore(obj)
+                              },
                             },
                           },
                           [_vm._v("Visualizar")]
@@ -41008,10 +41165,21 @@ var render = function () {
                         )
                       : _vm._e(),
                     _vm._v(" "),
-                    _vm.remover
+                    _vm.remover.visivel
                       ? _c(
                           "button",
-                          { staticClass: "btn btn-outline-danger btn-sm" },
+                          {
+                            staticClass: "btn btn-outline-danger btn-sm",
+                            attrs: {
+                              "data-toggle": _vm.remover.dataToggle,
+                              "data-target": _vm.remover.dataTarget,
+                            },
+                            on: {
+                              click: function ($event) {
+                                return _vm.setStore(obj)
+                              },
+                            },
+                          },
                           [_vm._v("Remover")]
                         )
                       : _vm._e(),

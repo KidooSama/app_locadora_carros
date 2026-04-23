@@ -32,7 +32,7 @@
                         <div class="">
                             <table-component 
                                 :visualizar="{visivel:true, dataToggle:'modal',dataTarget:'#modalMarcaVisualizar'}"
-                                :remover="true"
+                                :remover="{visivel:true, dataToggle:'modal',dataTarget:'#modalMarcaRemover'}"
                                 :atualizar="true"
                                 :titulos="
                                     {
@@ -47,12 +47,10 @@
                     </template>
                     <template v-slot:rodape>
                         <paginate-component class="float-left">
-
                             <li v-for="l,key in marcas.links" :key="key" 
                                 :class="l.active ? 'page-item active' : 'page-item'" 
                                 @click="paginacao(l)"
                             >
-
                                 <a class="page-link" style="cursor: pointer;" v-html="l.label"></a>
                             </li>
                         </paginate-component>
@@ -61,14 +59,13 @@
                 </card-component>
 
 
-                <!-- Modal -->
+                <!-- Modal Adicionar -->
                 <modal-component id="modalMarca" title="Adicionar Marca">
 
                     <template v-slot:alertas>
                         <alert-component tipo="success" :detalhes="transacaoDetalhes" titulo="Marca cadastrada com sucesso!" v-if="transacaoStatus == 'adicionado'" ></alert-component>
                         <alert-component tipo="danger" :detalhes="transacaoDetalhes" titulo="Erro ao tentar cadastrar a marca." v-if="transacaoStatus == 'erro'" ></alert-component>
                     </template>
-
                     <template v-slot:conteudo >
                         <div class="form-group">
                             <input-component titulo="Nome da Marca"  id="novoNome" id-help="novoNomeHelp" help-text="Informe o nome da marca.">
@@ -80,23 +77,55 @@
                             <input-component titulo="Imagem da Marca" id="novoImg" id-help="imgHelp" help-text="Selecione a imagem da marca.">
                                 <input type="file" id="novoImg" class="form-control-file" @change="imgLoad">
                             </input-component> 
-                            
                         </div>
                     </template>
-
                     <template v-slot:rodape>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                         <button type="button" class="btn btn-primary" @click="salvar">Salvar</button>
                     </template>
-                    
                 </modal-component>
-                <!-- Modal -->
+
+                <!-- Modal Visualizar -->
                  <modal-component id="modalMarcaVisualizar" title="Visualizar Marca">
                     <template v-slot:alertas>
 
                     </template>
                     <template v-slot:conteudo>
+                        <input-component titulo="ID">
+                            <input type="text" class="form-control" :value="$store.state.item.id" disabled> 
+                        </input-component>
+                        <input-component titulo="Marca">
+                            <input type="text" class="form-control" :value="$store.state.item.nome" disabled> 
+                        </input-component>
+                        <input-component titulo="Logo: ">
+                            <img :src="'storage/'+$store.state.item.imagem" alt="" v-if="$store.state.item.imagem">
+                        </input-component>
+                        <input-component titulo="Data de criação">
+                            <input type="text" class="form-control" :value="$store.state.item.created_at" disabled> 
+                        </input-component>
+                    </template>
+                    <template v-slot:rodape>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    </template>
+                 </modal-component>
 
+                 <!-- Mdodal Remover -->
+                 <modal-component id="modalMarcaRemover" title="Remover Marca">
+                    <template v-slot:alertas>
+                    </template>
+                    <template v-slot:conteudo>
+                        <input-component titulo="ID">
+                            <input type="text" class="form-control" :value="$store.state.item.id" disabled> 
+                        </input-component>
+                        <input-component titulo="Marca">
+                            <input type="text" class="form-control" :value="$store.state.item.nome" disabled> 
+                        </input-component>
+                        <input-component titulo="Logo: ">
+                            <img :src="'storage/'+$store.state.item.imagem" alt="" v-if="$store.state.item.imagem">
+                        </input-component>
+                        <input-component titulo="Data de criação">
+                            <input type="text" class="form-control" :value="$store.state.item.created_at" disabled> 
+                        </input-component>
                     </template>
                     <template v-slot:rodape>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
