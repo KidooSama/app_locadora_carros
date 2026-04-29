@@ -1,3 +1,5 @@
+const { error } = require('jquery');
+
 window._ = require('lodash');
 
 /**
@@ -23,24 +25,55 @@ window.axios = require('axios');
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
-window.axios.interceptors.request.use(config => {
+// Interceptar os requests da aplicação 
+window.axios.interceptors.request.use(
+    config => {
 
-    // pega todos os cookies
-    let cookies = document.cookie.split(';')
+        config.headers['Accept'] = 'application/json'
+        // pega todos os cookies
+        let cookies = document.cookie.split(';')
 
-    // procura o token
-    let token = cookies.find(c => c.trim().startsWith('token='))
+        // procura o token
+        let token = cookies.find(c => c.trim().startsWith('token='))
 
-    if (token) {
-        // pega só o valor
-        token = token.split('=')[1]
+        if (token) {
+            // pega só o valor
+            token = token.split('=')[1]
 
-        // adiciona no header automaticamente
-        config.headers.Authorization = `Bearer ${token}`
+            // adiciona no header automaticamente
+            config.headers.Authorization = `Bearer ${token}`
+        }
+    
+        return config
+    }),
+    error => {
+        console.log('Erro na requisição', error)
+        return Promise.reject(error)
     }
 
-    return config
-})
+//Interceptar os response da aplicaçao
+
+axios.interceptors.response.use(
+    response =>{
+        //console.log('interceptando a resposta antes de todes')
+        return response
+    },
+    error =>{
+        console.log('Erro na resposta: ', error.response)
+        if(error.response.status == 401 && error.response.data.message == 'Token has expired'){
+            
+            axios.post('http://localhost:8000/api/refresh')
+            .then(response =>{
+                console.log('refresh bem sucedido',response)
+                document.cookie = `token=${response.data.token}; SameSite=Lax`
+                console.log('Token Novo: ',response.data.token)
+                window.location.reload()
+            })
+        }
+        return Promise.reject(error)
+    }
+)
+
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting

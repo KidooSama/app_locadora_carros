@@ -2,7 +2,7 @@
 
     <div class="form-group">
         <div class="mb-3 ">
-            <label :for="id" class="form-label">{{titulo}}</label>
+            <label :for="id" class="form-label">{{titulo}}</label><br>
             <slot></slot>
             <div :id="idHelp" class="form-text text-muted">{{ helpText }}</div>                            
         </div>
