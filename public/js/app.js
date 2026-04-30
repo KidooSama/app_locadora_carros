@@ -3764,8 +3764,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -40276,7 +40274,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "container" }, [
       _c("div", { staticClass: "row justify-content-center" }, [
-        _c("div", { staticClass: "col-md-8" }, [
+        _c("div", { staticClass: "col-md" }, [
           _c("div", { staticClass: "card" }, [
             _c("div", { staticClass: "card-header" }, [_vm._v("Bem Vindo")]),
             _vm._v(" "),
@@ -40552,7 +40550,7 @@ var render = function () {
     _c("div", { staticClass: "row justify-content-center" }, [
       _c(
         "div",
-        { staticClass: "col-md-8" },
+        { staticClass: "col-lg" },
         [
           _c("card-component", {
             attrs: { titulo: "Busca de Marcas" },
@@ -40661,24 +40659,17 @@ var render = function () {
                         ],
                         1
                       ),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary float-right",
+                          attrs: { type: "submit" },
+                          on: { click: _vm.search },
+                        },
+                        [_vm._v("Pesquisar")]
+                      ),
                     ]),
-                  ]
-                },
-                proxy: true,
-              },
-              {
-                key: "rodape",
-                fn: function () {
-                  return [
-                    _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-primary float-right",
-                        attrs: { type: "submit" },
-                        on: { click: _vm.search },
-                      },
-                      [_vm._v("Pesquisar")]
-                    ),
                   ]
                 },
                 proxy: true,
@@ -40967,7 +40958,11 @@ var render = function () {
                         _c("input", {
                           staticClass: "form-control",
                           attrs: { type: "text", disabled: "" },
-                          domProps: { value: _vm.$store.state.item.created_at },
+                          domProps: {
+                            value: _vm._f("formataDataTempoGlobal")(
+                              _vm.$store.state.item.created_at
+                            ),
+                          },
                         }),
                       ]
                     ),
@@ -41440,7 +41435,7 @@ var render = function () {
                 _vm.titulos[chaveValor].tipo == "img"
                   ? _c("span", [
                       _c("img", {
-                        attrs: { src: "/storage/" + d, width: "40" },
+                        attrs: { src: "/storage/" + d, width: "60" },
                       }),
                     ])
                   : _vm._e(),

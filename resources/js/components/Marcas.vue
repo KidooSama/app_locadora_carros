@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div class="col-lg">
                 
                 <!-------- Inicio da Pesquisa --------->
                 <card-component titulo="Busca de Marcas">
@@ -17,10 +17,8 @@
                                     <input type="text" id="inputNome" class="form-control" placeholder="Ex.Toyota" v-model="busca.nome">
                                 </input-component>                       
                             </div>
+                            <button @click="search" type="submit" class="btn btn-primary float-right">Pesquisar</button>
                         </div>
-                    </template> 
-                    <template v-slot:rodape>
-                         <button @click="search" type="submit" class="btn btn-primary float-right">Pesquisar</button>
                     </template> 
                 </card-component>
                 <!-------- Inicio da Pesquisa --------->
@@ -98,7 +96,7 @@
                             <img :src="'storage/'+$store.state.item.imagem" alt="" v-if="$store.state.item.imagem">
                         </input-component>
                         <input-component titulo="Data de criação">
-                            <input type="text" class="form-control" :value="$store.state.item.created_at" disabled> 
+                            <input type="text" class="form-control" :value="$store.state.item.created_at | formataDataTempoGlobal" disabled> 
                         </input-component>
                     </template>
                     <template v-slot:rodape>
