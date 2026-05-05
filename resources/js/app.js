@@ -35,6 +35,7 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 Vue.component('login-component', require('./components/Login.vue').default);
 Vue.component('home-component', require('./components/Home.vue').default);
 Vue.component('marcas-component', require('./components/Marcas.vue').default);
+Vue.component('modelos-component', require('./components/Modelos.vue').default);
 Vue.component('input-component', require('./components/InputContainer.vue').default);
 Vue.component('table-component', require('./components/Table.vue').default);
 Vue.component('card-component', require('./components/Card.vue').default);

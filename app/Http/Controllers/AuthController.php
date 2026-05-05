@@ -23,7 +23,7 @@ class AuthController extends Controller
     }
     
     public function refresh(){
-    /** @var \Tymon\JWTAuth\JWTGuard  */
+    /** @var \PHPOpenSourceSaver\JWTAuth\JWTGuard  */
         $auth = auth('api');
         $token = $auth->refresh();
         return response()->json(['token'=> $token]);
