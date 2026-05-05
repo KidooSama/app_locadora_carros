@@ -4121,6 +4121,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -4329,20 +4341,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ['dados', 'titulos', 'visualizar', 'atualizar', 'remover'],
+  data: function data() {
+    return {};
+  },
+  props: ['dados', 'titulos', 'visualizar', 'atualizar', 'remover', 'url'],
   computed: {
     dadosFiltrados: function dadosFiltrados() {
       var campos = Object.keys(this.titulos);
@@ -4359,11 +4363,17 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
-    setStore: function setStore(obj) {
+    setStore: function setStore(id) {
+      var _this = this;
       this.$store.state.transacao.mensagem = '';
       this.$store.state.transacao.status = '';
       this.$store.state.transacao.dados = '';
-      this.$store.state.item = obj;
+      axios.get("".concat(this.url, "/").concat(id)).then(function (response) {
+        _this.$store.state.item = response.data;
+        console.log(_this.$store.state.item);
+      })["catch"](function (errors) {
+        console.log(errors);
+      });
     }
   }
 });
@@ -41351,7 +41361,7 @@ var render = function () {
                       _vm.$store.state.item.imagem
                         ? _c("img", {
                             attrs: {
-                              src: "storage/" + _vm.$store.state.item.imagem,
+                              src: "/storage/" + _vm.$store.state.item.imagem,
                               alt: "",
                             },
                           })
@@ -41947,11 +41957,12 @@ var render = function () {
                               dataToggle: "modal",
                               dataTarget: "#modalModeloAtualizar",
                             },
+                            url: _vm.urlBase,
                             titulos: {
                               id: { titulo: "ID", tipo: "text" },
                               nome: { titulo: "Nome", tipo: "text" },
+                              marca: { titulo: "Marca", tipo: "fk" },
                               imagem: { titulo: "Imagem", tipo: "img" },
-                              created_at: { titulo: "Criação", tipo: "data" },
                             },
                             dados: _vm.modelos.data,
                           },
@@ -42182,32 +42193,58 @@ var render = function () {
                       }),
                     ]),
                     _vm._v(" "),
-                    _c("input-component", { attrs: { titulo: "Modelo: " } }, [
-                      _vm.$store.state.item.imagem
-                        ? _c("img", {
-                            attrs: {
-                              src: "/storage/" + _vm.$store.state.item.imagem,
-                              alt: "",
-                            },
-                          })
-                        : _vm._e(),
-                    ]),
+                    _c(
+                      "input-component",
+                      { attrs: { titulo: "Foto do Modelo:" } },
+                      [
+                        _vm.$store.state.item.imagem
+                          ? _c("img", {
+                              attrs: {
+                                src: "/storage/" + _vm.$store.state.item.imagem,
+                                alt: "",
+                              },
+                            })
+                          : _vm._e(),
+                      ]
+                    ),
                     _vm._v(" "),
                     _c(
                       "input-component",
-                      { attrs: { titulo: "Data de criação" } },
+                      { attrs: { titulo: "Numero de Portas:" } },
                       [
                         _c("input", {
                           staticClass: "form-control",
                           attrs: { type: "text", disabled: "" },
                           domProps: {
-                            value: _vm._f("formataDataTempoGlobal")(
-                              _vm.$store.state.item.created_at
-                            ),
+                            value: _vm.$store.state.item.numero_portas,
                           },
                         }),
                       ]
                     ),
+                    _vm._v(" "),
+                    _c("input-component", { attrs: { titulo: "Lugares:" } }, [
+                      _c("input", {
+                        staticClass: "form-control",
+                        attrs: { type: "text", disabled: "" },
+                        domProps: { value: _vm.$store.state.item.lugares },
+                      }),
+                    ]),
+                    _vm._v(" "),
+                    _c("input-component", { attrs: { titulo: "Air Bag:" } }, [
+                      _c("input", {
+                        staticClass: "form-control",
+                        attrs: { type: "text", disabled: "" },
+                        domProps: { value: _vm.$store.state.item.air_bag },
+                      }),
+                    ]),
+                    _vm._v(" "),
+                    _c("input-component", { attrs: { titulo: "Abs:" } }, [
+                      _c("input", {
+                        staticClass: "form-control",
+                        attrs: { type: "text", disabled: "" },
+                        domProps: { value: _vm.$store.state.item.abs },
+                      }),
+                    ]),
                   ]
                 },
                 proxy: true,
@@ -42295,7 +42332,7 @@ var render = function () {
                                 ? _c("img", {
                                     attrs: {
                                       src:
-                                        "storage/" +
+                                        "/storage/" +
                                         _vm.$store.state.item.imagem,
                                       alt: "",
                                     },
@@ -42312,7 +42349,9 @@ var render = function () {
                                 staticClass: "form-control",
                                 attrs: { type: "text", disabled: "" },
                                 domProps: {
-                                  value: _vm.$store.state.item.created_at,
+                                  value: _vm._f("formataDataTempoGlobal")(
+                                    _vm.$store.state.item.created_at
+                                  ),
                                 },
                               }),
                             ]
@@ -42593,6 +42632,14 @@ var render = function () {
                   ? _c("span", [_vm._v(_vm._s(d))])
                   : _vm._e(),
                 _vm._v(" "),
+                _vm.titulos[chaveValor].tipo == "fk"
+                  ? _c("span", [_vm._v(_vm._s(d.nome))])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.titulos[chaveValor].tipo == "bool"
+                  ? _c("span", [_vm._v(_vm._s(d ? "Sim" : "Não"))])
+                  : _vm._e(),
+                _vm._v(" "),
                 _vm.titulos[chaveValor].tipo == "img"
                   ? _c("span", [
                       _c("img", {
@@ -42648,7 +42695,7 @@ var render = function () {
                               },
                               on: {
                                 click: function ($event) {
-                                  return _vm.setStore(obj)
+                                  return _vm.setStore(obj.id)
                                 },
                               },
                             },
@@ -42668,7 +42715,7 @@ var render = function () {
                               },
                               on: {
                                 click: function ($event) {
-                                  return _vm.setStore(obj)
+                                  return _vm.setStore(obj.id)
                                 },
                               },
                             },
@@ -42688,7 +42735,7 @@ var render = function () {
                               },
                               on: {
                                 click: function ($event) {
-                                  return _vm.setStore(obj)
+                                  return _vm.setStore(obj.id)
                                 },
                               },
                             },

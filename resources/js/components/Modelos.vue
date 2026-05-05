@@ -34,12 +34,14 @@
                                 :visualizar="{visivel:true, dataToggle:'modal',dataTarget:'#modalModeloVisualizar'}"
                                 :remover="{visivel:true, dataToggle:'modal',dataTarget:'#modalModeloRemover'}"
                                 :atualizar="{visivel:true, dataToggle:'modal',dataTarget:'#modalModeloAtualizar'}"
+                                :url="urlBase"
                                 :titulos="
                                     {
                                         id: {titulo: 'ID', tipo: 'text'},
                                         nome: {titulo: 'Nome', tipo: 'text'},
+                                        marca: {titulo: 'Marca', tipo: 'fk'},
                                         imagem: {titulo: 'Imagem', tipo: 'img'},
-                                        created_at: {titulo: 'Criação', tipo: 'data'}
+                                        
                                     }"
 
                                 :dados="modelos.data"></table-component>  
@@ -95,11 +97,21 @@
                         <input-component titulo="Modelo">
                             <input type="text" class="form-control" :value="$store.state.item.nome" disabled> 
                         </input-component>
-                        <input-component titulo="Modelo: ">
+                        <input-component titulo="Foto do Modelo:">
                             <img :src="'/storage/'+$store.state.item.imagem" alt="" v-if="$store.state.item.imagem">
                         </input-component>
-                        <input-component titulo="Data de criação">
-                            <input type="text" class="form-control" :value="$store.state.item.created_at | formataDataTempoGlobal" disabled> 
+                        <input-component titulo="Numero de Portas:">
+                            <input type="text" class="form-control" :value="$store.state.item.numero_portas" disabled> 
+                        </input-component>
+                        <input-component titulo="Lugares:">
+                            <input type="text" class="form-control" :value="$store.state.item.lugares" disabled> 
+                        </input-component>
+                        <input-component titulo="Air Bag:">
+                     
+                            <input type="text" class="form-control" :value="$store.state.item.air_bag" disabled> 
+                        </input-component>
+                        <input-component titulo="Abs:">
+                            <input type="text" class="form-control" :value="$store.state.item.abs" disabled> 
                         </input-component>
                     </template>
                     <template v-slot:rodape>
@@ -122,10 +134,10 @@
                             <input type="text" class="form-control" :value="$store.state.item.nome" disabled> 
                         </input-component>
                         <input-component titulo="Logo: ">
-                            <img :src="'storage/'+$store.state.item.imagem" alt="" v-if="$store.state.item.imagem">
+                            <img :src="'/storage/'+$store.state.item.imagem" alt="" v-if="$store.state.item.imagem">
                         </input-component>
                         <input-component titulo="Data de criação">
-                            <input type="text" class="form-control" :value="$store.state.item.created_at" disabled> 
+                            <input type="text" class="form-control" :value="$store.state.item.created_at | formataDataTempoGlobal" disabled> 
                         </input-component>
                     </template>
                     <template v-slot:rodape>
@@ -256,18 +268,17 @@
                     
                 }else{
                     this.urlFiltro = ''
-                    
                 }
-                this.loadModelos()
-                
-                
+                this.loadModelos() 
             },
+
             paginacao(l){
                 if (l.url){
-                this.urlPaginate = l.url.split('?')[1]
-                this.loadModelos()
-            }
+                    this.urlPaginate = l.url.split('?')[1]
+                    this.loadModelos()
+                }
             },
+            
             loadModelos(){
                 let url = this.urlBase + '?' + this.urlPaginate + this.urlFiltro
                 axios.get(url)
@@ -278,6 +289,7 @@
                 .catch(errors=>{
                     console.log(errors)
                 })
+                
             },
             
             imgLoad(e){

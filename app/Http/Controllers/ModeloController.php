@@ -81,11 +81,11 @@ class ModeloController extends Controller
      */
     public function show($id)
     {
-        $modelo = $this->modelo->with('marca')->find($id);
+        $modelo = $this->modelo->with('marca', 'carros')->find($id);
         if ($modelo === null) {
            return response()->json(['message'=>'Valor não encntrado'], 404);
         }
-        return response()->json(['data'=>$modelo], 200);
+        return response()->json($modelo, 200);
     }
 
     /**
@@ -127,7 +127,7 @@ class ModeloController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Modelo  $modelo
+     * @param  Integer $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -137,6 +137,11 @@ class ModeloController extends Controller
         if ($modelo === null) {
             return response()->json(['message'=>'Valor Não Encontrado'], 404);
         }
+        if ($modelo->carros()->exists()) {
+            return response()->json([
+                'message' => 'Não é possível excluir este modelo pois existem carros vinculados'
+            ], 400);
+        }
 
         Storage::disk('public')->delete($modelo->imagem);     
         $modelo->delete();
@@ -144,4 +149,5 @@ class ModeloController extends Controller
         return response()->json(['data'=>$modelo], 200);
    
     }
+    
 }

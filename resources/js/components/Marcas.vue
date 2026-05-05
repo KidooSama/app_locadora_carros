@@ -96,7 +96,7 @@
                             <input type="text" class="form-control" :value="$store.state.item.nome" disabled> 
                         </input-component>
                         <input-component titulo="Logo: ">
-                            <img :src="'storage/'+$store.state.item.imagem" alt="" v-if="$store.state.item.imagem">
+                            <img :src="'/storage/'+$store.state.item.imagem" alt="" v-if="$store.state.item.imagem">
                         </input-component>
                         <input-component titulo="Data de criação">
                             <input type="text" class="form-control" :value="$store.state.item.created_at | formataDataTempoGlobal" disabled> 
