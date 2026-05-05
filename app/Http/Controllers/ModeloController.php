@@ -69,6 +69,7 @@ class ModeloController extends Controller
             'air_bag'=> $request->air_bag,
             'abs'=> $request->abs,
         ]);
+        dd($imagem);
         return response()->json(['data'=> $modelo, 'message' => 'Criado com sucesso'], 201);
     }
 
