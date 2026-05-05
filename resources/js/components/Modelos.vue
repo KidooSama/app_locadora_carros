@@ -3,37 +3,37 @@
         <div class="row justify-content-center">
             <div class="col-lg">
                 
-<card-component titulo="Busca de Marcas">
-    <template v-slot:conteudo>
-        <div class="row">
-            <div class="mb-3 col-md-6">
-                <input-component titulo="ID" id="inputId" id-help="idHelp" help-text="Informe o ID da marca.">
-                    <input type="number" id="inputId" class="form-control" placeholder="Ex.01" v-model="busca.id">
-                </input-component>                            
-            </div>
-            <div class="mb-3 col">
-                <input-component titulo="Nome da Marca" id="inputNome" id-help="nomeHelp" help-text="Informe o nome da marca.">
-                    <input type="text" id="inputNome" class="form-control" placeholder="Ex.Toyota" v-model="busca.nome">
-                </input-component>                       
-            </div>
-        </div>
+                <card-component titulo="Busca de Modelos">
+                    <template v-slot:conteudo>
+                        <div class="row">
+                            <div class="mb-3 col-md-6">
+                                <input-component titulo="ID" id="inputId" id-help="idHelp" help-text="Informe o ID do Modelo.">
+                                    <input type="number" id="inputId" class="form-control" placeholder="Ex.01" v-model="busca.id">
+                                </input-component>                            
+                            </div>
+                            <div class="mb-3 col">
+                                <input-component titulo="Nome do Modelo" id="inputNome" id-help="nomeHelp" help-text="Informe o nome do modelo.">
+                                    <input type="text" id="inputNome" class="form-control" placeholder="Ex. Corolla" v-model="busca.nome">
+                                </input-component>                       
+                            </div>
+                        </div>
 
-        <div class="row">
-            <div class="col d-flex justify-content-end">
-                <button @click="search" type="submit" class="btn btn-primary">Pesquisar</button>
-            </div>
-        </div>
-    </template> 
-</card-component>
+                        <div class="row">
+                            <div class="col d-flex justify-content-end">
+                                <button @click="search" type="submit" class="btn btn-primary">Pesquisar</button>
+                            </div>
+                        </div>
+                    </template> 
+                </card-component>
 
                 <!----------- Listagem ---------->
-                <card-component titulo="Listagem de Marcas">       
+                <card-component titulo="Listagem de Modelos">       
                     <template v-slot:conteudo>
                         <div class="">
                             <table-component 
-                                :visualizar="{visivel:true, dataToggle:'modal',dataTarget:'#modalMarcaVisualizar'}"
-                                :remover="{visivel:true, dataToggle:'modal',dataTarget:'#modalMarcaRemover'}"
-                                :atualizar="{visivel:true, dataToggle:'modal',dataTarget:'#modalMarcaAtualizar'}"
+                                :visualizar="{visivel:true, dataToggle:'modal',dataTarget:'#modalModeloVisualizar'}"
+                                :remover="{visivel:true, dataToggle:'modal',dataTarget:'#modalModeloRemover'}"
+                                :atualizar="{visivel:true, dataToggle:'modal',dataTarget:'#modalModeloAtualizar'}"
                                 :titulos="
                                     {
                                         id: {titulo: 'ID', tipo: 'text'},
@@ -42,38 +42,38 @@
                                         created_at: {titulo: 'Criação', tipo: 'data'}
                                     }"
 
-                                :dados="marcas.data"></table-component>  
+                                :dados="modelos.data"></table-component>  
                         </div>
                     </template>
                     <template v-slot:rodape>
                         <paginate-component class="float-left">
-                            <li v-for="l,key in marcas.links" :key="key" 
+                            <li v-for="l,key in modelos.links" :key="key" 
                                 :class="l.active ? 'page-item active' : 'page-item'" 
                                 @click="paginacao(l)"
                             >
                                 <a class="page-link" style="cursor: pointer;" v-html="l.label"></a>
                             </li>
                         </paginate-component>
-                        <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#modalMarca">Adicionar</button>
+                        <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#modalModelo">Adicionar</button>
                     </template>
                 </card-component>
                 <!----------- Listagem ---------->
 
                 <!---------- Modal Adicionar ------------>
-                <modal-component id="modalMarca" title="Adicionar Marca">
+                <modal-component id="modalModelo" title="Adicionar Modelo">
                     <template v-slot:alertas>
-                        <alert-component tipo="success" :detalhes="transacaoDetalhes" titulo="Marca cadastrada com sucesso!" v-if="transacaoStatus == 'adicionado'" ></alert-component>
-                        <alert-component tipo="danger" :detalhes="transacaoDetalhes" titulo="Erro ao tentar cadastrar a marca." v-if="transacaoStatus == 'erro'" ></alert-component>
+                        <alert-component tipo="success" :detalhes="transacaoDetalhes" titulo="Modelo cadastrada com sucesso!" v-if="transacaoStatus == 'adicionado'" ></alert-component>
+                        <alert-component tipo="danger" :detalhes="transacaoDetalhes" titulo="Erro ao tentar cadastrar a modelo." v-if="transacaoStatus == 'erro'" ></alert-component>
                     </template>
                     <template v-slot:conteudo >
                         <div class="form-group">
-                            <input-component titulo="Nome da Marca"  id="novoNome" id-help="novoNomeHelp" help-text="Informe o nome da marca.">
-                                <input type="text" v-model="nomeMarca" id="novoNome" class="form-control" placeholder="Ex.Toyota">
+                            <input-component titulo="Nome da Modelo"  id="novoNome" id-help="novoNomeHelp" help-text="Informe o nome da modelo.">
+                                <input type="text" v-model="nomeModelo" id="novoNome" class="form-control" placeholder="Ex.Toyota">
                             </input-component>
                         </div>
                         
                         <div class="form-group">
-                            <input-component titulo="Imagem da Marca" id="novoImg" id-help="imgHelp" help-text="Selecione a imagem da marca.">
+                            <input-component titulo="Imagem da Modelo" id="novoImg" id-help="imgHelp" help-text="Selecione a imagem da modelo.">
                                 <input type="file" id="novoImg" class="form-control-file" @change="imgLoad($event)">
                             </input-component> 
                         </div>
@@ -87,16 +87,16 @@
 
 
                 <!--------- Modal Visualizar ----------->
-                <modal-component id="modalMarcaVisualizar" title="Visualizar Marca">
+                <modal-component id="modalModeloVisualizar" title="Visualizar Modelo">
                     <template v-slot:conteudo>
                         <input-component titulo="ID">
                             <input type="text" class="form-control" :value="$store.state.item.id" disabled> 
                         </input-component>
-                        <input-component titulo="Marca">
+                        <input-component titulo="Modelo">
                             <input type="text" class="form-control" :value="$store.state.item.nome" disabled> 
                         </input-component>
-                        <input-component titulo="Logo: ">
-                            <img :src="'storage/'+$store.state.item.imagem" alt="" v-if="$store.state.item.imagem">
+                        <input-component titulo="Modelo: ">
+                            <img :src="'/storage/'+$store.state.item.imagem" alt="" v-if="$store.state.item.imagem">
                         </input-component>
                         <input-component titulo="Data de criação">
                             <input type="text" class="form-control" :value="$store.state.item.created_at | formataDataTempoGlobal" disabled> 
@@ -109,16 +109,16 @@
                  <!---------- Modal Visualizar ---------->
 
                  <!---------- Mdodal Remover ------------>
-                <modal-component id="modalMarcaRemover" title="Remover Marca">
+                <modal-component id="modalModeloRemover" title="Remover Modelo">
                     <template v-slot:alertas>
                         <alert-component tipo="success" :detalhes="$store.state.transacao" titulo="Exclusão realizada com sucesso!" v-if="$store.state.transacao.status == 'sucesso'" ></alert-component>
-                        <alert-component tipo="danger" :detalhes="$store.state.transacao" titulo="Erro ao tentar excluir a marca." v-if="$store.state.transacao.status == 'erro'"></alert-component>
+                        <alert-component tipo="danger" :detalhes="$store.state.transacao" titulo="Erro ao tentar excluir a modelo." v-if="$store.state.transacao.status == 'erro'"></alert-component>
                     </template>
                     <template v-slot:conteudo v-if="$store.state.transacao.status != 'sucesso'">
                         <input-component titulo="ID">
                             <input type="text" class="form-control" :value="$store.state.item.id" disabled> 
                         </input-component>
-                        <input-component titulo="Marca">
+                        <input-component titulo="Modelo">
                             <input type="text" class="form-control" :value="$store.state.item.nome" disabled> 
                         </input-component>
                         <input-component titulo="Logo: ">
@@ -136,22 +136,22 @@
                  <!----------- Modal Remover ------------>
 
                  <!---------- Mdodal Atualizar ---------->
-                <modal-component id="modalMarcaAtualizar" title="Atualizar Marca">
+                <modal-component id="modalModeloAtualizar" title="Atualizar Modelo">
                     <template v-slot:alertas>
                         <alert-component tipo="success" :detalhes="$store.state.transacao" titulo="Atualização realizada com sucesso!" v-if="$store.state.transacao.status == 'sucesso'" ></alert-component>
-                        <alert-component tipo="danger" :detalhes="$store.state.transacao" titulo="Erro ao tentar atualizar a marca:" v-if="$store.state.transacao.status == 'erro'"></alert-component>
+                        <alert-component tipo="danger" :detalhes="$store.state.transacao" titulo="Erro ao tentar atualizar a modelo:" v-if="$store.state.transacao.status == 'erro'"></alert-component>
                     </template>
                    
                     <template v-slot:conteudo >
                         <div class="form-group">
                             
-                            <input-component titulo="Nome da Marca"  id="atualizarNome" id-help="atualizarNomeHelp" help-text="Informe o nome da marca.">
+                            <input-component titulo="Nome da Modelo"  id="atualizarNome" id-help="atualizarNomeHelp" help-text="Informe o nome da modelo.">
                                 <input type="text" v-model="$store.state.item.nome" id="atualizarNome" class="form-control" >
                             </input-component>
                         </div>
                         
                         <div class="form-group">
-                            <input-component titulo="Imagem da Marca" id="atualizarImg" id-help="atualizarImgHelp" help-text="Selecione a imagem da marca.">
+                            <input-component titulo="Imagem da Modelo" id="atualizarImg" id-help="atualizarImgHelp" help-text="Selecione a imagem da modelo.">
                                 <input type="file" id="atualizarImg" class="form-control-file" @change="imgLoad($event)">
                             </input-component> 
                             
@@ -175,14 +175,14 @@
     export default{
         data(){
             return{
-                nomeMarca: '',
-                imgMarca: [],
-                urlBase: 'http://localhost:8000/api/v1/marca',
+                nomeModelo: '',
+                imgModelo: [],
+                urlBase: 'http://localhost:8000/api/v1/modelo',
                 urlPaginate: '',
                 urlFiltro: '',
                 transacaoStatus:'',
                 transacaoDetalhes:{},
-                marcas: {data:[]},
+                modelos: {data:[]},
                 busca: {id: '', nome: ''}
             }           
         },
@@ -193,8 +193,8 @@
                 formData.append('nome', this.$store.state.item.nome)
                 formData.append('_method', 'put')
 
-                if (this.imgMarca[0]) {
-                    formData.append('imagem', this.imgMarca[0])
+                if (this.imgModelo[0]) {
+                    formData.append('imagem', this.imgModelo[0])
                 }
 
                 axios.post(url, formData)
@@ -202,7 +202,7 @@
                         console.log(response.data)
                         atualizarImg.value = ''
                         this.$store.state.transacao.status = 'sucesso'
-                        this.$store.state.transacao.mensagem = 'A marca foi atualizada com sucesso!'
+                        this.$store.state.transacao.mensagem = 'A modelo foi atualizada com sucesso!'
                         
                         
                     })
@@ -213,7 +213,7 @@
                         this.$store.state.transacao.dados = errors.response.data.errors
                         //errors.response.data.message
                     })
-                this.loadMarcas()
+                this.loadModelos()
             },
             remover(){
                 let confirmacao = confirm('Tem certeza que deseja remover esse registro?')
@@ -228,8 +228,8 @@
                     .then(response =>{
                         console.log(' Removido com sucesso', response)
                         this.$store.state.transacao.status = 'sucesso'
-                        this.$store.state.transacao.mensagem = 'A marca foi atualizada com sucesso!'
-                        this.loadMarcas()
+                        this.$store.state.transacao.mensagem = 'O modelo foi atualizada com sucesso!'
+                        this.loadModelos()
                         
                     })
                     .catch(errors =>{
@@ -258,21 +258,22 @@
                     this.urlFiltro = ''
                     
                 }
-                this.loadMarcas()
+                this.loadModelos()
                 
                 
             },
             paginacao(l){
                 if (l.url){
                 this.urlPaginate = l.url.split('?')[1]
-                this.loadMarcas()
+                this.loadModelos()
             }
             },
-            loadMarcas(){
+            loadModelos(){
                 let url = this.urlBase + '?' + this.urlPaginate + this.urlFiltro
                 axios.get(url)
                 .then(response =>{
-                    this.marcas = response.data
+                    this.modelos = response.data
+                    console.log(this.modelos)
                 })
                 .catch(errors=>{
                     console.log(errors)
@@ -280,13 +281,13 @@
             },
             
             imgLoad(e){
-                this.imgMarca = e.target.files
+                this.imgModelo = e.target.files
             },
             salvar(){
                 
                 let formData = new FormData();
-                formData.append('nome', this.nomeMarca)
-                formData.append('imagem', this.imgMarca[0])
+                formData.append('nome', this.nomeModelo)
+                formData.append('imagem', this.imgModelo[0])
 
                 axios.post(this.urlBase, formData)
                     .then(response =>{
@@ -309,7 +310,7 @@
             }
         },
         mounted(){
-            this.loadMarcas()
+            this.loadModelos()
         }
         
     }

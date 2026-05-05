@@ -3,7 +3,7 @@
             <thead>
                 <tr >
                     <th v-for="t,key in titulos" :key="key" scope="col">{{t.titulo}}</th>
-                    <th v-if="visualizar.visivel || atualizar.visivel || remover"></th>
+                    <th v-if="visualizar.visivel || atualizar.visivel || remover"> Ação </th>
                 </tr>
             </thead>
             <tbody>
@@ -16,10 +16,17 @@
                             {{d | formataDataTempoGlobal}}
                         </span>
                     </td>
-                    <td v-if="visualizar.visivel || atualizar.visivel || remover.visivel"> 
-                        <button v-if="visualizar.visivel"  class="btn btn-outline-primary btn-sm" :data-toggle="visualizar.dataToggle" :data-target="visualizar.dataTarget" @click="setStore(obj)">Visualizar</button>
-                        <button v-if="atualizar.visivel" class="btn btn-outline-primary btn-sm" :data-toggle="atualizar.dataToggle" :data-target="atualizar.dataTarget" @click="setStore(obj)">Atualizar</button>
-                        <button v-if="remover.visivel" class="btn btn-outline-danger btn-sm" :data-toggle="remover.dataToggle" :data-target="remover.dataTarget" @click="setStore(obj)">Remover</button>
+                    <td v-if="visualizar.visivel || atualizar.visivel || remover.visivel">
+                        <div class="dropdown">
+                            <button class="btn btn-outline-dark dropdown-toggle`" type="button" data-toggle="dropdown" aria-expanded="false">
+                                Alterar dados
+                            </button>
+                            <div class="dropdown-menu">
+                                <button v-if="visualizar.visivel" class="dropdown-item " type="button" :data-toggle="visualizar.dataToggle" :data-target="visualizar.dataTarget" @click="setStore(obj)">Visualizar</button>
+                                <button v-if="atualizar.visivel" class="dropdown-item" type="button" :data-toggle="atualizar.dataToggle" :data-target="atualizar.dataTarget" @click="setStore(obj)">Atualizar</button>
+                                <button v-if="remover.visivel" class="dropdown-item" type="button" :data-toggle="remover.dataToggle" :data-target="remover.dataTarget" @click="setStore(obj)">Remover</button>
+                            </div>
+                        </div>
                     </td>
                 </tr>                         
                 
@@ -43,22 +50,21 @@
 <script>
     export default {
         
-        props:['marcas','titulos','visualizar','atualizar','remover'],
+        props:['dados','titulos','visualizar','atualizar','remover'],
         computed:{
             dadosFiltrados(){
                 let campos = Object.keys(this.titulos)
-                let dadosFiltrados = []
-
-                this.marcas.map((item, chave)=>{
+                // Forma mais limpa com map
+                let dadosFiltrados = this.dados.map(item => {
                     let itemFiltrado = {}
-                    campos.forEach(campo =>{
+
+                    campos.forEach(campo => {
                         itemFiltrado[campo] = item[campo]
-
                     })
-                    dadosFiltrados.push(itemFiltrado)
 
+                    return itemFiltrado  // map usa o return pra montar o array novo
                 })
-                
+                console.log(dadosFiltrados)
                 return dadosFiltrados
             }
         },
