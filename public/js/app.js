@@ -4200,6 +4200,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
 //
 //
 //
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -42916,14 +42917,16 @@ var render = function () {
                             _c(
                               "option",
                               {
-                                attrs: { disabled: "" },
-                                domProps: { value: false },
+                                attrs: { selected: "" },
+                                domProps: {
+                                  value: _vm.$store.state.item.marca_id,
+                                },
                               },
-                              [_vm._v("Selecione o Modelo")]
+                              [_vm._v(_vm._s(_vm.$store.state.item.marca.nome))]
                             ),
                             _vm._v(" "),
                             _vm._l(
-                              _vm.$store.state.item.marca,
+                              _vm.$store.state.item.marca.nome,
                               function (marca) {
                                 return _c(
                                   "option",

@@ -199,10 +199,11 @@
                         </input-component>
                         <input-component titulo="Marca do Modelo"  id="marcaId" id-help="marcaIdHelp" help-text="Informe a marca do modelo.">
                                 <select v-model="$store.state.item.marca_id" id="marcaId" class="form-control">  
-                                    <option :value="false" disabled>Selecione o Modelo</option> 
-                                    <option v-for="marca in $store.state.item.marca" :key="marca.id" :value="marca.id">{{marca.nome}}</option>
+                                    <option :value="$store.state.item.marca_id" selected>{{$store.state.item.marca.nome}}</option> 
+                                    <option v-for="marca in $store.state.item.marca.nome" :key="marca.id" :value="marca.id">{{marca.nome}}</option>
                                 </select>
                         </input-component>
+                        <!-- {{ $store.state.item.marca_id }} -->
                         <input-component titulo="Foto do Modelo:">
                             <img :src="'/storage/'+$store.state.item.imagem" alt="" v-if="$store.state.item.imagem">
                         </input-component>
