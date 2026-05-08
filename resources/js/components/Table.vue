@@ -1,14 +1,14 @@
 <template>
-        <table class="table table-hover">
+        <table class="table table-hover  align-middle text-center">
             <thead>
                 <tr >
                     <th v-for="t,key in titulos" :key="key" scope="col">{{t.titulo}}</th>
-                    <th v-if="visualizar.visivel || atualizar.visivel || remover"> Ação </th>
+                    <th v-if="visualizar.visivel || atualizar.visivel || remover.visivel"> Ação </th>
                 </tr>
             </thead>
             <tbody>
 
-                <tr v-for="obj,k in dadosFiltrados" :key="k">
+                <tr  v-for="obj,k in dadosFiltrados" :key="k">
                     <td v-for="d,chaveValor in obj" :key="chaveValor">
                         <span v-if="titulos[chaveValor].tipo == 'text'">{{ d }}</span>
                         <span v-if="titulos[chaveValor].tipo == 'fk'">{{ d.nome }}</span>
@@ -56,20 +56,17 @@
 
                     return itemFiltrado  // map usa o return pra montar o array novo
                 })
-                console.log(dadosFiltrados)
+                //console.log(dadosFiltrados)
                 return dadosFiltrados
             }
         },
         methods:{
             setStore(id){
-                this.$store.state.transacao.mensagem = ''
-                this.$store.state.transacao.status = ''
-                this.$store.state.transacao.dados = ''
-
+                this.$store.commit('limparTransacao')
                 axios.get(`${this.url}/${id}`)
                     .then(response => {
                         this.$store.state.item = response.data
-                        console.log(this.$store.state.item)
+                       console.log(this.$store.state.item)
                     })
                 .catch(errors=>{
                     console.log(errors)

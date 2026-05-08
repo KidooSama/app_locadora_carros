@@ -11,6 +11,9 @@ class AbstractRepository{
     public function selectAtributosRegistros($atributos){
         $this->model = $this->model->with($atributos);
     }
+    public function withCount($relacoes){
+        $this->model = $this->model->withCount($relacoes);
+    }
     public function filtro($filtros){
         $filtros = explode(';',$filtros);
         foreach ($filtros as $condicao) {          

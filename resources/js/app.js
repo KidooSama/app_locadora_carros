@@ -16,6 +16,12 @@ const store = new Vuex.Store({
     state:{
         item: {},
         transacao: {status: '', mensagem:''}
+    },
+    mutations:{
+        limparTransacao(state){
+            state.transacao.status = ''
+            state.transacao.mensagem = ''
+        }
     }
 
 })

@@ -14,7 +14,7 @@ class Modelo extends Model
 
     public function rules(){
         return [
-            'marca_id' => 'exists:marcas,id|',
+            'marca_id' => 'exists:marcas,id|required',
             'nome' => 'required|unique:modelos,nome,'.$this->id.'|min:3',
             'imagem' => 'required|image|mimes:png',
             'numero_portas' => 'required|integer|digits_between:1,5',

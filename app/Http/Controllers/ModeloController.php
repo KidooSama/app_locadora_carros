@@ -31,6 +31,9 @@ class ModeloController extends Controller
         }else {
             $modeloRepository->selectAtributosRegistros('marca');
         }
+        
+        $modeloRepository->withCount('carros');
+
         if ($request->has('filtro')) {
            $modeloRepository->filtro($request->filtro);            
         }
@@ -69,8 +72,7 @@ class ModeloController extends Controller
             'air_bag'=> $request->air_bag,
             'abs'=> $request->abs,
         ]);
-        dd($imagem);
-        return response()->json(['data'=> $modelo, 'message' => 'Criado com sucesso'], 201);
+        return response()->json($modelo, 201);
     }
 
     /**
@@ -81,7 +83,7 @@ class ModeloController extends Controller
      */
     public function show($id)
     {
-        $modelo = $this->modelo->with('marca', 'carros')->find($id);
+        $modelo = $this->modelo->with('marca')->withCount('carros')->find($id);
         if ($modelo === null) {
            return response()->json(['message'=>'Valor não encntrado'], 404);
         }
