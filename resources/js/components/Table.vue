@@ -14,9 +14,7 @@
                         <span v-if="titulos[chaveValor].tipo == 'fk'">{{ d.nome }}</span>
                         <span v-if="titulos[chaveValor].tipo == 'bool'">{{ d ? 'Sim' : 'Não' }}</span>
                         <span v-if="titulos[chaveValor].tipo == 'img'"><img :src="'/storage/' + d" width="60"></span>
-                        <span v-if="titulos[chaveValor].tipo == 'data'">
-                            {{d | formataDataTempoGlobal}}
-                        </span>
+                        <span v-if="titulos[chaveValor].tipo == 'data'">{{d | formataDataTempoGlobal}}</span>
                     </td>
                     <td v-if="visualizar.visivel || atualizar.visivel || remover.visivel">
                         <div class="dropdown">
@@ -62,18 +60,22 @@
         },
         methods:{
             setStore(id){
+
                 this.$store.commit('limparTransacao')
+                this.$store.state.item = {}
                 axios.get(`${this.url}/${id}`)
                     .then(response => {
                         this.$store.state.item = response.data
-                       console.log(this.$store.state.item)
+                        console.log(this.$store.state.item)
+                        this.$emit('load-marca-options')
+                        console.log('Emitido')
                     })
                 .catch(errors=>{
                     console.log(errors)
                 })
-            }
 
+
+            }
         },
-       
     }
 </script>

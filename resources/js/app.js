@@ -48,6 +48,7 @@ Vue.component('card-component', require('./components/Card.vue').default);
 Vue.component('modal-component', require('./components/Modal.vue').default);
 Vue.component('alert-component', require('./components/Alert.vue').default);
 Vue.component('paginate-component', require('./components/Paginate.vue').default);
+Vue.component('carros-component', require('./components/Carros.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -60,7 +61,6 @@ Vue.filter('formataDataTempoGlobal', function(d){
     let data = d[0].split('-')
     data = data[2]+'/'+data[1]+'/'+data[0]
     let tempo = d[1].split('.')[0]
-    
     return data + ' - ' + tempo
 })
 const app = new Vue({
