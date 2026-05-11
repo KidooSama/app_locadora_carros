@@ -56,9 +56,9 @@ class CarroController extends Controller
      * @param  \App\Http\Requests\StoreCarroRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreCarroRequest $request)
     {
-        $request->validate($this->carro->rules());      
+              
         $carro = $this->carro->create([
             'modelo_id'=> $request->modelo_id,
             'placa'=> $request->placa,
