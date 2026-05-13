@@ -68,7 +68,7 @@ class CarroTest extends TestCase
 
 // ------------------------------------------
 
-    public function test_auth_obrigatorio()
+    public function test_cadastrar_auth_obrigatorio()
     {
         $dados= [
             'modelo_id' => $this->modelo->id,
@@ -84,7 +84,7 @@ class CarroTest extends TestCase
 
 // ------------------------------------------
 
-    public function test_placa_e_obrigatoria()
+    public function test_cadastrar_placa_eh_obrigatoria()
     {
         $dados =[
             'modelo_id' => $this->modelo->id,
@@ -101,10 +101,9 @@ class CarroTest extends TestCase
 
  // ------------------------------------------
 
-    public function test_modelo_id_obrigatoria()
+    public function test_cadastrar_modelo_id_obrigatoria()
     {
         $dados =[
-            'modelo_id' => '',
             'placa' => 'ABC1D23',
             'disponivel' => true,
             'km' => 1000
@@ -118,7 +117,7 @@ class CarroTest extends TestCase
 
 // ------------------------------------------   
 
-    public function test_placa_regex()
+    public function test_cadastrar_placa_regex()
     {
         $dados =[
             'modelo_id' => $this->modelo->id,
@@ -135,7 +134,7 @@ class CarroTest extends TestCase
 
  // ------------------------------------------
 
-    public function test_modelo_inexistente()
+    public function test_cadastrar_carro_modeloid_inexistente()
     {
         $dados = [
             'modelo_id' => '999999',
@@ -152,7 +151,7 @@ class CarroTest extends TestCase
 
     // ------------------------------------------
 
-    public function test_nao_permite_placa_duplicada()
+    public function test_cadastrar_nao_permite_placa_duplicada()
     {
         $dados =[
             'modelo_id' => $this->modelo->id,
@@ -171,6 +170,51 @@ class CarroTest extends TestCase
 
         $response->assertStatus(422);
         $response->assertJsonValidationErrors('placa');
+    }
+
+    // ------------------------------------------
+    // READ TEST
+    // ------------------------------------------
+
+    public function test_listar_carros()
+    {
+        Carro::factory(3)->create();
+
+        $response = $this->withHeaders(
+            $this->authHeader()
+        )->getJson('/api/v1/carro');
+        $response->assertStatus(200);
+        $response->assertJsonCount(3, 'data');
+    }
+
+    public function test_busca_carro_por_id()
+    {
+        $carro = Carro::factory()->create();
+
+        $response = $this->withHeaders($this->authHeader())
+        ->getJson("/api/v1/carro/{$carro->id}");
+        $response->assertStatus(200);
+        $response->assertJsonFragment([
+            'placa' => $carro->placa
+        ]);
+    }
+
+    public function test_busca_carro_inexistente()
+    {
+        $response = $this->withHeaders(
+            $this->authHeader()
+        )->getJson('/api/v1/carro/999999');
+        $response->assertStatus(404);
+    }
+
+    public function test_filtrar_carro_por_placa()
+    {
+        $carro = Carro::factory(2)->create();
+
+        $response = $this->withHeaders($this->authHeader())
+        ->getJson("/api/v1/carro?filtro=placa:=:{$carro[1]->placa}");
+        $response->assertStatus(200);
+        $response->assertJsonCount(1, 'data');
     }
 
     // ------------------------------------------
@@ -193,9 +237,54 @@ class CarroTest extends TestCase
         $this->assertDatabaseHas('carros', [
             'id' => $carro->id,
             'placa' => 'XYZ1A99',
+            'disponivel' => false,
             'km' => 50000
         ]);
     }
+        
+    // ------------------------------------------
+    
+    public function test_atualizar_auth_obrigatorio()
+    {
+        $carro = Carro::factory()->createOne();
+        $dados = [
+            'modelo_id' => $carro->modelo->id,
+            'placa' => 'XYZ1A99',
+            'disponivel' => false,
+            'km' => 50000
+        ];
+        $response = $this->putJson("/api/v1/carro/{$carro->id}",$dados);
+        $response->assertStatus(401);
+        $this->assertDatabaseMissing('carros', [
+            'placa' => 'XYZ1A99',
+            'disponivel' => false,
+            'km' => 50000
+        ]);
+    }
+        
+    // ------------------------------------------
+    
+    public function test_atualizar_um_campo_carro()
+    {
+        $carro = Carro::factory()->createOne();
+        $dados = [
+            'modelo_id' => $carro->modelo->id,
+            'km' => 50000
+        ];
+        $response = $this->withHeaders($this->authHeader())
+        ->putJson("/api/v1/carro/{$carro->id}",$dados);
+
+        $response->assertStatus(200);
+        $this->assertDatabaseHas('carros', [
+            'id' => $carro->id,
+            'placa' => $carro->placa,
+            'disponivel' => $carro->disponivel,
+            'km' => 50000
+        ]);
+    }
+        
+    // ------------------------------------------
+    
     public function test_atualizar_placa_ja_existente()
     {
         $carro = Carro::factory(2)->create();
@@ -211,7 +300,55 @@ class CarroTest extends TestCase
 
         $response->assertStatus(422);
         $response->assertJsonValidationErrors('placa');
-        $response->dumpJson();
+
+    }
         
+    // ------------------------------------------
+    
+    public function test_atualizar_carro_inexistente()
+    {
+        
+        $dados = [            
+            'disponivel' => false,
+            'km' => 50000
+        ];
+        $response = $this->withHeaders($this->authHeader())
+        ->putJson("/api/v1/carro/999999",$dados);
+        $response->assertStatus(404);
+
+    }
+
+    // ------------------------------------------
+    // DELETE TEST
+    // ------------------------------------------
+
+    public function test_deletar_carro()
+    {
+        $carro = Carro::factory()->create();
+        $response = $this->withHeaders($this->authHeader())
+        ->deleteJson("/api/v1/carro/{$carro->id}");
+        $response->assertStatus(200);
+
+    }
+
+    // ------------------------------------------
+
+    public function test_deletar_carro_inexistente()
+    {
+        $carro = Carro::factory()->create();
+        $response = $this->withHeaders($this->authHeader())
+        ->deleteJson("/api/v1/carro/99999");
+        $response->assertStatus(404);
+
+    }
+
+    // ------------------------------------------
+
+    public function test_deletar_auth_obrigatorio()
+    {
+        $carro = Carro::factory()->create();
+        $response = $this->deleteJson("/api/v1/carro/{$carro->id}");
+        $response->assertStatus(401);
+
     }
 }
