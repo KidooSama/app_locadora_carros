@@ -25,7 +25,7 @@ class StoreCarroRequest extends FormRequest
     {
         return [
             'modelo_id' => 'required|exists:modelos,id',
-            'placa' => 'required|string|size:7|unique:carros,placa',
+            'placa' => 'required|regex:/^[A-Z]{3}[0-9][A-Z][0-9]{2}$/|size:7|unique:carros,placa',
             'disponivel' => 'required|boolean',
             'km' => 'required|integer|min:0',
         ];
