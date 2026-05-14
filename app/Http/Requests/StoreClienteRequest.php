@@ -24,7 +24,7 @@ class StoreClienteRequest extends FormRequest
     public function rules()
     {
         return [
-           'nome' => 'required|min:3|max:255|'
+           'nome' => 'required|min:3|max:255|string'
         ];
     }
 }

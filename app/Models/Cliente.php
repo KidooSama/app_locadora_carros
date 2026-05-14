@@ -9,8 +9,8 @@ class Cliente extends Model
 {
     use HasFactory;
     protected $fillable = ['nome'];
-
-    public function carros(){
-        
+    
+    public function locacoes(){
+        return $this->belongsTo(Locacao::class);   
     }
 }

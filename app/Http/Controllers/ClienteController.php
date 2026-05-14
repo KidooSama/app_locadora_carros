@@ -29,7 +29,7 @@ class ClienteController extends Controller
         if ($request->has('atributos')) {
             $clienteRepository->selectAtributos($request->atributos);
         }
-        return  response()->json(['data'=>$clienteRepository->getResultado()], 200);
+        return  response()->json($clienteRepository->getResultadoPaginado(5), 200);
     }
 
 
@@ -44,13 +44,13 @@ class ClienteController extends Controller
         $cliente = $this->cliente->create([
             'nome'=> $request->nome
         ]);
-        return response()->json(['data'=> $cliente,'message' => 'Criado com sucesso'], 201);
+        return response()->json( $cliente, 201);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Cliente  $cliente
+     * @param  integer $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -59,14 +59,14 @@ class ClienteController extends Controller
         if ($cliente === null) {
            return response()->json(['message'=>'Valor não encontrado'], 404);
         }
-        return response()->json(['data'=>$cliente], 200);        
+        return response()->json($cliente, 200);        
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \App\Http\Requests\UpdateClienteRequest  $request
-     * @param  \App\Models\Cliente  $cliente
+     * @param  integer $id
      * @return \Illuminate\Http\Response
      */
     public function update(UpdateClienteRequest $request, $id)
@@ -83,7 +83,7 @@ class ClienteController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Cliente  $cliente
+     * @param  integer $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -94,6 +94,6 @@ class ClienteController extends Controller
         }   
         $cliente->delete();
         
-        return response()->json(['data'=>$cliente], 200);
+        return response()->json($cliente, 200);
     }
 }

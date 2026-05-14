@@ -24,7 +24,7 @@ class UpdateClienteRequest extends FormRequest
     public function rules()
     {
         return [
-           'nome' => 'sometimes|required|min:3|max:255|'
+           'nome' => 'sometimes|required|min:3|max:255|string'
         ];
     }
 }

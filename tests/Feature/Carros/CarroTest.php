@@ -256,7 +256,7 @@ class CarroTest extends TestCase
         $response->assertStatus(200);
         $this->assertDatabaseHas('carros', [
             'id' => $carro->id,
-            'placa' => 'XYZ1A99',
+            'placa' => $carro->placa,
             'disponivel' => false,
             'km' => 50000
         ]);
