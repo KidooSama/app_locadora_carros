@@ -25,7 +25,7 @@ class UpdateCarroRequest extends FormRequest
     {
         return [
             'modelo_id' => 'sometimes|exists:modelos,id',
-            'placa' => 'sometimes|required|regex:/^[A-Z]{3}[0-9][A-Z][0-9]{2}$/|size:7|unique:carros,placa',
+            'placa' => 'sometimes|required|regex:/^[A-Z]{3}[0-9][A-Z][0-9]{2}$/|size:7|unique:carros,placa,'.$this->route('carro'),
             'disponivel' => 'sometimes|required|boolean',
             'km' => 'sometimes|required|integer|min:0',
         ];

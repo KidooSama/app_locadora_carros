@@ -11,7 +11,7 @@
                 <tr  v-for="obj,k in dadosFiltrados" :key="k">
                     <td v-for="d,chaveValor in obj" :key="chaveValor">
                         <span v-if="titulos[chaveValor].tipo == 'text'">{{ d }}</span>
-                        <span v-if="titulos[chaveValor].tipo == 'fk'">{{ d.nome }}</span>
+                        <span v-if="titulos[chaveValor].tipo == 'fk'">{{ d[titulos[chaveValor].chave] }}</span>
                         <span v-if="titulos[chaveValor].tipo == 'bool'">{{ d ? 'Sim' : 'Não' }}</span>
                         <span v-if="titulos[chaveValor].tipo == 'img'"><img :src="'/storage/' + d" width="60"></span>
                         <span v-if="titulos[chaveValor].tipo == 'data'">{{d | formataDataTempoGlobal}}</span>
@@ -54,6 +54,7 @@
 
                     return itemFiltrado  // map usa o return pra montar o array novo
                 })
+                
                 //console.log(dadosFiltrados)
                 return dadosFiltrados
             }

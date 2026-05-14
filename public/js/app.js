@@ -3651,9 +3651,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -3724,12 +3721,13 @@ __webpack_require__.r(__webpack_exports__);
     atualizar: function atualizar() {
       var _this3 = this;
       var url = this.urlBase + '/' + this.$store.state.item.id;
-      var formData = new FormData();
-      formData.append('modelo_id', this.$store.state.item.modelo_id);
-      formData.append('placa', this.$store.state.item.placa);
-      formData.append('disponivel', this.$store.state.item.disponivel);
-      formData.append('km', this.$store.state.item.km);
-      axios.put(url, formData).then(function (response) {
+      var dados = {
+        'modelo_id': this.$store.state.item.modelo_id,
+        'placa': this.$store.state.item.placa,
+        'disponivel': this.$store.state.item.disponivel,
+        'km': this.$store.state.item.km
+      };
+      axios.put(url, dados).then(function (response) {
         console.log(response.data);
         _this3.$store.state.transacao.status = 'sucesso';
         _this3.$store.state.transacao.mensagem = 'A carro foi atualizada com sucesso!';
@@ -3790,7 +3788,7 @@ __webpack_require__.r(__webpack_exports__);
       var url = this.urlBase + '?' + this.urlPaginate + this.urlFiltro;
       axios.get(url).then(function (response) {
         _this5.carros = response.data;
-        //console.log(this.carros)
+        console.log(_this5.carros);
       })["catch"](function (errors) {
         console.log(errors);
       });
@@ -4888,6 +4886,7 @@ __webpack_require__.r(__webpack_exports__);
         });
         return itemFiltrado; // map usa o return pra montar o array novo
       });
+
       //console.log(dadosFiltrados)
       return dadosFiltrados;
     }
@@ -4973,6 +4972,7 @@ Vue.component('modal-component', (__webpack_require__(/*! ./components/Modal.vue
 Vue.component('alert-component', (__webpack_require__(/*! ./components/Alert.vue */ "./resources/js/components/Alert.vue")["default"]));
 Vue.component('paginate-component', (__webpack_require__(/*! ./components/Paginate.vue */ "./resources/js/components/Paginate.vue")["default"]));
 Vue.component('carros-component', (__webpack_require__(/*! ./components/Carros.vue */ "./resources/js/components/Carros.vue")["default"]));
+Vue.component('clientes-component', (__webpack_require__(/*! ./components/Carros.vue */ "./resources/js/components/Carros.vue")["default"]));
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -5057,7 +5057,6 @@ axios.interceptors.response.use(function (response) {
   console.log('Erro na resposta: ', error.response);
   if (error.response.status == 401 && error.response.data.message == 'Token has expired') {
     axios.post('http://localhost:8000/api/refresh').then(function (response) {
-      console.log('refresh bem sucedido', response);
       document.cookie = "token=".concat(response.data.token, "; SameSite=Lax");
       console.log('Token Novo: ', response.data.token);
       window.location.reload();
@@ -41314,7 +41313,7 @@ var render = function () {
                                 titulo: "Nome do Carro",
                                 id: "inputNome",
                                 "id-help": "nomeHelp",
-                                "help-text": "Informe o nome do carro.",
+                                "help-text": "Informe a placa do carro.",
                               },
                             },
                             [
@@ -41411,6 +41410,11 @@ var render = function () {
                             titulos: {
                               id: { titulo: "ID", tipo: "text" },
                               placa: { titulo: "Placa", tipo: "text" },
+                              modelo: {
+                                titulo: "Modelo",
+                                tipo: "fk",
+                                chave: "nome",
+                              },
                               disponivel: {
                                 titulo: "Disponivel",
                                 tipo: "text",
@@ -41788,7 +41792,7 @@ var render = function () {
           }),
           _vm._v(" "),
           _c("modal-component", {
-            attrs: { id: "modalModeloVisualizar", title: "Visualizar Carro" },
+            attrs: { id: "modalCarroVisualizar", title: "Visualizar Carro" },
             scopedSlots: _vm._u([
               {
                 key: "conteudo",
@@ -41826,13 +41830,13 @@ var render = function () {
                             _vm._v(" "),
                             _c(
                               "input-component",
-                              { attrs: { titulo: "Carro" } },
+                              { attrs: { titulo: "Modelo" } },
                               [
                                 _c("input", {
                                   staticClass: "form-control",
                                   attrs: { type: "text", disabled: "" },
                                   domProps: {
-                                    value: _vm.$store.state.item.nome,
+                                    value: _vm.$store.state.item.modelo.nome,
                                   },
                                 }),
                               ]
@@ -41840,13 +41844,14 @@ var render = function () {
                             _vm._v(" "),
                             _c(
                               "input-component",
-                              { attrs: { titulo: "Marca" } },
+                              { attrs: { titulo: "Imagem do Modelo" } },
                               [
-                                _c("input", {
-                                  staticClass: "form-control",
-                                  attrs: { type: "text", disabled: "" },
-                                  domProps: {
-                                    value: _vm.$store.state.item.marca.nome,
+                                _c("img", {
+                                  attrs: {
+                                    width: "300",
+                                    src:
+                                      "/storage/" +
+                                      _vm.$store.state.item.modelo.imagem,
                                   },
                                 }),
                               ]
@@ -41854,31 +41859,13 @@ var render = function () {
                             _vm._v(" "),
                             _c(
                               "input-component",
-                              { attrs: { titulo: "Foto do Carro:" } },
-                              [
-                                _vm.$store.state.item.imagem
-                                  ? _c("img", {
-                                      attrs: {
-                                        src:
-                                          "/storage/" +
-                                          _vm.$store.state.item.imagem,
-                                        alt: _vm.$store.state.item.nome,
-                                        width: "400",
-                                      },
-                                    })
-                                  : _vm._e(),
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "input-component",
-                              { attrs: { titulo: "Numero de Portas:" } },
+                              { attrs: { titulo: "Placa" } },
                               [
                                 _c("input", {
                                   staticClass: "form-control",
                                   attrs: { type: "text", disabled: "" },
                                   domProps: {
-                                    value: _vm.$store.state.item.numero_portas,
+                                    value: _vm.$store.state.item.placa,
                                   },
                                 }),
                               ]
@@ -41886,28 +41873,14 @@ var render = function () {
                             _vm._v(" "),
                             _c(
                               "input-component",
-                              { attrs: { titulo: "Lugares:" } },
-                              [
-                                _c("input", {
-                                  staticClass: "form-control",
-                                  attrs: { type: "text", disabled: "" },
-                                  domProps: {
-                                    value: _vm.$store.state.item.lugares,
-                                  },
-                                }),
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "input-component",
-                              { attrs: { titulo: "Air Bag:" } },
+                              { attrs: { titulo: "Disponivel" } },
                               [
                                 _c("input", {
                                   staticClass: "form-control",
                                   attrs: { type: "text", disabled: "" },
                                   domProps: {
                                     value:
-                                      _vm.$store.state.item.air_bag == 1
+                                      _vm.$store.state.item.disponivel == 1
                                         ? "Sim"
                                         : "Não",
                                   },
@@ -41917,17 +41890,12 @@ var render = function () {
                             _vm._v(" "),
                             _c(
                               "input-component",
-                              { attrs: { titulo: "Abs:" } },
+                              { attrs: { titulo: "Quilometragem" } },
                               [
                                 _c("input", {
                                   staticClass: "form-control",
                                   attrs: { type: "text", disabled: "" },
-                                  domProps: {
-                                    value:
-                                      _vm.$store.state.item.abs == 1
-                                        ? "Sim"
-                                        : "Não",
-                                  },
+                                  domProps: { value: _vm.$store.state.item.km },
                                 }),
                               ]
                             ),
@@ -42009,86 +41977,123 @@ var render = function () {
                       key: "conteudo",
                       fn: function () {
                         return [
-                          _c(
-                            "div",
-                            [
-                              _c(
-                                "input-component",
-                                { attrs: { titulo: "ID" } },
+                          !_vm.$store.state.item.id
+                            ? _c(
+                                "div",
+                                {
+                                  staticClass: "d-flex justify-content-center",
+                                },
                                 [
-                                  _c("input", {
-                                    staticClass: "form-control",
-                                    attrs: { type: "text", disabled: "" },
-                                    domProps: {
-                                      value: _vm.$store.state.item.id,
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass: "spinner-border",
+                                      attrs: { role: "status" },
                                     },
-                                  }),
+                                    [
+                                      _c("span", { staticClass: "sr-only" }, [
+                                        _vm._v("Loading..."),
+                                      ]),
+                                    ]
+                                  ),
                                 ]
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "input-component",
-                                { attrs: { titulo: "Placa" } },
+                              )
+                            : _c(
+                                "div",
                                 [
-                                  _c("input", {
-                                    staticClass: "form-control",
-                                    attrs: { type: "text", disabled: "" },
-                                    domProps: {
-                                      value: _vm.$store.state.item.placa,
-                                    },
-                                  }),
-                                ]
+                                  _c(
+                                    "input-component",
+                                    { attrs: { titulo: "ID" } },
+                                    [
+                                      _c("input", {
+                                        staticClass: "form-control",
+                                        attrs: { type: "text", disabled: "" },
+                                        domProps: {
+                                          value: _vm.$store.state.item.id,
+                                        },
+                                      }),
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "input-component",
+                                    { attrs: { titulo: "Modelo" } },
+                                    [
+                                      _c("input", {
+                                        staticClass: "form-control",
+                                        attrs: { type: "text", disabled: "" },
+                                        domProps: {
+                                          value:
+                                            _vm.$store.state.item.modelo.nome,
+                                        },
+                                      }),
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "input-component",
+                                    { attrs: { titulo: "Placa" } },
+                                    [
+                                      _c("input", {
+                                        staticClass: "form-control",
+                                        attrs: { type: "text", disabled: "" },
+                                        domProps: {
+                                          value: _vm.$store.state.item.placa,
+                                        },
+                                      }),
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "input-component",
+                                    { attrs: { titulo: "Disponivel" } },
+                                    [
+                                      _c("input", {
+                                        staticClass: "form-control",
+                                        attrs: { type: "text", disabled: "" },
+                                        domProps: {
+                                          value:
+                                            _vm.$store.state.item.disponivel ==
+                                            1
+                                              ? "Sim"
+                                              : "Não",
+                                        },
+                                      }),
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "input-component",
+                                    { attrs: { titulo: "Quilometragem" } },
+                                    [
+                                      _c("input", {
+                                        staticClass: "form-control",
+                                        attrs: { type: "text", disabled: "" },
+                                        domProps: {
+                                          value: _vm.$store.state.item.km,
+                                        },
+                                      }),
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "input-component",
+                                    { attrs: { titulo: "Data de criação" } },
+                                    [
+                                      _c("input", {
+                                        staticClass: "form-control",
+                                        attrs: { type: "text", disabled: "" },
+                                        domProps: {
+                                          value: _vm._f(
+                                            "formataDataTempoGlobal"
+                                          )(_vm.$store.state.item.created_at),
+                                        },
+                                      }),
+                                    ]
+                                  ),
+                                ],
+                                1
                               ),
-                              _vm._v(" "),
-                              _c(
-                                "input-component",
-                                { attrs: { titulo: "Disponivel" } },
-                                [
-                                  _c("input", {
-                                    staticClass: "form-control",
-                                    attrs: { type: "text", disabled: "" },
-                                    domProps: {
-                                      value:
-                                        _vm.$store.state.item.disponivel == 1
-                                          ? "Sim"
-                                          : "Não",
-                                    },
-                                  }),
-                                ]
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "input-component",
-                                { attrs: { titulo: "Quilometragem" } },
-                                [
-                                  _c("input", {
-                                    staticClass: "form-control",
-                                    attrs: { type: "text", disabled: "" },
-                                    domProps: {
-                                      value: _vm.$store.state.item.km,
-                                    },
-                                  }),
-                                ]
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "input-component",
-                                { attrs: { titulo: "Data de criação" } },
-                                [
-                                  _c("input", {
-                                    staticClass: "form-control",
-                                    attrs: { type: "text", disabled: "" },
-                                    domProps: {
-                                      value: _vm._f("formataDataTempoGlobal")(
-                                        _vm.$store.state.item.created_at
-                                      ),
-                                    },
-                                  }),
-                                ]
-                              ),
-                            ],
-                            1
-                          ),
                         ]
                       },
                       proxy: true,
@@ -42133,7 +42138,7 @@ var render = function () {
           }),
           _vm._v(" "),
           _c("modal-component", {
-            attrs: { id: "modalModeloAtualizar", title: "Atualizar Carro" },
+            attrs: { id: "modalCarroAtualizar", title: "Atualizar Carro" },
             scopedSlots: _vm._u([
               {
                 key: "alertas",
@@ -42187,13 +42192,17 @@ var render = function () {
                         )
                       : _c(
                           "div",
+                          { staticClass: "form-group" },
                           [
                             _c(
                               "input-component",
                               {
                                 attrs: {
-                                  titulo: "Nome da Carro",
-                                  id: "atualizarNome",
+                                  titulo: "Placa do Carro",
+                                  id: "novoPlaca",
+                                  "id-help": "novoPlacaHelp",
+                                  "help-text":
+                                    "Informe placa do carro no padrão mercosul.",
                                 },
                               },
                               [
@@ -42202,14 +42211,18 @@ var render = function () {
                                     {
                                       name: "model",
                                       rawName: "v-model",
-                                      value: _vm.$store.state.item.nome,
-                                      expression: "$store.state.item.nome",
+                                      value: _vm.$store.state.item.placa,
+                                      expression: "$store.state.item.placa",
                                     },
                                   ],
                                   staticClass: "form-control",
-                                  attrs: { type: "text", id: "atualizarNome" },
+                                  attrs: {
+                                    type: "text",
+                                    id: "novoPlaca",
+                                    placeholder: "Ex: ABC1D23",
+                                  },
                                   domProps: {
-                                    value: _vm.$store.state.item.nome,
+                                    value: _vm.$store.state.item.placa,
                                   },
                                   on: {
                                     input: function ($event) {
@@ -42218,7 +42231,7 @@ var render = function () {
                                       }
                                       _vm.$set(
                                         _vm.$store.state.item,
-                                        "nome",
+                                        "placa",
                                         $event.target.value
                                       )
                                     },
@@ -42226,258 +42239,209 @@ var render = function () {
                                 }),
                               ]
                             ),
-                            _vm._v(" "),
-                            _c(
-                              "input-component",
-                              {
-                                attrs: {
-                                  titulo: "Marca do Carro",
-                                  id: "marcaId",
-                                  "id-help": "marcaIdHelp",
-                                  "help-text": "Informe a marca do carro.",
-                                },
-                              },
-                              [
-                                _c(
-                                  "select",
-                                  {
-                                    directives: [
-                                      {
-                                        name: "model",
-                                        rawName: "v-model",
-                                        value: _vm.$store.state.item.marca_id,
-                                        expression:
-                                          "$store.state.item.marca_id",
-                                      },
-                                    ],
-                                    staticClass: "form-control",
-                                    attrs: { id: "marcaId" },
-                                    on: {
-                                      change: function ($event) {
-                                        var $$selectedVal =
-                                          Array.prototype.filter
-                                            .call(
-                                              $event.target.options,
-                                              function (o) {
-                                                return o.selected
-                                              }
-                                            )
-                                            .map(function (o) {
-                                              var val =
-                                                "_value" in o
-                                                  ? o._value
-                                                  : o.value
-                                              return val
-                                            })
-                                        _vm.$set(
-                                          _vm.$store.state.item,
-                                          "marca_id",
-                                          $event.target.multiple
-                                            ? $$selectedVal
-                                            : $$selectedVal[0]
-                                        )
-                                      },
-                                    },
-                                  },
-                                  [
-                                    _c(
-                                      "option",
-                                      {
-                                        attrs: { disabled: "" },
-                                        domProps: { value: null },
-                                      },
-                                      [_vm._v(" Selecione a Marca ")]
-                                    ),
-                                    _vm._v(" "),
-                                    _vm._l(_vm.marcas, function (marca) {
-                                      return _c(
-                                        "option",
-                                        {
-                                          key: marca.id,
-                                          domProps: { value: marca.id },
-                                        },
-                                        [_vm._v(_vm._s(marca.nome))]
-                                      )
-                                    }),
-                                  ],
-                                  2
-                                ),
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "input-component",
-                              {
-                                attrs: {
-                                  titulo: "Alterar Imagem do Carro",
-                                  id: "atualizarImg",
-                                },
-                              },
-                              [
-                                _c("input", {
-                                  staticClass: "form-control-file",
-                                  attrs: { type: "file", id: "atualizarImg" },
-                                  on: {
-                                    change: function ($event) {
-                                      return _vm.imgLoad($event)
-                                    },
-                                  },
-                                }),
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "input-component",
-                              { attrs: { titulo: "Numero de Portas:" } },
-                              [
-                                _c("input", {
-                                  staticClass: "form-control",
-                                  attrs: { type: "text" },
-                                  domProps: {
-                                    value: _vm.$store.state.item.numero_portas,
-                                  },
-                                }),
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "input-component",
-                              { attrs: { titulo: "Lugares:" } },
-                              [
-                                _c("input", {
-                                  staticClass: "form-control",
-                                  attrs: { type: "text" },
-                                  domProps: {
-                                    value: _vm.$store.state.item.lugares,
-                                  },
-                                }),
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "input-component",
-                              {
-                                attrs: {
-                                  titulo: "Air Bag",
-                                  id: "airBag",
-                                  "id-help": "airBagHelp",
-                                  "help-text":
-                                    "Informe se o carro possui air bag.",
-                                },
-                              },
-                              [
-                                _c(
-                                  "select",
-                                  {
-                                    directives: [
-                                      {
-                                        name: "model",
-                                        rawName: "v-model",
-                                        value: _vm.air_bag,
-                                        expression: "air_bag",
-                                      },
-                                    ],
-                                    staticClass: "form-control",
-                                    attrs: { id: "airBag" },
-                                    on: {
-                                      change: function ($event) {
-                                        var $$selectedVal =
-                                          Array.prototype.filter
-                                            .call(
-                                              $event.target.options,
-                                              function (o) {
-                                                return o.selected
-                                              }
-                                            )
-                                            .map(function (o) {
-                                              var val =
-                                                "_value" in o
-                                                  ? o._value
-                                                  : o.value
-                                              return val
-                                            })
-                                        _vm.air_bag = $event.target.multiple
-                                          ? $$selectedVal
-                                          : $$selectedVal[0]
-                                      },
-                                    },
-                                  },
-                                  [
-                                    _c("option", { domProps: { value: 0 } }, [
-                                      _vm._v("Nao"),
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("option", { domProps: { value: 1 } }, [
-                                      _vm._v("Sim"),
-                                    ]),
-                                  ]
-                                ),
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "input-component",
-                              {
-                                attrs: {
-                                  titulo: "ABS",
-                                  id: "abs",
-                                  "id-help": "absHelp",
-                                  "help-text":
-                                    "Informe se o carro possui freios ABS.",
-                                },
-                              },
-                              [
-                                _c(
-                                  "select",
-                                  {
-                                    directives: [
-                                      {
-                                        name: "model",
-                                        rawName: "v-model",
-                                        value: _vm.abs,
-                                        expression: "abs",
-                                      },
-                                    ],
-                                    staticClass: "form-control",
-                                    attrs: { id: "abs" },
-                                    on: {
-                                      change: function ($event) {
-                                        var $$selectedVal =
-                                          Array.prototype.filter
-                                            .call(
-                                              $event.target.options,
-                                              function (o) {
-                                                return o.selected
-                                              }
-                                            )
-                                            .map(function (o) {
-                                              var val =
-                                                "_value" in o
-                                                  ? o._value
-                                                  : o.value
-                                              return val
-                                            })
-                                        _vm.abs = $event.target.multiple
-                                          ? $$selectedVal
-                                          : $$selectedVal[0]
-                                      },
-                                    },
-                                  },
-                                  [
-                                    _c("option", { domProps: { value: 0 } }, [
-                                      _vm._v("Nao"),
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("option", { domProps: { value: 1 } }, [
-                                      _vm._v("Sim"),
-                                    ]),
-                                  ]
-                                ),
-                              ]
-                            ),
                           ],
                           1
                         ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "form-group" },
+                      [
+                        _c(
+                          "input-component",
+                          {
+                            attrs: {
+                              titulo: "Modelo do Carro",
+                              id: "modeloId",
+                              "id-help": "modeloIdHelp",
+                              "help-text": "Informe o modelo do carro.",
+                            },
+                          },
+                          [
+                            _c(
+                              "select",
+                              {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.$store.state.item.modelo_id,
+                                    expression: "$store.state.item.modelo_id",
+                                  },
+                                ],
+                                staticClass: "form-control",
+                                attrs: { id: "modeloId" },
+                                on: {
+                                  change: function ($event) {
+                                    var $$selectedVal = Array.prototype.filter
+                                      .call(
+                                        $event.target.options,
+                                        function (o) {
+                                          return o.selected
+                                        }
+                                      )
+                                      .map(function (o) {
+                                        var val =
+                                          "_value" in o ? o._value : o.value
+                                        return val
+                                      })
+                                    _vm.$set(
+                                      _vm.$store.state.item,
+                                      "modelo_id",
+                                      $event.target.multiple
+                                        ? $$selectedVal
+                                        : $$selectedVal[0]
+                                    )
+                                  },
+                                },
+                              },
+                              [
+                                _c(
+                                  "option",
+                                  {
+                                    attrs: { disabled: "" },
+                                    domProps: { value: false },
+                                  },
+                                  [_vm._v("Selecione o Modelo")]
+                                ),
+                                _vm._v(" "),
+                                _vm._l(_vm.modelos, function (modelo) {
+                                  return _c(
+                                    "option",
+                                    {
+                                      key: modelo.id,
+                                      domProps: { value: modelo.id },
+                                    },
+                                    [_vm._v(_vm._s(modelo.nome))]
+                                  )
+                                }),
+                              ],
+                              2
+                            ),
+                          ]
+                        ),
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "form-group" },
+                      [
+                        _c(
+                          "input-component",
+                          {
+                            attrs: {
+                              titulo: "Qual a quilometragem do carro?",
+                              id: "km",
+                              "id-help": "kmHelp",
+                              "help-text":
+                                "Informe quantos km rodados o carro possui.",
+                            },
+                          },
+                          [
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.$store.state.item.km,
+                                  expression: "$store.state.item.km",
+                                },
+                              ],
+                              staticClass: "form-control",
+                              attrs: {
+                                type: "number",
+                                id: "km",
+                                placeholder: "Ex: 40.000",
+                              },
+                              domProps: { value: _vm.$store.state.item.km },
+                              on: {
+                                input: function ($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    _vm.$store.state.item,
+                                    "km",
+                                    $event.target.value
+                                  )
+                                },
+                              },
+                            }),
+                          ]
+                        ),
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "form-group" },
+                      [
+                        _c(
+                          "input-component",
+                          {
+                            attrs: {
+                              titulo: "O carro se encontra disponivel?",
+                              id: "disponivel",
+                              "id-help": "disponivelHelp",
+                              "help-text": "Informe o carro está disponivel.",
+                            },
+                          },
+                          [
+                            _c(
+                              "select",
+                              {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.$store.state.item.disponivel,
+                                    expression: "$store.state.item.disponivel",
+                                  },
+                                ],
+                                staticClass: "form-control",
+                                attrs: { id: "disponivel" },
+                                on: {
+                                  change: function ($event) {
+                                    var $$selectedVal = Array.prototype.filter
+                                      .call(
+                                        $event.target.options,
+                                        function (o) {
+                                          return o.selected
+                                        }
+                                      )
+                                      .map(function (o) {
+                                        var val =
+                                          "_value" in o ? o._value : o.value
+                                        return val
+                                      })
+                                    _vm.$set(
+                                      _vm.$store.state.item,
+                                      "disponivel",
+                                      $event.target.multiple
+                                        ? $$selectedVal
+                                        : $$selectedVal[0]
+                                    )
+                                  },
+                                },
+                              },
+                              [
+                                _c("option", { domProps: { value: 0 } }, [
+                                  _vm._v("Nao"),
+                                ]),
+                                _vm._v(" "),
+                                _c("option", { domProps: { value: 1 } }, [
+                                  _vm._v("Sim"),
+                                ]),
+                              ]
+                            ),
+                          ]
+                        ),
+                      ],
+                      1
+                    ),
                   ]
                 },
                 proxy: true,
@@ -45304,7 +45268,9 @@ var render = function () {
                     : _vm._e(),
                   _vm._v(" "),
                   _vm.titulos[chaveValor].tipo == "fk"
-                    ? _c("span", [_vm._v(_vm._s(d.nome))])
+                    ? _c("span", [
+                        _vm._v(_vm._s(d[_vm.titulos[chaveValor].chave])),
+                      ])
                     : _vm._e(),
                   _vm._v(" "),
                   _vm.titulos[chaveValor].tipo == "bool"

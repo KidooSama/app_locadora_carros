@@ -31,13 +31,14 @@ class CarroController extends Controller
         }else {
             $carroRepository->selectAtributosRegistros('modelo');
         }
+        $carroRepository->withObj('modelo.marca');
         if ($request->has('filtro')) {
            $carroRepository->filtro($request->filtro);            
         }
         if ($request->has('atributos')) {
             $carroRepository->selectAtributos($request->atributos);
         }
-        return  response()->json(['data'=>$carroRepository->getResultado()], 200);
+        return  response()->json($carroRepository->getResultadoPaginado(5), 200);
     }
 
     /**
@@ -70,7 +71,7 @@ class CarroController extends Controller
         if ($carro === null) {
            return response()->json(['message'=>'Valor não encontrado'], 404);
         }
-        return response()->json(['data'=>$carro], 200);
+        return response()->json($carro, 200);
     }
 
     /**

@@ -40,7 +40,7 @@ class ModeloController extends Controller
         if ($request->has('atributos')) {
             $modeloRepository->selectAtributos($request->atributos);
         }
-        return  response()->json(['data'=>$modeloRepository->getResultado()], 200);
+        return  response()->json($modeloRepository->getResultadoPaginado(5), 200);
     }
 
     /**
@@ -83,7 +83,7 @@ class ModeloController extends Controller
      */
     public function show($id)
     {
-        $modelo = $this->modelo->with('marca')->withCount('carros')->find($id);
+        $modelo = $this->modelo->with('marca','carros')->withCount('carros')->find($id);
         if ($modelo === null) {
            return response()->json(['message'=>'Valor não encntrado'], 404);
         }

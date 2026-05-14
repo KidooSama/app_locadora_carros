@@ -38,6 +38,10 @@ Route::prefix('app')->middleware('auth')->group(function () {
         return view('app.carros');
     })->name('carros');
 
+    Route::get('/clientes', function () {
+        return view('app.clientes');
+    })->name('clientes');
+
 });
 
 

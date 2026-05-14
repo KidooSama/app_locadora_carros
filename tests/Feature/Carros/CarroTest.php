@@ -241,6 +241,26 @@ class CarroTest extends TestCase
             'km' => 50000
         ]);
     }
+    public function test_atualizar_carro_placa_igual()
+    {
+        $carro = Carro::factory()->createOne();
+        $dados = [
+            'modelo_id' => $carro->modelo->id,
+            'placa' => $carro->placa,
+            'disponivel' => false,
+            'km' => 50000
+        ];
+        $response = $this->withHeaders($this->authHeader())
+        ->putJson("/api/v1/carro/{$carro->id}",$dados);
+
+        $response->assertStatus(200);
+        $this->assertDatabaseHas('carros', [
+            'id' => $carro->id,
+            'placa' => 'XYZ1A99',
+            'disponivel' => false,
+            'km' => 50000
+        ]);
+    }
         
     // ------------------------------------------
     

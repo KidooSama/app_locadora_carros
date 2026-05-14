@@ -14,6 +14,9 @@ class AbstractRepository{
     public function withCount($relacoes){
         $this->model = $this->model->withCount($relacoes);
     }
+    public function withObj($relacoes){
+        $this->model = $this->model->with($relacoes);
+    }
     public function filtro($filtros){
         $filtros = explode(';',$filtros);
         foreach ($filtros as $condicao) {          

@@ -50,6 +50,7 @@ Vue.component('modal-component', require('./components/Modal.vue').default);
 Vue.component('alert-component', require('./components/Alert.vue').default);
 Vue.component('paginate-component', require('./components/Paginate.vue').default);
 Vue.component('carros-component', require('./components/Carros.vue').default);
+Vue.component('clientes-component', require('./components/Carros.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
