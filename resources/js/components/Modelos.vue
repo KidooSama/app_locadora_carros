@@ -373,7 +373,7 @@ import { error } from 'jquery';
                         console.log(response.data)
                         atualizarImg.value = ''
                         this.$store.state.transacao.status = 'sucesso'
-                        this.$store.state.transacao.mensagem = 'A modelo foi atualizada com sucesso!'
+                        this.$store.state.transacao.mensagem = 'O modelo foi atualizada com sucesso!'
                         
                         
                     })
@@ -393,9 +393,8 @@ import { error } from 'jquery';
                 }
                 let url = this.urlBase + '/' + this.$store.state.item.id
                 let formData = new FormData();
-                formData.append('_method', 'delete')
                 
-                axios.post(url, formData)
+                axios.delete(url, formData)
                     .then(response =>{
                         console.log(' Removido com sucesso', response)
                         this.$store.state.transacao.status = 'sucesso'

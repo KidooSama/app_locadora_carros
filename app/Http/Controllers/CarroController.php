@@ -61,8 +61,7 @@ class CarroController extends Controller
 
     /**
      * Display the specified resource.
-     *
-     * @param  \App\Models\Carro  $carro
+     * @param  integer $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -78,7 +77,7 @@ class CarroController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \App\Http\Requests\UpdateCarroRequest  $request
-     * @param  \App\Models\Carro  $carro
+     * @param  integer $id
      * @return \Illuminate\Http\Response
      */
     public function update(UpdateCarroRequest $request, $id)

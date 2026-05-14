@@ -26,13 +26,17 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::prefix('app')->middleware('auth')->group(function () {
 
-Route::get('/marcas', function () {
-    return view('app.marcas');
-})->name('marcas');
+    Route::get('/marcas', function () {
+        return view('app.marcas');
+    })->name('marcas');
 
-Route::get('/modelos', function () {
-    return view('app.modelos');
-})->name('modelos');
+    Route::get('/modelos', function () {
+        return view('app.modelos');
+    })->name('modelos');
+
+    Route::get('/carros', function () {
+        return view('app.carros');
+    })->name('carros');
 
 });
 

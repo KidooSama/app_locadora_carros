@@ -60,7 +60,6 @@
         },
         methods:{
             setStore(id){
-
                 this.$store.commit('limparTransacao')
                 this.$store.state.item = {}
                 axios.get(`${this.url}/${id}`)
@@ -68,7 +67,8 @@
                         this.$store.state.item = response.data
                         console.log(this.$store.state.item)
                         this.$emit('load-marca-options')
-                        console.log('Emitido')
+                        this.$emit('load-modelo-options')
+                        
                     })
                 .catch(errors=>{
                     console.log(errors)

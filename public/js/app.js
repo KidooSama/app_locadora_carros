@@ -3407,47 +3407,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
-function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
-function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
-function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
-function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -3699,77 +3658,81 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
-    var _ref;
-    return _ref = {
-      nome: '',
-      imagem: [],
-      marca_id: false
-    }, _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_ref, "imagem", ''), "numero_portas", ''), "lugares", ''), "air_bag", 1), "abs", 0), "urlBase", 'http://localhost:8000/api/v1/modelo'), "urlPaginate", ''), "urlFiltro", ''), "transacaoStatus", ''), "transacaoDetalhes", {}), _defineProperty(_defineProperty(_defineProperty(_ref, "modelos", {
-      data: []
-    }), "busca", {
-      id: '',
-      nome: ''
-    }), "marcas", []);
+    return {
+      marca_id: false,
+      modelo_id: false,
+      placa: '',
+      disponivel: 1,
+      km: '',
+      urlBase: 'http://localhost:8000/api/v1/carro',
+      urlPaginate: '',
+      urlFiltro: '',
+      transacaoStatus: '',
+      transacaoDetalhes: {},
+      carros: {
+        data: []
+      },
+      busca: {
+        id: '',
+        nome: ''
+      },
+      marcas: [],
+      modelos: []
+    };
   },
   methods: {
-    loadMarcaOptions: function loadMarcaOptions() {
+    loadModeloOptions: function loadModeloOptions() {
       var _this = this;
       this.$store.commit('limparTransacao');
-      if (this.marcas.length) {
+      if (this.modelos.length) {
         return;
       }
-      axios.get('/api/v1/marca').then(function (response) {
-        _this.marcas = response.data.data;
-        console.log(_this.marcas);
+      axios.get('/api/v1/modelo').then(function (response) {
+        _this.modelos = response.data.data;
+        //console.log(this.modelos)
       })["catch"](function (errors) {
         _this.transacaoStatus = 'erro';
         _this.transacaoDetalhes = {
           mensagem: errors.response.data.message,
           dados: errors.response.data.errors
         };
-        console.log(errors.response);
+        //console.log(errors.response)
       });
     },
     salvar: function salvar() {
       var _this2 = this;
       var formData = new FormData();
-      formData.append('marca_id', this.marca_id);
-      formData.append('nome', this.nome);
-      formData.append('imagem', this.imagem[0]);
-      formData.append('numero_portas', this.numero_portas);
-      formData.append('lugares', this.lugares);
-      formData.append('air_bag', this.air_bag);
-      formData.append('abs', this.abs);
+      formData.append('modelo_id', this.modelo_id);
+      formData.append('placa', this.placa);
+      formData.append('disponivel', this.disponivel);
+      formData.append('km', this.km);
       axios.post(this.urlBase, formData).then(function (response) {
         _this2.$store.state.transacao.status = 'sucesso';
-        _this2.$store.state.transacao.mensagem = 'O modelo foi adicionado com sucesso!';
-        console.log(response.data);
+        _this2.$store.state.transacao.mensagem = 'O carro foi adicionado com sucesso!';
+        //console.log(response.data)
       })["catch"](function (errors) {
-        console.log('Erro ao Atualizar: ', errors.response);
+        console.log('Erro ao cadastrar: ', errors.response);
         _this2.$store.state.transacao.status = 'erro';
         _this2.$store.state.transacao.mensagem = errors.response.data.message;
         _this2.$store.state.transacao.dados = errors.response.data.errors;
-        console.log(errors.response);
+
+        //console.log(errors.response)
         //errors.response.data.message
       });
-      this.loadModelos();
+      this.loadCarros();
     },
     atualizar: function atualizar() {
       var _this3 = this;
       var url = this.urlBase + '/' + this.$store.state.item.id;
       var formData = new FormData();
-      formData.append('nome', this.$store.state.item.nome);
-      console.log(this.$store.state.item.nome);
-      formData.append('_method', 'put');
-      if (this.imagem[0]) {
-        formData.append('imagem', this.imagem[0]);
-        console.log(this.$store.state.item.nome);
-      }
-      axios.post(url, formData).then(function (response) {
+      formData.append('modelo_id', this.$store.state.item.modelo_id);
+      formData.append('placa', this.$store.state.item.placa);
+      formData.append('disponivel', this.$store.state.item.disponivel);
+      formData.append('km', this.$store.state.item.km);
+      axios.put(url, formData).then(function (response) {
         console.log(response.data);
-        atualizarImg.value = '';
         _this3.$store.state.transacao.status = 'sucesso';
-        _this3.$store.state.transacao.mensagem = 'A modelo foi atualizada com sucesso!';
+        _this3.$store.state.transacao.mensagem = 'A carro foi atualizada com sucesso!';
       })["catch"](function (errors) {
         console.log('Erro ao Atualizar: ', errors.response);
         _this3.$store.state.transacao.status = 'erro';
@@ -3777,7 +3740,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         _this3.$store.state.transacao.dados = errors.response.data.errors;
         //errors.response.data.message
       });
-      this.loadModelos();
+      this.loadCarros();
     },
     remover: function remover() {
       var _this4 = this;
@@ -3787,12 +3750,11 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       }
       var url = this.urlBase + '/' + this.$store.state.item.id;
       var formData = new FormData();
-      formData.append('_method', 'delete');
-      axios.post(url, formData).then(function (response) {
+      axios["delete"](url, formData).then(function (response) {
         console.log(' Removido com sucesso', response);
         _this4.$store.state.transacao.status = 'sucesso';
-        _this4.$store.state.transacao.mensagem = 'O modelo foi atualizada com sucesso!';
-        _this4.loadModelos();
+        _this4.$store.state.transacao.mensagem = 'O carro foi atualizada com sucesso!';
+        _this4.loadCarros();
       })["catch"](function (errors) {
         console.log('erro', errors.data);
         _this4.$store.state.transacao.status = 'erro';
@@ -3815,30 +3777,27 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       } else {
         this.urlFiltro = '';
       }
-      this.loadModelos();
+      this.loadCarros();
     },
     paginacao: function paginacao(l) {
       if (l.url) {
         this.urlPaginate = l.url.split('?')[1];
-        this.loadModelos();
+        this.loadCarros();
       }
     },
-    loadModelos: function loadModelos() {
+    loadCarros: function loadCarros() {
       var _this5 = this;
       var url = this.urlBase + '?' + this.urlPaginate + this.urlFiltro;
       axios.get(url).then(function (response) {
-        _this5.modelos = response.data;
-        console.log(_this5.modelos);
+        _this5.carros = response.data;
+        //console.log(this.carros)
       })["catch"](function (errors) {
         console.log(errors);
       });
-    },
-    imgLoad: function imgLoad(e) {
-      this.imagem = e.target.files;
     }
   },
   mounted: function mounted() {
-    this.loadModelos();
+    this.loadCarros();
   }
 });
 
@@ -4763,7 +4722,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         console.log(response.data);
         atualizarImg.value = '';
         _this3.$store.state.transacao.status = 'sucesso';
-        _this3.$store.state.transacao.mensagem = 'A modelo foi atualizada com sucesso!';
+        _this3.$store.state.transacao.mensagem = 'O modelo foi atualizada com sucesso!';
       })["catch"](function (errors) {
         console.log('Erro ao Atualizar: ', errors.response);
         _this3.$store.state.transacao.status = 'erro';
@@ -4781,8 +4740,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       }
       var url = this.urlBase + '/' + this.$store.state.item.id;
       var formData = new FormData();
-      formData.append('_method', 'delete');
-      axios.post(url, formData).then(function (response) {
+      axios["delete"](url, formData).then(function (response) {
         console.log(' Removido com sucesso', response);
         _this4.$store.state.transacao.status = 'sucesso';
         _this4.$store.state.transacao.mensagem = 'O modelo foi atualizada com sucesso!';
@@ -4943,7 +4901,7 @@ __webpack_require__.r(__webpack_exports__);
         _this.$store.state.item = response.data;
         console.log(_this.$store.state.item);
         _this.$emit('load-marca-options');
-        console.log('Emitido');
+        _this.$emit('load-modelo-options');
       })["catch"](function (errors) {
         console.log(errors);
       });
@@ -4979,13 +4937,15 @@ var store = new Vuex__WEBPACK_IMPORTED_MODULE_0__["default"].Store({
     item: {},
     transacao: {
       status: '',
-      mensagem: ''
+      mensagem: '',
+      dados: ''
     }
   },
   mutations: {
     limparTransacao: function limparTransacao(state) {
       state.transacao.status = '';
       state.transacao.mensagem = '';
+      state.transacao.dados = '';
     }
   }
 });
@@ -41286,7 +41246,7 @@ var render = function () {
         { staticClass: "col-lg" },
         [
           _c("card-component", {
-            attrs: { titulo: "Busca de Modelos" },
+            attrs: { titulo: "Busca de carros" },
             scopedSlots: _vm._u([
               {
                 key: "conteudo",
@@ -41304,7 +41264,7 @@ var render = function () {
                                 titulo: "ID",
                                 id: "inputId",
                                 "id-help": "idHelp",
-                                "help-text": "Informe o ID do Modelo.",
+                                "help-text": "Informe o ID do Carro.",
                               },
                             },
                             [
@@ -41351,10 +41311,10 @@ var render = function () {
                             "input-component",
                             {
                               attrs: {
-                                titulo: "Nome do Modelo",
+                                titulo: "Nome do Carro",
                                 id: "inputNome",
                                 "id-help": "nomeHelp",
-                                "help-text": "Informe o nome do modelo.",
+                                "help-text": "Informe o nome do carro.",
                               },
                             },
                             [
@@ -41419,7 +41379,7 @@ var render = function () {
           }),
           _vm._v(" "),
           _c("card-component", {
-            attrs: { titulo: "Listagem de Modelos" },
+            attrs: { titulo: "Listagem de Carros" },
             scopedSlots: _vm._u([
               {
                 key: "conteudo",
@@ -41434,31 +41394,31 @@ var render = function () {
                             visualizar: {
                               visivel: true,
                               dataToggle: "modal",
-                              dataTarget: "#modalModeloVisualizar",
+                              dataTarget: "#modalCarroVisualizar",
                             },
                             remover: {
                               visivel: true,
                               dataToggle: "modal",
-                              dataTarget: "#modalModeloRemover",
+                              dataTarget: "#modalCarroRemover",
                             },
                             atualizar: {
                               visivel: true,
                               dataToggle: "modal",
-                              dataTarget: "#modalModeloAtualizar",
+                              dataTarget: "#modalCarroAtualizar",
                             },
                             url: _vm.urlBase,
-                            dados: _vm.modelos.data,
+                            dados: _vm.carros.data,
                             titulos: {
                               id: { titulo: "ID", tipo: "text" },
-                              nome: { titulo: "Nome", tipo: "text" },
-                              carros_count: {
-                                titulo: "Carros Registrados",
+                              placa: { titulo: "Placa", tipo: "text" },
+                              disponivel: {
+                                titulo: "Disponivel",
                                 tipo: "text",
                               },
-                              marca: { titulo: "Marca", tipo: "fk" },
+                              km: { titulo: "Quilometros", tipo: "text" },
                             },
                           },
-                          on: { "load-marca-options": _vm.loadMarcaOptions },
+                          on: { "load-modelo-options": _vm.loadModeloOptions },
                         }),
                       ],
                       1
@@ -41474,7 +41434,7 @@ var render = function () {
                     _c(
                       "paginate-component",
                       { staticClass: "float-left" },
-                      _vm._l(_vm.modelos.links, function (l, key) {
+                      _vm._l(_vm.carros.links, function (l, key) {
                         return _c(
                           "li",
                           {
@@ -41509,7 +41469,7 @@ var render = function () {
                         },
                         on: {
                           click: function ($event) {
-                            return _vm.loadMarcaOptions()
+                            return _vm.loadModeloOptions()
                           },
                         },
                       },
@@ -41523,7 +41483,7 @@ var render = function () {
           }),
           _vm._v(" "),
           _c("modal-component", {
-            attrs: { id: "modalModelo", title: "Adicionar Modelo" },
+            attrs: { id: "modalModelo", title: "Adicionar Carro" },
             scopedSlots: _vm._u([
               {
                 key: "alertas",
@@ -41564,10 +41524,11 @@ var render = function () {
                           "input-component",
                           {
                             attrs: {
-                              titulo: "Nome do Modelo",
-                              id: "novoNome",
-                              "id-help": "novoNomeHelp",
-                              "help-text": "Informe o nome do modelo.",
+                              titulo: "Placa do Carro",
+                              id: "novoPlaca",
+                              "id-help": "novoPlacaHelp",
+                              "help-text":
+                                "Informe placa do carro no padrão mercosul.",
                             },
                           },
                           [
@@ -41576,23 +41537,23 @@ var render = function () {
                                 {
                                   name: "model",
                                   rawName: "v-model",
-                                  value: _vm.nome,
-                                  expression: "nome",
+                                  value: _vm.placa,
+                                  expression: "placa",
                                 },
                               ],
                               staticClass: "form-control",
                               attrs: {
                                 type: "text",
-                                id: "novoNome",
-                                placeholder: "Ex: Corolla",
+                                id: "novoPlaca",
+                                placeholder: "Ex: ABC1D23",
                               },
-                              domProps: { value: _vm.nome },
+                              domProps: { value: _vm.placa },
                               on: {
                                 input: function ($event) {
                                   if ($event.target.composing) {
                                     return
                                   }
-                                  _vm.nome = $event.target.value
+                                  _vm.placa = $event.target.value
                                 },
                               },
                             }),
@@ -41610,10 +41571,10 @@ var render = function () {
                           "input-component",
                           {
                             attrs: {
-                              titulo: "Marca do Modelo",
-                              id: "marcaId",
-                              "id-help": "marcaIdHelp",
-                              "help-text": "Informe a marca do modelo.",
+                              titulo: "Modelo do Carro",
+                              id: "modeloId",
+                              "id-help": "modeloIdHelp",
+                              "help-text": "Informe o modelo do carro.",
                             },
                           },
                           [
@@ -41624,12 +41585,12 @@ var render = function () {
                                   {
                                     name: "model",
                                     rawName: "v-model",
-                                    value: _vm.marca_id,
-                                    expression: "marca_id",
+                                    value: _vm.modelo_id,
+                                    expression: "modelo_id",
                                   },
                                 ],
                                 staticClass: "form-control",
-                                attrs: { id: "marcaId" },
+                                attrs: { id: "modeloId" },
                                 on: {
                                   change: function ($event) {
                                     var $$selectedVal = Array.prototype.filter
@@ -41644,7 +41605,7 @@ var render = function () {
                                           "_value" in o ? o._value : o.value
                                         return val
                                       })
-                                    _vm.marca_id = $event.target.multiple
+                                    _vm.modelo_id = $event.target.multiple
                                       ? $$selectedVal
                                       : $$selectedVal[0]
                                   },
@@ -41660,14 +41621,14 @@ var render = function () {
                                   [_vm._v("Selecione o Modelo")]
                                 ),
                                 _vm._v(" "),
-                                _vm._l(_vm.marcas, function (marca) {
+                                _vm._l(_vm.modelos, function (modelo) {
                                   return _c(
                                     "option",
                                     {
-                                      key: marca.id,
-                                      domProps: { value: marca.id },
+                                      key: modelo.id,
+                                      domProps: { value: modelo.id },
                                     },
-                                    [_vm._v(_vm._s(marca.nome))]
+                                    [_vm._v(_vm._s(modelo.nome))]
                                   )
                                 }),
                               ],
@@ -41687,11 +41648,11 @@ var render = function () {
                           "input-component",
                           {
                             attrs: {
-                              titulo: "Número de Portas",
-                              id: "numeroPortas",
-                              "id-help": "numeroPortasHelp",
+                              titulo: "Qual a quilometragem do carro?",
+                              id: "km",
+                              "id-help": "kmHelp",
                               "help-text":
-                                "Informe a quantidade de portas do veículo.",
+                                "Informe quantos km rodados o carro possui.",
                             },
                           },
                           [
@@ -41700,23 +41661,23 @@ var render = function () {
                                 {
                                   name: "model",
                                   rawName: "v-model",
-                                  value: _vm.numero_portas,
-                                  expression: "numero_portas",
+                                  value: _vm.km,
+                                  expression: "km",
                                 },
                               ],
                               staticClass: "form-control",
                               attrs: {
                                 type: "number",
-                                id: "numeroPortas",
-                                placeholder: "Ex: 4",
+                                id: "km",
+                                placeholder: "Ex: 40.000",
                               },
-                              domProps: { value: _vm.numero_portas },
+                              domProps: { value: _vm.km },
                               on: {
                                 input: function ($event) {
                                   if ($event.target.composing) {
                                     return
                                   }
-                                  _vm.numero_portas = $event.target.value
+                                  _vm.km = $event.target.value
                                 },
                               },
                             }),
@@ -41734,58 +41695,10 @@ var render = function () {
                           "input-component",
                           {
                             attrs: {
-                              titulo: "Quantidade de Lugares",
-                              id: "lugares",
-                              "id-help": "lugaresHelp",
-                              "help-text":
-                                "Informe a quantidade de lugares do veículo.",
-                            },
-                          },
-                          [
-                            _c("input", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: _vm.lugares,
-                                  expression: "lugares",
-                                },
-                              ],
-                              staticClass: "form-control",
-                              attrs: {
-                                type: "number",
-                                id: "lugares",
-                                placeholder: "Ex: 5",
-                              },
-                              domProps: { value: _vm.lugares },
-                              on: {
-                                input: function ($event) {
-                                  if ($event.target.composing) {
-                                    return
-                                  }
-                                  _vm.lugares = $event.target.value
-                                },
-                              },
-                            }),
-                          ]
-                        ),
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      { staticClass: "form-group" },
-                      [
-                        _c(
-                          "input-component",
-                          {
-                            attrs: {
-                              titulo: "Air Bag",
-                              id: "airBag",
-                              "id-help": "airBagHelp",
-                              "help-text":
-                                "Informe se o modelo possui air bag.",
+                              titulo: "O carro se encontra disponivel?",
+                              id: "disponivel",
+                              "id-help": "disponivelHelp",
+                              "help-text": "Informe o carro está disponivel.",
                             },
                           },
                           [
@@ -41796,12 +41709,12 @@ var render = function () {
                                   {
                                     name: "model",
                                     rawName: "v-model",
-                                    value: _vm.air_bag,
-                                    expression: "air_bag",
+                                    value: _vm.disponivel,
+                                    expression: "disponivel",
                                   },
                                 ],
                                 staticClass: "form-control",
-                                attrs: { id: "airBag" },
+                                attrs: { id: "disponivel" },
                                 on: {
                                   change: function ($event) {
                                     var $$selectedVal = Array.prototype.filter
@@ -41816,7 +41729,7 @@ var render = function () {
                                           "_value" in o ? o._value : o.value
                                         return val
                                       })
-                                    _vm.air_bag = $event.target.multiple
+                                    _vm.disponivel = $event.target.multiple
                                       ? $$selectedVal
                                       : $$selectedVal[0]
                                   },
@@ -41832,101 +41745,6 @@ var render = function () {
                                 ]),
                               ]
                             ),
-                          ]
-                        ),
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      { staticClass: "form-group" },
-                      [
-                        _c(
-                          "input-component",
-                          {
-                            attrs: {
-                              titulo: "ABS",
-                              id: "abs",
-                              "id-help": "absHelp",
-                              "help-text":
-                                "Informe se o modelo possui freios ABS.",
-                            },
-                          },
-                          [
-                            _c(
-                              "select",
-                              {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: _vm.abs,
-                                    expression: "abs",
-                                  },
-                                ],
-                                staticClass: "form-control",
-                                attrs: { id: "abs" },
-                                on: {
-                                  change: function ($event) {
-                                    var $$selectedVal = Array.prototype.filter
-                                      .call(
-                                        $event.target.options,
-                                        function (o) {
-                                          return o.selected
-                                        }
-                                      )
-                                      .map(function (o) {
-                                        var val =
-                                          "_value" in o ? o._value : o.value
-                                        return val
-                                      })
-                                    _vm.abs = $event.target.multiple
-                                      ? $$selectedVal
-                                      : $$selectedVal[0]
-                                  },
-                                },
-                              },
-                              [
-                                _c("option", { domProps: { value: 0 } }, [
-                                  _vm._v("Nao"),
-                                ]),
-                                _vm._v(" "),
-                                _c("option", { domProps: { value: 1 } }, [
-                                  _vm._v("Sim"),
-                                ]),
-                              ]
-                            ),
-                          ]
-                        ),
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      { staticClass: "form-group" },
-                      [
-                        _c(
-                          "input-component",
-                          {
-                            attrs: {
-                              titulo: "Imagem do Modelo",
-                              id: "novoImg",
-                              "id-help": "imgHelp",
-                              "help-text": "Selecione a imagem do modelo.",
-                            },
-                          },
-                          [
-                            _c("input", {
-                              staticClass: "form-control-file",
-                              attrs: { type: "file", id: "novoImg" },
-                              on: {
-                                change: function ($event) {
-                                  return _vm.imgLoad($event)
-                                },
-                              },
-                            }),
                           ]
                         ),
                       ],
@@ -41970,7 +41788,7 @@ var render = function () {
           }),
           _vm._v(" "),
           _c("modal-component", {
-            attrs: { id: "modalModeloVisualizar", title: "Visualizar Modelo" },
+            attrs: { id: "modalModeloVisualizar", title: "Visualizar Carro" },
             scopedSlots: _vm._u([
               {
                 key: "conteudo",
@@ -42008,7 +41826,7 @@ var render = function () {
                             _vm._v(" "),
                             _c(
                               "input-component",
-                              { attrs: { titulo: "Modelo" } },
+                              { attrs: { titulo: "Carro" } },
                               [
                                 _c("input", {
                                   staticClass: "form-control",
@@ -42036,7 +41854,7 @@ var render = function () {
                             _vm._v(" "),
                             _c(
                               "input-component",
-                              { attrs: { titulo: "Foto do Modelo:" } },
+                              { attrs: { titulo: "Foto do Carro:" } },
                               [
                                 _vm.$store.state.item.imagem
                                   ? _c("img", {
@@ -42156,7 +41974,7 @@ var render = function () {
           }),
           _vm._v(" "),
           _c("modal-component", {
-            attrs: { id: "modalModeloRemover", title: "Remover Modelo" },
+            attrs: { id: "modalCarroRemover", title: "Remover Carro" },
             scopedSlots: _vm._u(
               [
                 {
@@ -42191,172 +42009,86 @@ var render = function () {
                       key: "conteudo",
                       fn: function () {
                         return [
-                          !_vm.$store.state.item.id
-                            ? _c(
-                                "div",
-                                {
-                                  staticClass: "d-flex justify-content-center",
-                                },
+                          _c(
+                            "div",
+                            [
+                              _c(
+                                "input-component",
+                                { attrs: { titulo: "ID" } },
                                 [
-                                  _c(
-                                    "div",
-                                    {
-                                      staticClass: "spinner-border",
-                                      attrs: { role: "status" },
+                                  _c("input", {
+                                    staticClass: "form-control",
+                                    attrs: { type: "text", disabled: "" },
+                                    domProps: {
+                                      value: _vm.$store.state.item.id,
                                     },
-                                    [
-                                      _c("span", { staticClass: "sr-only" }, [
-                                        _vm._v("Loading..."),
-                                      ]),
-                                    ]
-                                  ),
+                                  }),
                                 ]
-                              )
-                            : _c(
-                                "div",
-                                [
-                                  _c(
-                                    "input-component",
-                                    { attrs: { titulo: "ID" } },
-                                    [
-                                      _c("input", {
-                                        staticClass: "form-control",
-                                        attrs: { type: "text", disabled: "" },
-                                        domProps: {
-                                          value: _vm.$store.state.item.id,
-                                        },
-                                      }),
-                                    ]
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "input-component",
-                                    { attrs: { titulo: "Modelo" } },
-                                    [
-                                      _c("input", {
-                                        staticClass: "form-control",
-                                        attrs: { type: "text", disabled: "" },
-                                        domProps: {
-                                          value: _vm.$store.state.item.nome,
-                                        },
-                                      }),
-                                    ]
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "input-component",
-                                    { attrs: { titulo: "Marca" } },
-                                    [
-                                      _c("input", {
-                                        staticClass: "form-control",
-                                        attrs: { type: "text", disabled: "" },
-                                        domProps: {
-                                          value:
-                                            _vm.$store.state.item.marca.nome,
-                                        },
-                                      }),
-                                    ]
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "input-component",
-                                    { attrs: { titulo: "Foto do Modelo:" } },
-                                    [
-                                      _vm.$store.state.item.imagem
-                                        ? _c("img", {
-                                            attrs: {
-                                              src:
-                                                "/storage/" +
-                                                _vm.$store.state.item.imagem,
-                                              alt: _vm.$store.state.item.nome,
-                                              width: "400",
-                                            },
-                                          })
-                                        : _vm._e(),
-                                    ]
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "input-component",
-                                    { attrs: { titulo: "Numero de Portas:" } },
-                                    [
-                                      _c("input", {
-                                        staticClass: "form-control",
-                                        attrs: { type: "text", disabled: "" },
-                                        domProps: {
-                                          value:
-                                            _vm.$store.state.item.numero_portas,
-                                        },
-                                      }),
-                                    ]
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "input-component",
-                                    { attrs: { titulo: "Lugares:" } },
-                                    [
-                                      _c("input", {
-                                        staticClass: "form-control",
-                                        attrs: { type: "text", disabled: "" },
-                                        domProps: {
-                                          value: _vm.$store.state.item.lugares,
-                                        },
-                                      }),
-                                    ]
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "input-component",
-                                    { attrs: { titulo: "Air Bag:" } },
-                                    [
-                                      _c("input", {
-                                        staticClass: "form-control",
-                                        attrs: { type: "text", disabled: "" },
-                                        domProps: {
-                                          value:
-                                            _vm.$store.state.item.air_bag == 1
-                                              ? "Sim"
-                                              : "Não",
-                                        },
-                                      }),
-                                    ]
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "input-component",
-                                    { attrs: { titulo: "Abs:" } },
-                                    [
-                                      _c("input", {
-                                        staticClass: "form-control",
-                                        attrs: { type: "text", disabled: "" },
-                                        domProps: {
-                                          value:
-                                            _vm.$store.state.item.abs == 1
-                                              ? "Sim"
-                                              : "Não",
-                                        },
-                                      }),
-                                    ]
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "input-component",
-                                    { attrs: { titulo: "Data de criação" } },
-                                    [
-                                      _c("input", {
-                                        staticClass: "form-control",
-                                        attrs: { type: "text", disabled: "" },
-                                        domProps: {
-                                          value: _vm._f(
-                                            "formataDataTempoGlobal"
-                                          )(_vm.$store.state.item.created_at),
-                                        },
-                                      }),
-                                    ]
-                                  ),
-                                ],
-                                1
                               ),
+                              _vm._v(" "),
+                              _c(
+                                "input-component",
+                                { attrs: { titulo: "Placa" } },
+                                [
+                                  _c("input", {
+                                    staticClass: "form-control",
+                                    attrs: { type: "text", disabled: "" },
+                                    domProps: {
+                                      value: _vm.$store.state.item.placa,
+                                    },
+                                  }),
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "input-component",
+                                { attrs: { titulo: "Disponivel" } },
+                                [
+                                  _c("input", {
+                                    staticClass: "form-control",
+                                    attrs: { type: "text", disabled: "" },
+                                    domProps: {
+                                      value:
+                                        _vm.$store.state.item.disponivel == 1
+                                          ? "Sim"
+                                          : "Não",
+                                    },
+                                  }),
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "input-component",
+                                { attrs: { titulo: "Quilometragem" } },
+                                [
+                                  _c("input", {
+                                    staticClass: "form-control",
+                                    attrs: { type: "text", disabled: "" },
+                                    domProps: {
+                                      value: _vm.$store.state.item.km,
+                                    },
+                                  }),
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "input-component",
+                                { attrs: { titulo: "Data de criação" } },
+                                [
+                                  _c("input", {
+                                    staticClass: "form-control",
+                                    attrs: { type: "text", disabled: "" },
+                                    domProps: {
+                                      value: _vm._f("formataDataTempoGlobal")(
+                                        _vm.$store.state.item.created_at
+                                      ),
+                                    },
+                                  }),
+                                ]
+                              ),
+                            ],
+                            1
+                          ),
                         ]
                       },
                       proxy: true,
@@ -42401,7 +42133,7 @@ var render = function () {
           }),
           _vm._v(" "),
           _c("modal-component", {
-            attrs: { id: "modalModeloAtualizar", title: "Atualizar Modelo" },
+            attrs: { id: "modalModeloAtualizar", title: "Atualizar Carro" },
             scopedSlots: _vm._u([
               {
                 key: "alertas",
@@ -42460,7 +42192,7 @@ var render = function () {
                               "input-component",
                               {
                                 attrs: {
-                                  titulo: "Nome da Modelo",
+                                  titulo: "Nome da Carro",
                                   id: "atualizarNome",
                                 },
                               },
@@ -42499,10 +42231,10 @@ var render = function () {
                               "input-component",
                               {
                                 attrs: {
-                                  titulo: "Marca do Modelo",
+                                  titulo: "Marca do Carro",
                                   id: "marcaId",
                                   "id-help": "marcaIdHelp",
-                                  "help-text": "Informe a marca do modelo.",
+                                  "help-text": "Informe a marca do carro.",
                                 },
                               },
                               [
@@ -42577,7 +42309,7 @@ var render = function () {
                               "input-component",
                               {
                                 attrs: {
-                                  titulo: "Alterar Imagem do Modelo",
+                                  titulo: "Alterar Imagem do Carro",
                                   id: "atualizarImg",
                                 },
                               },
@@ -42630,7 +42362,7 @@ var render = function () {
                                   id: "airBag",
                                   "id-help": "airBagHelp",
                                   "help-text":
-                                    "Informe se o modelo possui air bag.",
+                                    "Informe se o carro possui air bag.",
                                 },
                               },
                               [
@@ -42691,7 +42423,7 @@ var render = function () {
                                   id: "abs",
                                   "id-help": "absHelp",
                                   "help-text":
-                                    "Informe se o modelo possui freios ABS.",
+                                    "Informe se o carro possui freios ABS.",
                                 },
                               },
                               [

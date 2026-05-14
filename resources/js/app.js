@@ -15,12 +15,13 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
     state:{
         item: {},
-        transacao: {status: '', mensagem:''}
+        transacao: {status: '', mensagem:'', dados:''}
     },
     mutations:{
         limparTransacao(state){
             state.transacao.status = ''
             state.transacao.mensagem = ''
+            state.transacao.dados = ''
         }
     }
 

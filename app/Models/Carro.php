@@ -11,7 +11,6 @@ class Carro extends Model
     protected $fillable = ['modelo_id', 'placa', 'disponivel', 'km'];
     use HasFactory;
     
-
     public function modelo(){
         return $this->belongsTo(Modelo::class);
     }
