@@ -12,8 +12,8 @@
                                 </input-component>                            
                             </div>
                             <div class="mb-3 col">
-                                <input-component titulo="Nome do Carro" id="inputNome" id-help="nomeHelp" help-text="Informe a placa do carro.">
-                                    <input type="text" id="inputNome" class="form-control" placeholder="Ex. Corolla" v-model="busca.nome">
+                                <input-component titulo="Numero da placa" id="inputNome" id-help="nomeHelp" help-text="Informe a placa do carro.">
+                                    <input type="text" id="inputNome" class="form-control" placeholder="Ex. ABC1D23" v-model="busca.placa">
                                 </input-component>                       
                             </div>
                         </div>
@@ -260,7 +260,7 @@ import { error } from 'jquery';
                 transacaoStatus:'',
                 transacaoDetalhes:{},
                 carros: {data:[]},
-                busca: {id: '', nome: ''},
+                busca: {id: '', placa: ''},
                 marcas: [],
                 modelos: [],
             }           

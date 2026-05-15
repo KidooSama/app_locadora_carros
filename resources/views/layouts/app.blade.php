@@ -35,7 +35,7 @@
                         <ul class="navbar-nav mr-auto">
                             @auth
                                 <li class="nav-item ">
-                                    <a href="" class="nav-link ">Clientes</a>
+                                    <a href="{{route('clientes')}}" class="nav-link ">Clientes</a>
                                 </li>
                                 <li class="nav-item ">
                                     <a href="" class="nav-link">Locações</a>

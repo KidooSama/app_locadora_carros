@@ -3671,7 +3671,7 @@ __webpack_require__.r(__webpack_exports__);
       },
       busca: {
         id: '',
-        nome: ''
+        placa: ''
       },
       marcas: [],
       modelos: []
@@ -3796,6 +3796,326 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     this.loadCarros();
+  }
+});
+
+/***/ },
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Clientes.vue?vue&type=script&lang=js&"
+/*!***************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Clientes.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************************************************************************************************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  data: function data() {
+    return {
+      nome: '',
+      urlBase: 'http://localhost:8000/api/v1/cliente',
+      urlPaginate: '',
+      urlFiltro: '',
+      transacaoStatus: '',
+      transacaoDetalhes: {},
+      busca: {
+        id: '',
+        nome: ''
+      },
+      clientes: []
+    };
+  },
+  methods: {
+    // loadModeloOptions(){
+    //     this.$store.commit('limparTransacao')
+    //     if (this.modelos.length) {
+    //         return
+    //     }
+    //     axios.get('/api/v1/modelo')
+    //     .then(response =>{
+    //         this.modelos = response.data.data
+    //         //console.log(this.modelos)
+    //     })
+    //     .catch(errors =>{
+    //         this.transacaoStatus = 'erro'
+    //         this.transacaoDetalhes ={
+    //             mensagem:errors.response.data.message,
+    //             dados: errors.response.data.errors
+    //         } 
+    //         //console.log(errors.response)
+    //     })              
+    // },
+    salvar: function salvar() {
+      var _this = this;
+      var dados = {
+        'nome': this.nome
+      };
+      axios.post(this.urlBase, dados).then(function (response) {
+        _this.$store.state.transacao.status = 'sucesso';
+        _this.$store.state.transacao.mensagem = 'O cliente foi adicionado com sucesso!';
+      })["catch"](function (errors) {
+        console.log('Erro ao cadastrar: ', errors.response);
+        _this.$store.state.transacao.status = 'erro';
+        _this.$store.state.transacao.mensagem = errors.response.data.message;
+        _this.$store.state.transacao.dados = errors.response.data.errors;
+      });
+      this.loadClientes();
+    },
+    atualizar: function atualizar() {
+      var _this2 = this;
+      var url = this.urlBase + '/' + this.$store.state.item.id;
+      var dados = {
+        'nome': this.$store.state.item.nome
+      };
+      axios.put(url, dados).then(function (response) {
+        _this2.$store.state.transacao.status = 'sucesso';
+        _this2.$store.state.transacao.mensagem = 'O cliente foi atualizado com sucesso!';
+      })["catch"](function (errors) {
+        console.log('Erro ao Atualizar: ', errors.response);
+        _this2.$store.state.transacao.status = 'erro';
+        _this2.$store.state.transacao.mensagem = errors.response.data.message;
+        _this2.$store.state.transacao.dados = errors.response.data.errors;
+        //errors.response.data.message
+      });
+      this.loadClientes();
+    },
+    remover: function remover() {
+      var _this3 = this;
+      var confirmacao = confirm('Tem certeza que deseja remover esse registro?');
+      if (!confirmacao) {
+        return false;
+      }
+      var url = this.urlBase + '/' + this.$store.state.item.id;
+      axios["delete"](url).then(function (response) {
+        console.log(' Removido com sucesso', response);
+        _this3.$store.state.transacao.status = 'sucesso';
+        _this3.$store.state.transacao.mensagem = 'O cliente foi atualizada com sucesso!';
+        _this3.loadClientes();
+      })["catch"](function (errors) {
+        console.log('erro', errors.data);
+        _this3.$store.state.transacao.status = 'erro';
+        _this3.$store.state.transacao.mensagem = errors.response.data.message;
+      });
+    },
+    search: function search() {
+      var filtro = '';
+      for (var chave in this.busca) {
+        if (this.busca[chave]) {
+          if (filtro != '') {
+            filtro += ";";
+          }
+          filtro += chave + ':like:' + '%' + this.busca[chave] + '%';
+        }
+      }
+      if (filtro != '') {
+        this.urlPaginate = 'page=1';
+        this.urlFiltro = '&filtro=' + filtro;
+      } else {
+        this.urlFiltro = '';
+      }
+      this.loadClientes();
+    },
+    paginacao: function paginacao(l) {
+      if (l.url) {
+        this.urlPaginate = l.url.split('?')[1];
+        this.loadClientes();
+      }
+    },
+    loadClientes: function loadClientes() {
+      var _this4 = this;
+      var url = this.urlBase + '?' + this.urlPaginate + this.urlFiltro;
+      axios.get(url).then(function (response) {
+        _this4.clientes = response.data.data;
+        console.log(_this4.clientes);
+      })["catch"](function (errors) {
+        console.log(errors);
+      });
+    }
+  },
+  mounted: function mounted() {
+    this.loadClientes();
   }
 });
 
@@ -4737,8 +5057,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         return false;
       }
       var url = this.urlBase + '/' + this.$store.state.item.id;
-      var formData = new FormData();
-      axios["delete"](url, formData).then(function (response) {
+      axios["delete"](url).then(function (response) {
         console.log(' Removido com sucesso', response);
         _this4.$store.state.transacao.status = 'sucesso';
         _this4.$store.state.transacao.mensagem = 'O modelo foi atualizada com sucesso!';
@@ -4972,7 +5291,8 @@ Vue.component('modal-component', (__webpack_require__(/*! ./components/Modal.vue
 Vue.component('alert-component', (__webpack_require__(/*! ./components/Alert.vue */ "./resources/js/components/Alert.vue")["default"]));
 Vue.component('paginate-component', (__webpack_require__(/*! ./components/Paginate.vue */ "./resources/js/components/Paginate.vue")["default"]));
 Vue.component('carros-component', (__webpack_require__(/*! ./components/Carros.vue */ "./resources/js/components/Carros.vue")["default"]));
-Vue.component('clientes-component', (__webpack_require__(/*! ./components/Carros.vue */ "./resources/js/components/Carros.vue")["default"]));
+Vue.component('clientes-component', (__webpack_require__(/*! ./components/Clientes.vue */ "./resources/js/components/Clientes.vue")["default"]));
+Vue.component('locacoes-component', Object(function webpackMissingModule() { var e = new Error("Cannot find module './components/Locacoes.vue'"); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -40386,6 +40706,46 @@ component.options.__file = "resources/js/components/Carros.vue"
 
 /***/ },
 
+/***/ "./resources/js/components/Clientes.vue"
+/*!**********************************************!*\
+  !*** ./resources/js/components/Clientes.vue ***!
+  \**********************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _Clientes_vue_vue_type_template_id_39326ab8___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Clientes.vue?vue&type=template&id=39326ab8& */ "./resources/js/components/Clientes.vue?vue&type=template&id=39326ab8&");
+/* harmony import */ var _Clientes_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Clientes.vue?vue&type=script&lang=js& */ "./resources/js/components/Clientes.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Clientes_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Clientes_vue_vue_type_template_id_39326ab8___WEBPACK_IMPORTED_MODULE_0__.render,
+  _Clientes_vue_vue_type_template_id_39326ab8___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) // removed by dead control flow
+{ var api; }
+component.options.__file = "resources/js/components/Clientes.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ },
+
 /***/ "./resources/js/components/ExampleComponent.vue"
 /*!******************************************************!*\
   !*** ./resources/js/components/ExampleComponent.vue ***!
@@ -40797,6 +41157,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ },
 
+/***/ "./resources/js/components/Clientes.vue?vue&type=script&lang=js&"
+/*!***********************************************************************!*\
+  !*** ./resources/js/components/Clientes.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Clientes_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Clientes.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Clientes.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Clientes_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ },
+
 /***/ "./resources/js/components/ExampleComponent.vue?vue&type=script&lang=js&"
 /*!*******************************************************************************!*\
   !*** ./resources/js/components/ExampleComponent.vue?vue&type=script&lang=js& ***!
@@ -40992,6 +41368,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   staticRenderFns: () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Carros_vue_vue_type_template_id_94f152a6___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Carros_vue_vue_type_template_id_94f152a6___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Carros.vue?vue&type=template&id=94f152a6& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Carros.vue?vue&type=template&id=94f152a6&");
+
+
+/***/ },
+
+/***/ "./resources/js/components/Clientes.vue?vue&type=template&id=39326ab8&"
+/*!*****************************************************************************!*\
+  !*** ./resources/js/components/Clientes.vue?vue&type=template&id=39326ab8& ***!
+  \*****************************************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   render: () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Clientes_vue_vue_type_template_id_39326ab8___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   staticRenderFns: () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Clientes_vue_vue_type_template_id_39326ab8___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Clientes_vue_vue_type_template_id_39326ab8___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Clientes.vue?vue&type=template&id=39326ab8& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Clientes.vue?vue&type=template&id=39326ab8&");
 
 
 /***/ },
@@ -41310,7 +41703,7 @@ var render = function () {
                             "input-component",
                             {
                               attrs: {
-                                titulo: "Nome do Carro",
+                                titulo: "Numero da placa",
                                 id: "inputNome",
                                 "id-help": "nomeHelp",
                                 "help-text": "Informe a placa do carro.",
@@ -41322,17 +41715,17 @@ var render = function () {
                                   {
                                     name: "model",
                                     rawName: "v-model",
-                                    value: _vm.busca.nome,
-                                    expression: "busca.nome",
+                                    value: _vm.busca.placa,
+                                    expression: "busca.placa",
                                   },
                                 ],
                                 staticClass: "form-control",
                                 attrs: {
                                   type: "text",
                                   id: "inputNome",
-                                  placeholder: "Ex. Corolla",
+                                  placeholder: "Ex. ABC1D23",
                                 },
-                                domProps: { value: _vm.busca.nome },
+                                domProps: { value: _vm.busca.placa },
                                 on: {
                                   input: function ($event) {
                                     if ($event.target.composing) {
@@ -41340,7 +41733,7 @@ var render = function () {
                                     }
                                     _vm.$set(
                                       _vm.busca,
-                                      "nome",
+                                      "placa",
                                       $event.target.value
                                     )
                                   },
@@ -42442,6 +42835,775 @@ var render = function () {
                       ],
                       1
                     ),
+                  ]
+                },
+                proxy: true,
+              },
+              {
+                key: "rodape",
+                fn: function () {
+                  return [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-secondary",
+                        attrs: { type: "button", "data-dismiss": "modal" },
+                      },
+                      [_vm._v("Cancelar")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-primary",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function ($event) {
+                            return _vm.atualizar()
+                          },
+                        },
+                      },
+                      [_vm._v("Salvar")]
+                    ),
+                  ]
+                },
+                proxy: true,
+              },
+            ]),
+          }),
+        ],
+        1
+      ),
+    ]),
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ },
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Clientes.vue?vue&type=template&id=39326ab8&"
+/*!********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Clientes.vue?vue&type=template&id=39326ab8& ***!
+  \********************************************************************************************************************************************************************************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   render: () => (/* binding */ render),
+/* harmony export */   staticRenderFns: () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function () {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "container" }, [
+    _c("div", { staticClass: "row justify-content-center" }, [
+      _c(
+        "div",
+        { staticClass: "col-lg" },
+        [
+          _c("card-component", {
+            attrs: { titulo: "Busca de clientes" },
+            scopedSlots: _vm._u([
+              {
+                key: "conteudo",
+                fn: function () {
+                  return [
+                    _c("div", { staticClass: "row" }, [
+                      _c(
+                        "div",
+                        { staticClass: "mb-3 col-md-6" },
+                        [
+                          _c(
+                            "input-component",
+                            {
+                              attrs: {
+                                titulo: "ID",
+                                id: "inputId",
+                                "id-help": "idHelp",
+                                "help-text": "Informe o ID do Cliente.",
+                              },
+                            },
+                            [
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.busca.id,
+                                    expression: "busca.id",
+                                  },
+                                ],
+                                staticClass: "form-control",
+                                attrs: {
+                                  type: "number",
+                                  id: "inputId",
+                                  placeholder: "Ex.01",
+                                },
+                                domProps: { value: _vm.busca.id },
+                                on: {
+                                  input: function ($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      _vm.busca,
+                                      "id",
+                                      $event.target.value
+                                    )
+                                  },
+                                },
+                              }),
+                            ]
+                          ),
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        { staticClass: "mb-3 col" },
+                        [
+                          _c(
+                            "input-component",
+                            {
+                              attrs: {
+                                titulo: "Nome do Cliente",
+                                id: "inputNome",
+                                "id-help": "nomeHelp",
+                                "help-text": "Informe a placa do cliente.",
+                              },
+                            },
+                            [
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.busca.nome,
+                                    expression: "busca.nome",
+                                  },
+                                ],
+                                staticClass: "form-control",
+                                attrs: {
+                                  type: "text",
+                                  id: "inputNome",
+                                  placeholder: "Ex. Corolla",
+                                },
+                                domProps: { value: _vm.busca.nome },
+                                on: {
+                                  input: function ($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      _vm.busca,
+                                      "nome",
+                                      $event.target.value
+                                    )
+                                  },
+                                },
+                              }),
+                            ]
+                          ),
+                        ],
+                        1
+                      ),
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "row" }, [
+                      _c(
+                        "div",
+                        { staticClass: "col d-flex justify-content-end" },
+                        [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-primary",
+                              attrs: { type: "submit" },
+                              on: { click: _vm.search },
+                            },
+                            [_vm._v("Pesquisar")]
+                          ),
+                        ]
+                      ),
+                    ]),
+                  ]
+                },
+                proxy: true,
+              },
+            ]),
+          }),
+          _vm._v(" "),
+          _c("card-component", {
+            attrs: { titulo: "Listagem de Clientes" },
+            scopedSlots: _vm._u([
+              {
+                key: "conteudo",
+                fn: function () {
+                  return [
+                    _c(
+                      "div",
+                      {},
+                      [
+                        _c("table-component", {
+                          attrs: {
+                            visualizar: {
+                              visivel: true,
+                              dataToggle: "modal",
+                              dataTarget: "#modalClienteVisualizar",
+                            },
+                            remover: {
+                              visivel: true,
+                              dataToggle: "modal",
+                              dataTarget: "#modalClienteRemover",
+                            },
+                            atualizar: {
+                              visivel: true,
+                              dataToggle: "modal",
+                              dataTarget: "#modalClienteAtualizar",
+                            },
+                            url: _vm.urlBase,
+                            dados: _vm.clientes,
+                            titulos: {
+                              id: { titulo: "ID", tipo: "text" },
+                              nome: { titulo: "Cliente", tipo: "text" },
+                              created_at: { titulo: "Criado", tipo: "data" },
+                            },
+                          },
+                        }),
+                      ],
+                      1
+                    ),
+                  ]
+                },
+                proxy: true,
+              },
+              {
+                key: "rodape",
+                fn: function () {
+                  return [
+                    _c(
+                      "paginate-component",
+                      { staticClass: "float-left" },
+                      _vm._l(_vm.clientes.links, function (l, key) {
+                        return _c(
+                          "li",
+                          {
+                            key: key,
+                            class: l.active ? "page-item active" : "page-item",
+                            on: {
+                              click: function ($event) {
+                                return _vm.paginacao(l)
+                              },
+                            },
+                          },
+                          [
+                            _c("a", {
+                              staticClass: "page-link",
+                              staticStyle: { cursor: "pointer" },
+                              domProps: { innerHTML: _vm._s(l.label) },
+                            }),
+                          ]
+                        )
+                      }),
+                      0
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-primary float-right",
+                        attrs: {
+                          type: "button",
+                          "data-toggle": "modal",
+                          "data-target": "#modalModelo",
+                        },
+                        on: {
+                          click: function ($event) {
+                            return _vm.loadModeloOptions()
+                          },
+                        },
+                      },
+                      [_vm._v("Adicionar")]
+                    ),
+                  ]
+                },
+                proxy: true,
+              },
+            ]),
+          }),
+          _vm._v(" "),
+          _c("modal-component", {
+            attrs: { id: "modalModelo", title: "Adicionar Cliente" },
+            scopedSlots: _vm._u([
+              {
+                key: "alertas",
+                fn: function () {
+                  return [
+                    _vm.$store.state.transacao.status == "sucesso"
+                      ? _c("alert-component", {
+                          attrs: {
+                            tipo: "success",
+                            detalhes: _vm.$store.state.transacao,
+                            titulo: "Cadastro realizado com sucesso!",
+                          },
+                        })
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.$store.state.transacao.status == "erro"
+                      ? _c("alert-component", {
+                          attrs: {
+                            tipo: "danger",
+                            detalhes: _vm.$store.state.transacao,
+                            titulo: "Erro ao tentar cadastrar.",
+                          },
+                        })
+                      : _vm._e(),
+                  ]
+                },
+                proxy: true,
+              },
+              {
+                key: "conteudo",
+                fn: function () {
+                  return [
+                    _c(
+                      "div",
+                      { staticClass: "form-group" },
+                      [
+                        _c(
+                          "input-component",
+                          {
+                            attrs: {
+                              titulo: "Nome do Cliente",
+                              id: "novoNome",
+                              "id-help": "novoNomeHelp",
+                              "help-text":
+                                "Informe nome do cliente no padrão mercosul.",
+                            },
+                          },
+                          [
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.nome,
+                                  expression: "nome",
+                                },
+                              ],
+                              staticClass: "form-control",
+                              attrs: {
+                                type: "text",
+                                id: "novoNome",
+                                placeholder: "Ex: ABC1D23",
+                              },
+                              domProps: { value: _vm.nome },
+                              on: {
+                                input: function ($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.nome = $event.target.value
+                                },
+                              },
+                            }),
+                          ]
+                        ),
+                      ],
+                      1
+                    ),
+                  ]
+                },
+                proxy: true,
+              },
+              {
+                key: "rodape",
+                fn: function () {
+                  return [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-secondary",
+                        attrs: { type: "button", "data-dismiss": "modal" },
+                      },
+                      [_vm._v("Cancelar")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-primary",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function ($event) {
+                            return _vm.salvar()
+                          },
+                        },
+                      },
+                      [_vm._v("Salvar")]
+                    ),
+                  ]
+                },
+                proxy: true,
+              },
+            ]),
+          }),
+          _vm._v(" "),
+          _c("modal-component", {
+            attrs: {
+              id: "modalClienteVisualizar",
+              title: "Visualizar Cliente",
+            },
+            scopedSlots: _vm._u([
+              {
+                key: "conteudo",
+                fn: function () {
+                  return [
+                    !_vm.$store.state.item.id
+                      ? _c(
+                          "div",
+                          { staticClass: "d-flex justify-content-center" },
+                          [
+                            _c(
+                              "div",
+                              {
+                                staticClass: "spinner-border",
+                                attrs: { role: "status" },
+                              },
+                              [
+                                _c("span", { staticClass: "sr-only" }, [
+                                  _vm._v("Loading..."),
+                                ]),
+                              ]
+                            ),
+                          ]
+                        )
+                      : _c(
+                          "div",
+                          [
+                            _c("input-component", { attrs: { titulo: "ID" } }, [
+                              _c("input", {
+                                staticClass: "form-control",
+                                attrs: { type: "text", disabled: "" },
+                                domProps: { value: _vm.$store.state.item.id },
+                              }),
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "input-component",
+                              { attrs: { titulo: "Cliente" } },
+                              [
+                                _c("input", {
+                                  staticClass: "form-control",
+                                  attrs: { type: "text", disabled: "" },
+                                  domProps: {
+                                    value: _vm.$store.state.item.nome,
+                                  },
+                                }),
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "input-component",
+                              { attrs: { titulo: "Data de criação" } },
+                              [
+                                _c("input", {
+                                  staticClass: "form-control",
+                                  attrs: { type: "text", disabled: "" },
+                                  domProps: {
+                                    value: _vm._f("formataDataTempoGlobal")(
+                                      _vm.$store.state.item.created_at
+                                    ),
+                                  },
+                                }),
+                              ]
+                            ),
+                          ],
+                          1
+                        ),
+                  ]
+                },
+                proxy: true,
+              },
+              {
+                key: "rodape",
+                fn: function () {
+                  return [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-secondary",
+                        attrs: { type: "button", "data-dismiss": "modal" },
+                      },
+                      [_vm._v("Cancelar")]
+                    ),
+                  ]
+                },
+                proxy: true,
+              },
+            ]),
+          }),
+          _vm._v(" "),
+          _c("modal-component", {
+            attrs: { id: "modalClienteRemover", title: "Remover Cliente" },
+            scopedSlots: _vm._u(
+              [
+                {
+                  key: "alertas",
+                  fn: function () {
+                    return [
+                      _vm.$store.state.transacao.status == "sucesso"
+                        ? _c("alert-component", {
+                            attrs: {
+                              tipo: "success",
+                              detalhes: _vm.$store.state.transacao,
+                              titulo: "Exclusão realizada com sucesso!",
+                            },
+                          })
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.$store.state.transacao.status == "erro"
+                        ? _c("alert-component", {
+                            attrs: {
+                              tipo: "danger",
+                              detalhes: _vm.$store.state.transacao,
+                              titulo: "Erro ao tentar excluir.",
+                            },
+                          })
+                        : _vm._e(),
+                    ]
+                  },
+                  proxy: true,
+                },
+                _vm.$store.state.transacao.status != "sucesso"
+                  ? {
+                      key: "conteudo",
+                      fn: function () {
+                        return [
+                          !_vm.$store.state.item.id
+                            ? _c(
+                                "div",
+                                {
+                                  staticClass: "d-flex justify-content-center",
+                                },
+                                [
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass: "spinner-border",
+                                      attrs: { role: "status" },
+                                    },
+                                    [
+                                      _c("span", { staticClass: "sr-only" }, [
+                                        _vm._v("Loading..."),
+                                      ]),
+                                    ]
+                                  ),
+                                ]
+                              )
+                            : _c(
+                                "div",
+                                [
+                                  _c(
+                                    "input-component",
+                                    { attrs: { titulo: "ID" } },
+                                    [
+                                      _c("input", {
+                                        staticClass: "form-control",
+                                        attrs: { type: "text", disabled: "" },
+                                        domProps: {
+                                          value: _vm.$store.state.item.id,
+                                        },
+                                      }),
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "input-component",
+                                    { attrs: { titulo: "Cliente" } },
+                                    [
+                                      _c("input", {
+                                        staticClass: "form-control",
+                                        attrs: { type: "text", disabled: "" },
+                                        domProps: {
+                                          value: _vm.$store.state.item.nome,
+                                        },
+                                      }),
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "input-component",
+                                    { attrs: { titulo: "Data de criação" } },
+                                    [
+                                      _c("input", {
+                                        staticClass: "form-control",
+                                        attrs: { type: "text", disabled: "" },
+                                        domProps: {
+                                          value: _vm._f(
+                                            "formataDataTempoGlobal"
+                                          )(_vm.$store.state.item.created_at),
+                                        },
+                                      }),
+                                    ]
+                                  ),
+                                ],
+                                1
+                              ),
+                        ]
+                      },
+                      proxy: true,
+                    }
+                  : null,
+                {
+                  key: "rodape",
+                  fn: function () {
+                    return [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-secondary",
+                          attrs: { type: "button", "data-dismiss": "modal" },
+                        },
+                        [_vm._v("Fechar")]
+                      ),
+                      _vm._v(" "),
+                      _vm.$store.state.transacao.status != "sucesso"
+                        ? _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-danger",
+                              attrs: { type: "button" },
+                              on: {
+                                click: function ($event) {
+                                  return _vm.remover()
+                                },
+                              },
+                            },
+                            [_vm._v("Remover")]
+                          )
+                        : _vm._e(),
+                    ]
+                  },
+                  proxy: true,
+                },
+              ],
+              null,
+              true
+            ),
+          }),
+          _vm._v(" "),
+          _c("modal-component", {
+            attrs: { id: "modalClienteAtualizar", title: "Atualizar Cliente" },
+            scopedSlots: _vm._u([
+              {
+                key: "alertas",
+                fn: function () {
+                  return [
+                    _vm.$store.state.transacao.status == "sucesso"
+                      ? _c("alert-component", {
+                          attrs: {
+                            tipo: "success",
+                            detalhes: _vm.$store.state.transacao,
+                            titulo: "Atualização realizada com sucesso!",
+                          },
+                        })
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.$store.state.transacao.status == "erro"
+                      ? _c("alert-component", {
+                          attrs: {
+                            tipo: "danger",
+                            detalhes: _vm.$store.state.transacao,
+                            titulo: "Erro ao tentar atualizar:",
+                          },
+                        })
+                      : _vm._e(),
+                  ]
+                },
+                proxy: true,
+              },
+              {
+                key: "conteudo",
+                fn: function () {
+                  return [
+                    !_vm.$store.state.item.id
+                      ? _c(
+                          "div",
+                          { staticClass: "d-flex justify-content-center" },
+                          [
+                            _c(
+                              "div",
+                              {
+                                staticClass: "spinner-border",
+                                attrs: { role: "status" },
+                              },
+                              [
+                                _c("span", { staticClass: "sr-only" }, [
+                                  _vm._v("Loading..."),
+                                ]),
+                              ]
+                            ),
+                          ]
+                        )
+                      : _c(
+                          "div",
+                          { staticClass: "form-group" },
+                          [
+                            _c(
+                              "input-component",
+                              {
+                                attrs: {
+                                  titulo: "Nome do Cliente",
+                                  id: "novoNome",
+                                  "id-help": "novoNomeHelp",
+                                  "help-text":
+                                    "Informe nome do cliente atualizado.",
+                                },
+                              },
+                              [
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.$store.state.item.nome,
+                                      expression: "$store.state.item.nome",
+                                    },
+                                  ],
+                                  staticClass: "form-control",
+                                  attrs: {
+                                    type: "text",
+                                    id: "novoNome",
+                                    placeholder: "Ex: ABC1D23",
+                                  },
+                                  domProps: {
+                                    value: _vm.$store.state.item.nome,
+                                  },
+                                  on: {
+                                    input: function ($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        _vm.$store.state.item,
+                                        "nome",
+                                        $event.target.value
+                                      )
+                                    },
+                                  },
+                                }),
+                              ]
+                            ),
+                          ],
+                          1
+                        ),
                   ]
                 },
                 proxy: true,

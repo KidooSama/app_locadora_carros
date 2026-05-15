@@ -392,9 +392,9 @@ import { error } from 'jquery';
                     return false;
                 }
                 let url = this.urlBase + '/' + this.$store.state.item.id
-                let formData = new FormData();
+               
                 
-                axios.delete(url, formData)
+                axios.delete(url)
                     .then(response =>{
                         console.log(' Removido com sucesso', response)
                         this.$store.state.transacao.status = 'sucesso'
