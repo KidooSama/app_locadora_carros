@@ -51,7 +51,7 @@ Vue.component('alert-component', require('./components/Alert.vue').default);
 Vue.component('paginate-component', require('./components/Paginate.vue').default);
 Vue.component('carros-component', require('./components/Carros.vue').default);
 Vue.component('clientes-component', require('./components/Clientes.vue').default);
-Vue.component('locacoes-component', require('./components/Locacoes.vue').default);
+Vue.component('locacao-component', require('./components/Locacao.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

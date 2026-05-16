@@ -42,6 +42,10 @@ Route::prefix('app')->middleware('auth')->group(function () {
         return view('app.clientes');
     })->name('clientes');
 
+    Route::get('/locacoes', function () {
+        return view('app.locacoes');
+    })->name('locacoes');
+
 });
 
 

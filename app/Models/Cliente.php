@@ -11,6 +11,6 @@ class Cliente extends Model
     protected $fillable = ['nome'];
     
     public function locacoes(){
-        return $this->belongsTo(Locacao::class);   
+        return $this->hasMany(Locacao::class);   
     }
 }
