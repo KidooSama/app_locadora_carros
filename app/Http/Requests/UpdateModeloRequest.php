@@ -27,8 +27,8 @@ public function rules()
         'marca_id' => 'sometimes|exists:marcas,id',
         'nome' => 'sometimes|required|min:3|unique:modelos,nome,'.$this->route('modelo'),
         'imagem' => 'sometimes|image|mimes:png',
-        'numero_portas' => 'sometimes|integer|digits_between:1,5',
-        'lugares' => 'sometimes|integer|digits_between:1,20',
+        'numero_portas' => 'sometimes|integer|digits_between:1,5|min:1',
+        'lugares' => 'sometimes|integer|digits_between:1,20|min:1',
         'air_bag' => 'sometimes|boolean',
         'abs' => 'sometimes|boolean'
     ];

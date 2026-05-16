@@ -5,15 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\Locacao;
 use App\Http\Requests\StoreLocacaoRequest;
 use App\Http\Requests\UpdateLocacaoRequest;
+use App\Models\Carro;
 use Illuminate\Http\Request;
 use App\repositories\LocacaoRepository;
 
 class LocacaoController extends Controller
 {
     protected $locacao;
-
-    public function __construct(locacao $locacao){
+    protected $carro;
+    public function __construct(locacao $locacao, Carro $carro){
         $this->locacao = $locacao;
+        $this->carro = $carro;
     }
     /**
      * Display a listing of the resource.
@@ -24,13 +26,21 @@ class LocacaoController extends Controller
     {
         $locacaoRepository = new locacaoRepository($this->locacao);
 
+        // if ($request->has('atributos_marca')) {
+        //     $atributos_marca = 'marca:id,'.$request->atributos_marca;
+        //     $locacaoRepository->selectAtributosRegistros($atributos_marca);
+        // }else {
+        //     $locacaoRepository->selectAtributosRegistros('marca');
+        // }
+        $locacaoRepository->withObj('cliente');
+        $locacaoRepository->withObj('carro');
         if ($request->has('filtro')) {
            $locacaoRepository->filtro($request->filtro);            
         }
         if ($request->has('atributos')) {
             $locacaoRepository->selectAtributos($request->atributos);
         }
-        return  response()->json(['data'=>$locacaoRepository->getResultado()], 200);
+        return  response()->json($locacaoRepository->getResultadoPaginado(5), 200);
     }
 
     /**
@@ -51,15 +61,22 @@ class LocacaoController extends Controller
      */
     public function store(StoreLocacaoRequest $request)
     {
+        $carro = $this->carro->find($request->carro_id);
+        if (!$carro->disponivel) {
+           return response()->json([
+            'message' => 'O carro precisa estar disponível'], 422);
+        }
         $locacao = $this->locacao->fill($request->all());
         $locacao->save();
-        return response()->json(['data'=> $locacao,'message' => 'Criado com sucesso'], 201);
+        $carro->disponivel = false;
+        $carro->save();
+        return response()->json($locacao->load('cliente', 'carro.modelo'), 201);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Locacao  $locacao
+     * @param  integer $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -86,7 +103,7 @@ class LocacaoController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \App\Http\Requests\UpdateLocacaoRequest  $request
-     * @param  \App\Models\Locacao  $locacao
+     * @param  integer $id
      * @return \Illuminate\Http\Response
      */
     public function update(UpdateLocacaoRequest $request, $id)
@@ -103,7 +120,7 @@ class LocacaoController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Locacao  $locacao
+     * @param  integer $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

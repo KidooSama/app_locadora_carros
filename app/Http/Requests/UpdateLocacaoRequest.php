@@ -24,14 +24,26 @@ class UpdateLocacaoRequest extends FormRequest
     public function rules()
     {
         return [
-            'cliente_id' => 'sometimes|exists:clientes,id',
-            'carro_id' => 'sometimes|exists:carros,id',
-            'data_inicio_periodo' => 'sometimes|required',
-            'data_final_previsto_periodo' => 'sometimes|required',
-            'data_final_realizado_periodo' => 'sometimes|required',
-            'valor_diaria' => 'sometimes|required',
-            'km_inicial' => 'sometimes|required',
-            'km_final' => 'sometimes|required',
+            'cliente_id' => 'sometimes|required|exists:clientes,id',
+
+            'carro_id' => 'sometimes|required|exists:carros,id',
+
+            'data_inicio_periodo' => 'sometimes|required|date|after_or_equal:today',
+
+            'data_final_previsto_periodo' =>
+                'sometimes|required|date|after:data_inicio_periodo',
+
+            'data_final_realizado_periodo' =>
+                'sometimes|nullable|date|after_or_equal:data_inicio_periodo',
+
+            'valor_diaria' =>
+                'sometimes|required|numeric|min:0',
+
+            'km_inicial' =>
+                'sometimes|required|integer|min:0',
+
+            'km_final' =>
+                'sometimes|nullable|integer|gte:km_inicial'
         ];
     }
 }

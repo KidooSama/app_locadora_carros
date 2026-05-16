@@ -24,14 +24,27 @@ class StoreLocacaoRequest extends FormRequest
     public function rules()
     {
         return [
-            'cliente_id' => 'exists:clientes,id',
-            'carro_id' => 'exists:carros,id',
-            'data_inicio_periodo' => 'required',
-            'data_final_previsto_periodo' => 'required',
-            'data_final_realizado_periodo' => 'required',
-            'valor_diaria' => 'required',
-            'km_inicial' => 'required',
-            'km_final' => 'required',
+
+            'cliente_id' => 'required|exists:clientes,id',
+
+            'carro_id' => 'required|exists:carros,id',
+
+            'data_inicio_periodo' => 'required|date|after_or_equal:today',
+
+            'data_final_previsto_periodo' =>
+                'required|date|after:data_inicio_periodo',
+
+            'data_final_realizado_periodo' =>
+                'nullable|date|after_or_equal:data_inicio_periodo',
+
+            'valor_diaria' =>
+                'required|numeric|min:0',
+
+            'km_inicial' =>
+                'required|integer|min:0',
+
+            'km_final' =>
+                'nullable|integer|gte:km_inicial'
         ];
     }
 }
