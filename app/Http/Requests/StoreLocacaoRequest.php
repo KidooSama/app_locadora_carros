@@ -25,9 +25,9 @@ class StoreLocacaoRequest extends FormRequest
     {
         return [
 
-            'cliente_id' => 'required|exists:clientes,id',
+            'cliente_id' => 'required|exists:clientes,id'.$this->id,
 
-            'carro_id' => 'required|exists:carros,id',
+            'carro_id' => 'required|exists:carros,id'.$this->id,
 
             'data_inicio_periodo' => 'required|date|after_or_equal:today',
 
@@ -40,11 +40,8 @@ class StoreLocacaoRequest extends FormRequest
             'valor_diaria' =>
                 'required|numeric|min:0',
 
-            'km_inicial' =>
-                'required|integer|min:0',
-
             'km_final' =>
-                'nullable|integer|gte:km_inicial'
+                'nullable|integer|gt:km_inicial'
         ];
     }
 }

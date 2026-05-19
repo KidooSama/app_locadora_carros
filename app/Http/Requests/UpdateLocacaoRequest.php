@@ -39,11 +39,8 @@ class UpdateLocacaoRequest extends FormRequest
             'valor_diaria' =>
                 'sometimes|required|numeric|min:0',
 
-            'km_inicial' =>
-                'sometimes|required|integer|min:0',
-
             'km_final' =>
-                'sometimes|nullable|integer|gte:km_inicial'
+                'sometimes|nullable|integer'
         ];
     }
 }

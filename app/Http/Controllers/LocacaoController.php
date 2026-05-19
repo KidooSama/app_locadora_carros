@@ -24,35 +24,33 @@ class LocacaoController extends Controller
      */
     public function index(Request $request)
     {
-        $locacaoRepository = new locacaoRepository($this->locacao);
+        $locacaoRepository = new LocacaoRepository($this->locacao);
 
-        // if ($request->has('atributos_marca')) {
-        //     $atributos_marca = 'marca:id,'.$request->atributos_marca;
-        //     $locacaoRepository->selectAtributosRegistros($atributos_marca);
-        // }else {
-        //     $locacaoRepository->selectAtributosRegistros('marca');
-        // }
-        $locacaoRepository->withObj('cliente');
-        $locacaoRepository->withObj('carro');
+        // Relacionamentos
+        $locacaoRepository->withObj([
+            'cliente',
+            'carro.modelo.marca'
+        ]);
+
+        // Filtros simples da tabela locacoes
         if ($request->has('filtro')) {
-           $locacaoRepository->filtro($request->filtro);            
+
+            $locacaoRepository->filtro($request->filtro);
         }
+
+        // Seleção de atributos da locação
         if ($request->has('atributos')) {
-            $locacaoRepository->selectAtributos($request->atributos);
+
+            $locacaoRepository->selectAtributos(
+                $request->atributos
+            );
         }
-        return  response()->json($locacaoRepository->getResultadoPaginado(5), 200);
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return response()->json(
+            $locacaoRepository->getResultadoPaginado(5),
+            200
+        );
     }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -62,11 +60,16 @@ class LocacaoController extends Controller
     public function store(StoreLocacaoRequest $request)
     {
         $carro = $this->carro->find($request->carro_id);
+        if (!$carro) {
+            return response()->json(['message' => 'O carro não existe'], 404);
+        }
         if (!$carro->disponivel) {
            return response()->json([
             'message' => 'O carro precisa estar disponível'], 422);
         }
+        
         $locacao = $this->locacao->fill($request->all());
+        $locacao->km_inicial = $carro->km;
         $locacao->save();
         $carro->disponivel = false;
         $carro->save();
@@ -85,18 +88,7 @@ class LocacaoController extends Controller
         if ($locacao === null) {
            return response()->json(['message'=>'Valor não encontrado'], 404);
         }
-        return response()->json(['data'=>$locacao], 200);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Locacao  $locacao
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Locacao $locacao)
-    {
-        //
+        return response()->json($locacao->load('cliente', 'carro.modelo'), 200);
     }
 
     /**
@@ -109,12 +101,77 @@ class LocacaoController extends Controller
     public function update(UpdateLocacaoRequest $request, $id)
     {
         $locacao = $this->locacao->find($id);
-        if($locacao === null) {
-            return response()->json(['erro' => 'Impossível realizar a atualização. O recurso solicitado não existe'], 404);
+
+        if ($locacao === null) {
+            return response()->json([
+                'erro' => 'Impossível realizar a atualização. O recurso solicitado não existe'
+            ], 404);
         }
+        if ($locacao->data_final_realizado_periodo !== null) {
+            return response()->json([
+                'erro' => 'Locação finalizada não pode ser alterada'
+            ], 422);
+        }
+
+        // -----------------------------------------
+        // ALTERAÇÃO DE CARRO
+        // -----------------------------------------
+
+        if ($request->has('carro_id') && $request->carro_id != $locacao->carro_id) {
+
+            $novoCarro = $this->carro->find($request->carro_id);
+
+            if (!$novoCarro->disponivel) {
+                return response()->json(['message' => 'O carro precisa estar disponível'], 422);
+            }
+            // carro antigo
+            $carroAntigo = $locacao->carro;
+
+            $carroAntigo->disponivel = true;
+            $carroAntigo->save();
+
+            // novo carro
+            $novoCarro->disponivel = false;
+            $novoCarro->save();
+
+            // novo km inicial
+            $locacao->km_inicial = $novoCarro->km;
+        }
+
+        // -----------------------------------------
+        // FINALIZAÇÃO
+        // -----------------------------------------
+        if ($request->has('km_final') && !$request->has('data_final_realizado_periodo')){
+            return response()->json(['erro' => "O campo data final realizado é necessario "], 422);
+        }
+
+        if ($request->has('data_final_realizado_periodo') && $locacao->data_final_realizado_periodo === null){
+
+            if ($request->data_final_realizado_periodo < $locacao->data_inicio_periodo) {
+                return response()->json(['erro' => 'A data final realizada não pode ser menor que a data inicial'], 422);
+            }
+            if ($request->km_final < $locacao->km_inicial) {
+                return response()->json(['erro' => "O valor final da quilometragem precisa ser maior que {$locacao->km_inicial}"], 422);
+            }
+
+            $carro = $locacao->carro;
+
+            $carro->km = $request->km_final;
+            $carro->disponivel = true;
+            $carro->save();
+        }
+
+        // -----------------------------------------
+        // UPDATE
+        // -----------------------------------------
+
         $locacao->fill($request->all());
         $locacao->save();
-        return response()->json($locacao, 200);
+
+        return response()->json(
+            $locacao->load('cliente', 'carro.modelo'),
+            200
+        );
     }
 
     /**
@@ -125,12 +182,19 @@ class LocacaoController extends Controller
      */
     public function destroy($id)
     {
+        
         $locacao = $this->locacao->find($id);
         if ($locacao === null) {
             return response()->json(['message'=>'Valor Não Encontrado'], 404);
-        }   
+        }
+        if ($locacao->data_final_realizado_periodo === null) {
+            //Cancelar Locação:
+            $carro = $locacao->carro;
+            $carro->disponivel = true;
+            $carro->save();
+        }
+
         $locacao->delete();
-        
         return response()->json(['data'=>$locacao], 200);
     }
 }
