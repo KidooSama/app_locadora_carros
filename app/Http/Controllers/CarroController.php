@@ -23,7 +23,7 @@ class CarroController extends Controller
      */
     public function index(Request $request)
     {
-      $carroRepository = new CarroRepository($this->carro);
+        $carroRepository = new CarroRepository($this->carro);
 
         if ($request->has('atributos_modelo')) {
             $atributos_modelo = 'modelo:id,'.$request->atributos_modelo;
@@ -39,6 +39,11 @@ class CarroController extends Controller
             $carroRepository->selectAtributos($request->atributos);
         }
         return  response()->json($carroRepository->getResultadoPaginado(5), 200);
+    }
+
+    public function carroDisponivel(){
+        $disponivel = $this->carro->where('disponivel',1)->get();
+        return response()->json($disponivel, 200);
     }
 
     /**

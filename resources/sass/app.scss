@@ -1,8 +1,535 @@
 // Fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito');
+@import url('https://fonts.googleapis.com/css?family=Nunito:400,600,700&display=swap');
 
 // Variables
 @import 'variables';
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+
+// ---------------------------------------------------------------------------
+// Estilos globais — painel administrativo
+// ---------------------------------------------------------------------------
+
+body {
+    color: #334155;
+    min-height: 100vh;
+}
+
+// Navbar
+.app-navbar {
+    background-color: #0f172a !important;
+    border-bottom: 3px solid $blue;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.12);
+    padding-top: 0.4rem;
+    padding-bottom: 0.4rem;
+
+    .navbar-brand {
+        font-weight: 700;
+        font-size: 1.05rem;
+        letter-spacing: 0.01em;
+        color: #fff !important;
+        gap: 0.5rem;
+    }
+
+    .app-brand-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        background: rgba(255, 255, 255, 0.12);
+        border-radius: 8px;
+        font-size: 1rem;
+    }
+
+    .nav-icon {
+        font-size: 0.95rem;
+        margin-right: 0.35rem;
+        opacity: 0.85;
+    }
+
+    .nav-link {
+        font-weight: 600;
+        font-size: 0.875rem;
+        padding: 0.45rem 0.75rem !important;
+        border-radius: 6px;
+        transition: background-color 0.15s ease, color 0.15s ease;
+        color: rgba(255, 255, 255, 0.78) !important;
+
+        &:hover {
+            background-color: rgba(255, 255, 255, 0.08);
+            color: #fff !important;
+        }
+
+        &.active {
+            background-color: rgba(37, 99, 235, 0.25);
+            color: #fff !important;
+
+            .nav-icon {
+                opacity: 1;
+            }
+        }
+    }
+
+    .dropdown-menu {
+        border: 1px solid rgba(15, 23, 42, 0.08);
+        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+        border-radius: $border-radius-lg;
+        padding: 0.35rem 0;
+
+        .dropdown-item {
+            font-size: 0.875rem;
+            padding: 0.5rem 1rem;
+            display: flex;
+            align-items: center;
+
+            &.active {
+                background-color: #eff6ff;
+                color: $blue;
+                font-weight: 600;
+            }
+
+            &:hover {
+                background-color: #f1f5f9;
+                color: #1e293b;
+            }
+        }
+    }
+}
+
+.dropdown-icon {
+    font-size: 0.9rem;
+    margin-right: 0.5rem;
+    width: 1.1rem;
+    text-align: center;
+    opacity: 0.7;
+}
+
+// Cabeçalho da página
+.app-page-header {
+    background: #fff;
+    border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+    margin-bottom: 1.5rem;
+
+    .breadcrumb {
+        background: transparent;
+        padding: 0;
+        margin-bottom: 0.35rem;
+        font-size: 0.8125rem;
+
+        .breadcrumb-item + .breadcrumb-item::before {
+            color: #94a3b8;
+        }
+
+        a {
+            color: $blue;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+
+        .active {
+            color: #64748b;
+        }
+    }
+
+    .page-title {
+        font-size: 1.35rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0;
+    }
+}
+
+// Área principal
+.app-main {
+    padding-bottom: 2.5rem;
+}
+
+// Cards do sistema
+.app-card {
+    border: 1px solid $card-border-color;
+    border-radius: $border-radius-lg;
+    box-shadow: $box-shadow-sm;
+    overflow: hidden;
+    margin-bottom: 1.25rem;
+
+    .card-header {
+        background: #fff;
+        border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+        font-weight: 600;
+        font-size: 0.9375rem;
+        color: #1e293b;
+        padding: 0.875rem 1.25rem;
+    }
+
+    .card-body {
+        padding: 1.25rem;
+    }
+
+    .card-footer {
+        background: #f8fafc;
+        border-top: 1px solid rgba(15, 23, 42, 0.08);
+        padding: 0.875rem 1.25rem;
+    }
+
+    &.app-card--filter {
+        .card-header {
+            background: #f8fafc;
+            font-size: 0.875rem;
+            color: #475569;
+        }
+    }
+}
+
+// Tabelas
+.app-table-wrapper {
+    border: 1px solid #e2e8f0;
+    border-radius: $border-radius-lg;
+    overflow: hidden;
+    background: #fff;
+
+    .app-table {
+        margin-bottom: 0;
+        font-size: 0.875rem;
+
+        thead th {
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+            color: #64748b;
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            white-space: nowrap;
+            vertical-align: middle;
+            padding: 0.85rem 1rem;
+        }
+
+        tbody td {
+            vertical-align: middle;
+            padding: 0.85rem 1rem;
+            color: #334155;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        tbody tr {
+            transition: background-color 0.12s ease;
+
+            &:hover {
+                background-color: #f8fafc;
+            }
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .col-id {
+            width: 70px;
+            font-variant-numeric: tabular-nums;
+
+            .table-cell-text {
+                display: inline-block;
+                font-size: 0.8125rem;
+                font-weight: 600;
+                color: #64748b;
+                background: #f1f5f9;
+                padding: 0.2rem 0.5rem;
+                border-radius: 4px;
+                min-width: 2rem;
+                text-align: center;
+            }
+        }
+
+        .col-img {
+            width: 90px;
+        }
+
+        .col-date {
+            white-space: nowrap;
+            font-size: 0.8125rem;
+            color: #64748b;
+        }
+
+        .col-actions {
+            width: 80px;
+        }
+
+        .col-placa .table-cell-text {
+            font-family: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: #1e293b;
+        }
+
+        .table-cell-text {
+            font-weight: 500;
+        }
+
+        .table-cell-money {
+            font-weight: 600;
+            color: #059669;
+            font-variant-numeric: tabular-nums;
+        }
+    }
+
+    .table-img-cell {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 64px;
+        height: 44px;
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 6px;
+        padding: 4px;
+        overflow: hidden;
+    }
+
+    .table-img {
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        display: block;
+    }
+
+    .table-img-placeholder {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 64px;
+        height: 44px;
+        background: #f8fafc;
+        border: 1px dashed #cbd5e1;
+        border-radius: 6px;
+        color: #94a3b8;
+        font-size: 1.1rem;
+    }
+}
+
+// Estado vazio
+.app-empty-state {
+    padding: 2.5rem 1rem;
+    text-align: center;
+    color: #94a3b8;
+
+    .app-empty-state__icon {
+        font-size: 2.25rem;
+        margin-bottom: 0.5rem;
+        display: block;
+        color: #cbd5e1;
+    }
+
+    p {
+        margin: 0;
+        font-size: 0.9375rem;
+    }
+}
+
+// Badges de status
+.badge-status {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.35em 0.65em;
+    border-radius: 50rem;
+}
+
+// Paginação
+.app-pagination {
+    .pagination {
+        margin-bottom: 0;
+    }
+
+    .page-link {
+        font-size: 0.8125rem;
+        padding: 0.4rem 0.75rem;
+        color: #475569;
+        border-color: #e2e8f0;
+
+        &:hover {
+            background-color: #eff6ff;
+            color: $blue;
+            border-color: #bfdbfe;
+        }
+    }
+
+    .page-item.active .page-link {
+        background-color: $blue;
+        border-color: $blue;
+    }
+
+    .page-item.disabled .page-link {
+        color: #cbd5e1;
+    }
+}
+
+// Rodapé de cards com paginação + ação
+.app-card-footer-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+// Formulários
+.form-label-custom {
+    font-weight: 600;
+    font-size: 0.8125rem;
+    color: #475569;
+    margin-bottom: 0.35rem;
+}
+
+.form-control,
+.custom-select {
+    font-size: 0.875rem;
+    border-color: $input-border-color;
+
+    &:focus {
+        border-color: $input-focus-border-color;
+        box-shadow: $input-focus-box-shadow;
+    }
+}
+
+.form-text {
+    font-size: 0.75rem;
+}
+
+// Modais
+.app-modal {
+    .modal-header {
+        background: #f8fafc;
+        border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+        padding: 1rem 1.25rem;
+
+        .modal-title {
+            font-weight: 600;
+            font-size: 1rem;
+            color: #1e293b;
+        }
+    }
+
+    .modal-body {
+        padding: 1.25rem;
+    }
+
+    .modal-footer {
+        background: #f8fafc;
+        border-top: 1px solid rgba(15, 23, 42, 0.08);
+        padding: 0.875rem 1.25rem;
+    }
+}
+
+// Alertas
+.app-alert {
+    border: none;
+    border-radius: $border-radius;
+    font-size: 0.875rem;
+
+    hr {
+        margin: 0.5rem 0;
+        opacity: 0.3;
+    }
+
+    p {
+        margin-bottom: 0.25rem;
+    }
+
+    ul {
+        margin-bottom: 0;
+        padding-left: 1.25rem;
+        font-size: 0.8125rem;
+    }
+}
+
+// Botões
+.btn {
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.btn-action-toggle {
+    font-size: 0.875rem;
+    padding: 0.2rem 0.5rem;
+    line-height: 1;
+    border-color: #e2e8f0;
+    color: #64748b;
+
+    &::after {
+        display: none;
+    }
+
+    &:hover {
+        background: #f1f5f9;
+        border-color: #cbd5e1;
+        color: #334155;
+    }
+}
+
+// Login
+.app-login-card {
+    max-width: 420px;
+    margin: 2rem auto;
+    border: none;
+    border-radius: $border-radius-lg;
+    box-shadow: $box-shadow;
+
+    .card-header {
+        background-color: #0f172a;
+        color: #fff;
+        font-weight: 700;
+        text-align: center;
+        padding: 1.25rem;
+        border: none;
+        border-bottom: 3px solid $blue;
+    }
+}
+
+// Home / Dashboard
+.app-welcome-card {
+    border: none;
+    border-radius: $border-radius-lg;
+    box-shadow: $box-shadow-sm;
+
+    .card-header {
+        background-color: #0f172a;
+        color: #fff;
+        font-weight: 700;
+        border: none;
+        border-bottom: 3px solid $blue;
+    }
+}
+
+.app-feature-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15rem;
+    flex-shrink: 0;
+}
+
+// Imagens em modais
+.app-modal-img {
+    display: block;
+    max-width: 100%;
+    max-height: 200px;
+    object-fit: contain;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: $border-radius;
+    padding: 0.75rem;
+}

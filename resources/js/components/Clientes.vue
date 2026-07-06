@@ -3,7 +3,7 @@
         <div class="row justify-content-center">
             <div class="col-lg">
                 
-                <card-component titulo="Busca de clientes">
+                <card-component titulo="Busca de Clientes" :filter="true">
                     <template v-slot:conteudo>
                         <div class="row">
                             <div class="mb-3 col-md-6">
@@ -20,7 +20,7 @@
 
                         <div class="row">
                             <div class="col d-flex justify-content-end">
-                                <button @click="search" type="submit" class="btn btn-primary">Pesquisar</button>
+                                <button @click="search" type="submit" class="btn btn-primary px-4">Pesquisar</button>
                             </div>
                         </div>
                     </template> 
@@ -48,12 +48,14 @@
                         </div>
                     </template>
                     <template v-slot:rodape>
-                        <paginate-component class="float-left">
-                            <li v-for="l,key in clientes.links" :key="key" :class="l.active ? 'page-item active' : 'page-item'" @click="paginacao(l)">
-                                <a class="page-link" style="cursor: pointer;" v-html="l.label"></a>
-                            </li>
-                        </paginate-component>
-                        <button type="button" @click="loadModeloOptions()" class="btn btn-primary float-right" data-toggle="modal" data-target="#modalModelo">Adicionar</button>
+                        <div class="app-card-footer-actions w-100">
+                            <paginate-component>
+                                <li v-for="l,key in clientes.links" :key="key" :class="l.active ? 'page-item active' : 'page-item'" @click="paginacao(l)">
+                                    <a class="page-link" style="cursor: pointer;" v-html="l.label"></a>
+                                </li>
+                            </paginate-component>
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalModelo">+ Adicionar</button>
+                        </div>
                     </template>
                 </card-component>
                 <!----------- Listagem ---------->

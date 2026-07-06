@@ -3,7 +3,7 @@
         <div class="row justify-content-center">
             <div class="col-lg">
                 
-                <card-component titulo="Busca de Modelos">
+                <card-component titulo="Busca de Modelos" :filter="true">
                     <template v-slot:conteudo>
                         <div class="row">
                             <div class="mb-3 col-md-6">
@@ -20,7 +20,7 @@
 
                         <div class="row">
                             <div class="col d-flex justify-content-end">
-                                <button @click="search" type="submit" class="btn btn-primary">Pesquisar</button>
+                                <button @click="search" type="submit" class="btn btn-primary px-4">Pesquisar</button>
                             </div>
                         </div>
                     </template> 
@@ -48,12 +48,14 @@
                         </div>
                     </template>
                     <template v-slot:rodape>
-                        <paginate-component class="float-left">
-                            <li v-for="l,key in modelos.links" :key="key" :class="l.active ? 'page-item active' : 'page-item'" @click="paginacao(l)">
-                                <a class="page-link" style="cursor: pointer;" v-html="l.label"></a>
-                            </li>
-                        </paginate-component>
-                        <button type="button" @click="loadMarcaOptions()" class="btn btn-primary float-right" data-toggle="modal" data-target="#modalModelo">Adicionar</button>
+                        <div class="app-card-footer-actions w-100">
+                            <paginate-component>
+                                <li v-for="l,key in modelos.links" :key="key" :class="l.active ? 'page-item active' : 'page-item'" @click="paginacao(l)">
+                                    <a class="page-link" style="cursor: pointer;" v-html="l.label"></a>
+                                </li>
+                            </paginate-component>
+                            <button type="button" @click="loadMarcaOptions()" class="btn btn-primary" data-toggle="modal" data-target="#modalModelo">+ Adicionar</button>
+                        </div>
                     </template>
                 </card-component>
                 <!----------- Listagem ---------->
@@ -146,8 +148,8 @@
                             <input-component titulo="Marca">
                                 <input type="text" class="form-control" :value="$store.state.item.marca.nome" disabled> 
                             </input-component>
-                            <input-component titulo="Foto do Modelo:">
-                                <img :src="'/storage/'+$store.state.item.imagem" :alt="$store.state.item.nome" width="400" v-if="$store.state.item.imagem">
+                            <input-component titulo="Foto do Modelo">
+                                <img :src="imgUrl($store.state.item.imagem)" class="app-modal-img" :alt="$store.state.item.nome" v-if="$store.state.item.imagem">
                             </input-component>
                             <input-component titulo="Numero de Portas:">
                                 <input type="text" class="form-control" :value="$store.state.item.numero_portas" disabled> 
@@ -194,8 +196,8 @@
                             <input-component titulo="Marca">
                                 <input type="text" class="form-control" :value="$store.state.item.marca.nome" disabled> 
                             </input-component>
-                            <input-component titulo="Foto do Modelo:">
-                                <img :src="'/storage/'+$store.state.item.imagem" :alt="$store.state.item.nome" width="400" v-if="$store.state.item.imagem">
+                            <input-component titulo="Foto do Modelo">
+                                <img :src="imgUrl($store.state.item.imagem)" class="app-modal-img" :alt="$store.state.item.nome" v-if="$store.state.item.imagem">
                             </input-component>
                             <input-component titulo="Numero de Portas:">
                                 <input type="text" class="form-control" :value="$store.state.item.numero_portas" disabled> 
@@ -308,6 +310,13 @@ import { error } from 'jquery';
             }           
         },
         methods: {
+            imgUrl(path) {
+                if (!path) return ''
+                if (path.startsWith('http://') || path.startsWith('https://')) return path
+                if (path.startsWith('/storage/')) return path
+                if (path.startsWith('storage/')) return '/' + path
+                return '/storage/' + path.replace(/^\/+/, '')
+            },
             loadMarcaOptions(){
                 this.$store.commit('limparTransacao')
                 if (this.marcas.length) {

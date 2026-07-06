@@ -51,19 +51,33 @@ Vue.component('alert-component', require('./components/Alert.vue').default);
 Vue.component('paginate-component', require('./components/Paginate.vue').default);
 Vue.component('carros-component', require('./components/Carros.vue').default);
 Vue.component('clientes-component', require('./components/Clientes.vue').default);
-Vue.component('locacao-component', require('./components/Locacao.vue').default);
+Vue.component('locacoes-component', require('./components/Locacoes.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+Vue.filter('formataKm', function(km){
+    if (!d) return ''
+    km = km.split()
+})
+
+Vue.filter('formataDataGlobal', function(d){
+    if (!d) return ''
+    d = d.split(' ')
+    let data = d[0].split('-')
+    data = data[2]+'/'+data[1]+'/'+data[0]
+    return data 
+})
+
 Vue.filter('formataDataTempoGlobal', function(d){
     if (!d) return ''
     d = d.split('T')
     let data = d[0].split('-')
     data = data[2]+'/'+data[1]+'/'+data[0]
     let tempo = d[1].split('.')[0]
+    console.log(data + tempo)
     return data + ' - ' + tempo
 })
 const app = new Vue({

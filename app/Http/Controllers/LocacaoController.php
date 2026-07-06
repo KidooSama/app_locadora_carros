@@ -37,6 +37,10 @@ class LocacaoController extends Controller
 
             $locacaoRepository->filtro($request->filtro);
         }
+        if ($request->has('disponivel')) {
+
+            $locacaoRepository->filtro($request->filtro);
+        }
 
         // Seleção de atributos da locação
         if ($request->has('atributos')) {
@@ -46,11 +50,9 @@ class LocacaoController extends Controller
             );
         }
 
-        return response()->json(
-            $locacaoRepository->getResultadoPaginado(5),
-            200
-        );
+        return response()->json($locacaoRepository->getResultadoPaginado(5),200);
     }
+
     /**
      * Store a newly created resource in storage.
      *

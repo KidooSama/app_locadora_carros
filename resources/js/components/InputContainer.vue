@@ -1,16 +1,13 @@
 <template>
-
-    <div class="form-group">
-        <div class="mb-3 ">
-            <label :for="id" class="form-label">{{titulo}}</label><br>
-            <slot></slot>
-            <div :id="idHelp" class="form-text text-muted">{{ helpText }}</div>                            
-        </div>
+    <div class="form-group mb-3">
+        <label :for="id" class="form-label-custom d-block">{{ titulo }}</label>
+        <slot></slot>
+        <div v-if="helpText" :id="idHelp" class="form-text text-muted">{{ helpText }}</div>
     </div>
 </template>
 
 <script>
-    export default{
-        props: ['id','titulo','idHelp','helpText']
+    export default {
+        props: ['id', 'titulo', 'idHelp', 'helpText']
     }
 </script>

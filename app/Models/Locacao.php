@@ -13,6 +13,7 @@ class Locacao extends Model
             'data_final_previsto_periodo','data_final_realizado_periodo',
             'valor_diaria','km_inicial','km_final'
         ];
+    protected $appends = ['status'];
     use HasFactory;
     protected $table = 'locacoes';
 
@@ -22,4 +23,10 @@ class Locacao extends Model
     public function carro() {
         return $this->belongsTo(Carro::class);
     }
+    public function getStatusAttribute(){
+        return $this->data_final_realizado_periodo == null
+            ? 'Em andamento'
+            : 'Finalizada';
+    }
+
 }

@@ -1,15 +1,11 @@
 <template>
-    <nav aria-label="Page navigation example">
-        <ul class="pagination">
+    <nav class="app-pagination" aria-label="Paginação">
+        <ul class="pagination pagination-sm mb-0 flex-wrap">
             <slot></slot>
         </ul>
     </nav>
 </template>
 
 <script>
-    export default {
-        mounted() {
-            console.log('Component mounted.')
-        }
-    }
+    export default {}
 </script>

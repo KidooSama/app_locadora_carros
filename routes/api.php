@@ -19,13 +19,15 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 Route::prefix('v1')->middleware('jwt.auth')->group(function () {
     Route::post('me', 'AuthController@me');
-    
+    Route::get('/carro/disponiveis', 'CarroController@carroDisponivel');
 
     Route::apiResource('cliente', 'ClienteController');
     Route::apiResource('carro', 'CarroController');
     Route::apiResource('locacao', 'locacaoController');
     Route::apiResource('marca', 'MarcaController');
     Route::apiResource('modelo', 'ModeloController');
+
+
 });
 
 
