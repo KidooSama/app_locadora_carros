@@ -21,4 +21,5 @@ class Carro extends Model
     public function getDescricaoAttribute(){
         return $this->id.' | ' .$this->modelo->marca->nome.' - '.$this->modelo->nome.' - '.$this->placa;
     }
+    
 }

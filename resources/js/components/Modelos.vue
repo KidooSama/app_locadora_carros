@@ -42,7 +42,7 @@
                                         id: {titulo: 'ID', tipo: 'text'},
                                         nome: {titulo: 'Nome', tipo: 'text'},
                                         carros_count: {titulo: 'Carros Registrados', tipo: 'text'},
-                                        marca: {titulo: 'Marca', tipo: 'fk'},
+                                        marca: {titulo: 'Marca', tipo: 'fk', chave: 'nome'},
                                     }">
                             </table-component>  
                         </div>

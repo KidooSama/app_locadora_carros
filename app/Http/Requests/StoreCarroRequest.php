@@ -30,4 +30,21 @@ class StoreCarroRequest extends FormRequest
             'km' => 'required|integer|min:0',
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'modelo_id.required' => 'Selecione um modelo.',
+            'modelo_id.exists' => 'O modelo informado não existe.',
+            'placa.required' => 'Informe a placa do carro.',
+            'placa.regex' => 'A placa deve seguir o padrão Mercosul.',
+            'placa.size' => 'A placa deve ter 7 caracteres.',
+            'placa.unique' => 'Já existe um carro com essa placa.',
+            'disponivel.required' => 'Informe se o carro está disponível.',
+            'disponivel.boolean' => 'Disponibilidade deve ser verdadeiro/falso.',
+            'km.required' => 'Informe a quilometragem.',
+            'km.integer' => 'Quilometragem deve ser um número inteiro.',
+            'km.min' => 'Quilometragem não pode ser negativa.',
+        ];
+    }
 }

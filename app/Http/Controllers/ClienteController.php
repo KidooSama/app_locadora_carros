@@ -73,7 +73,7 @@ class ClienteController extends Controller
     {
         $cliente = $this->cliente->find($id);
         if($cliente === null) {
-            return response()->json(['erro' => 'Impossível realizar a atualização. O recurso solicitado não existe'], 404);
+            return response()->json(['message' => 'Impossível realizar a atualização. O recurso solicitado não existe'], 404);
         }
         $cliente->fill($request->all());
         $cliente->save();

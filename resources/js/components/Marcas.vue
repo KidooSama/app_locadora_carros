@@ -34,6 +34,7 @@
                                 :visualizar="{visivel:true, dataToggle:'modal',dataTarget:'#modalMarcaVisualizar'}"
                                 :remover="{visivel:true, dataToggle:'modal',dataTarget:'#modalMarcaRemover'}"
                                 :atualizar="{visivel:true, dataToggle:'modal',dataTarget:'#modalMarcaAtualizar'}"
+                                :url="urlBase"
                                 :titulos="
                                     {
                                         id: {titulo: 'ID', tipo: 'text'},
@@ -98,7 +99,7 @@
                             <input type="text" class="form-control" :value="$store.state.item.nome" disabled> 
                         </input-component>
                         <input-component titulo="Logo">
-                            <img :src="imgUrl($store.state.item.imagem)" class="app-modal-img" :alt="$store.state.item.nome" v-if="$store.state.item.imagem">
+                            <img :src="$imgUrl($store.state.item.imagem)" class="app-modal-img" :alt="$store.state.item.nome" v-if="$store.state.item.imagem">
                         </input-component>
                         <input-component titulo="Data de criação">
                             <input type="text" class="form-control" :value="$store.state.item.created_at | formataDataTempoGlobal" disabled> 
@@ -108,7 +109,7 @@
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                     </template>
                 </modal-component>
-                 <!---------- Modal Visualizar ---------->
+                 <!---------- Modal Visualizar ------------>
 
                  <!---------- Mdodal Remover ------------>
                 <modal-component id="modalMarcaRemover" title="Remover Marca">
@@ -124,7 +125,7 @@
                             <input type="text" class="form-control" :value="$store.state.item.nome" disabled> 
                         </input-component>
                         <input-component titulo="Logo">
-                            <img :src="imgUrl($store.state.item.imagem)" class="app-modal-img" :alt="$store.state.item.nome" v-if="$store.state.item.imagem">
+                            <img :src="$imgUrl($store.state.item.imagem)" class="app-modal-img" :alt="$store.state.item.nome" v-if="$store.state.item.imagem">
                         </input-component>
                         <input-component titulo="Data de criação">
                             <input type="text" class="form-control" :value="$store.state.item.created_at | formataDataTempoGlobal" disabled> 
@@ -160,6 +161,7 @@
                         </div>
                       
                     </template>
+
                     <template v-slot:rodape>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                         <button type="button" class="btn btn-primary" @click="atualizar()">Salvar</button>
@@ -189,13 +191,7 @@
             }           
         },
         methods: {
-            imgUrl(path) {
-                if (!path) return ''
-                if (path.startsWith('http://') || path.startsWith('https://')) return path
-                if (path.startsWith('/storage/')) return path
-                if (path.startsWith('storage/')) return '/' + path
-                return '/storage/' + path.replace(/^\/+/, '')
-            },
+
             atualizar(){
                 let url = this.urlBase + '/' + this.$store.state.item.id
                 let formData = new FormData();
@@ -230,21 +226,26 @@
                     return false;
                 }
                 let url = this.urlBase + '/' + this.$store.state.item.id
-                let formData = new FormData();
+                let formData = new FormData();                
                 formData.append('_method', 'delete')
                 console.log(url)
                 axios.post(url, formData)
                     .then(response =>{
                         console.log(' Removido com sucesso', response)
-                        this.$store.state.transacao.status = 'sucesso'
-                        this.$store.state.transacao.mensagem = 'A marca foi atualizada com sucesso!'
+                        this.transacaoStatus = 'adicionado'
+                        this.transacaoDetalhes = {
+                            mensagem: 'A marca foi atualizada com sucesso!'
+                        }
                         this.loadMarcas()
                         
                     })
                     .catch(errors =>{
                         console.log('erro', errors.data)
-                        this.$store.state.transacao.status = 'erro'
-                        this.$store.state.transacao.mensagem = errors.response.data.message
+                        this.transacaoStatus = 'erro'
+                        this.transacaoDetalhes ={
+                            mensagem:errors.response.data.message,
+                            dados: errors.response.data.errors
+                        } 
                     
                     })
             },
@@ -257,7 +258,7 @@
                             filtro += ";"
                         }
                         filtro += chave + ':like:' + '%' +this.busca[chave]+'%'  
-                    }                    
+                    }                   
                 }
                 if (filtro != '') {
                     this.urlPaginate = 'page=1'

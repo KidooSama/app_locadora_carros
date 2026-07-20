@@ -43,7 +43,7 @@
                                         placa: {titulo: 'Placa', tipo: 'text'}, 
                                         modelo: {titulo: 'Modelo', tipo: 'fk', chave: 'nome'}, 
                                         disponivel: {titulo: 'Disponível', tipo: 'bool'},
-                                        km: {titulo: 'Quilometros', tipo: 'text'},
+                                        km: {titulo: 'Quilometros', tipo: 'km'},
                                     }">
                             </table-component>  
                         </div>
@@ -125,7 +125,7 @@
                                 <input type="text" class="form-control" :value="$store.state.item.modelo.nome" disabled> 
                             </input-component>
                             <input-component titulo="Imagem do Modelo">
-                                <img :src="imgUrl($store.state.item.modelo.imagem)" class="app-modal-img" :alt="$store.state.item.modelo.nome" v-if="$store.state.item.modelo && $store.state.item.modelo.imagem">
+                                <img :src="$imgUrl($store.state.item.modelo.imagem)" class="app-modal-img" :alt="$store.state.item.modelo.nome" v-if="$store.state.item.modelo && $store.state.item.modelo.imagem">
                             </input-component>
                             <input-component titulo="Placa">
                                 <input type="text" class="form-control" :value="$store.state.item.placa" disabled> 
@@ -268,13 +268,7 @@ import { error } from 'jquery';
             }           
         },
         methods: {
-            imgUrl(path) {
-                if (!path) return ''
-                if (path.startsWith('http://') || path.startsWith('https://')) return path
-                if (path.startsWith('/storage/')) return path
-                if (path.startsWith('storage/')) return '/' + path
-                return '/storage/' + path.replace(/^\/+/, '')
-            },
+
             loadModeloOptions(){
                 this.$store.commit('limparTransacao')
                 if (this.modelos.length) {

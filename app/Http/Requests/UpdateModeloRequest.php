@@ -33,4 +33,13 @@ public function rules()
         'abs' => 'sometimes|boolean'
     ];
 }
+
+public function messages()
+{
+    return [
+        'nome.unique' => 'Esse nome de modelo já está sendo usado.',
+        'imagem.image' => 'O arquivo deve ser uma imagem.',
+        'imagem.mimes' => 'A imagem deve ser do tipo PNG.'
+    ];
+}
 }

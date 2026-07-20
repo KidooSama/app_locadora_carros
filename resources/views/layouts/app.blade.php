@@ -123,19 +123,19 @@
                     $currentRoute = request()->route()->getName();
                     $pageTitle = $routeLabels[$currentRoute] ?? ucfirst($currentRoute);
                 @endphp
-                <div class="app-page-header">
-                    <div class="container">
-                        <nav aria-label="breadcrumb">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="bi bi-grid-1x2"></i> Painel</a></li>
-                                @if ($currentRoute !== 'home')
+                @if ($currentRoute !== 'home')
+                    <div class="app-page-header">
+                        <div class="container">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="bi bi-grid-1x2"></i> Painel</a></li>
                                     <li class="breadcrumb-item active" aria-current="page">{{ $pageTitle }}</li>
-                                @endif
-                            </ol>
-                        </nav>
-                        <h1 class="page-title">{{ $pageTitle }}</h1>
+                                </ol>
+                            </nav>
+                            <h1 class="page-title">{{ $pageTitle }}</h1>
+                        </div>
                     </div>
-                </div>
+                @endif
             @endauth
 
             <main class="app-main">

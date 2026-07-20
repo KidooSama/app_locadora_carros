@@ -43,4 +43,25 @@ class UpdateLocacaoRequest extends FormRequest
                 'sometimes|nullable|integer'
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'cliente_id.required' => 'Selecione um cliente.',
+            'cliente_id.exists' => 'O cliente informado não existe.',
+            'carro_id.required' => 'Selecione um carro.',
+            'carro_id.exists' => 'O carro informado não existe.',
+            'data_inicio_periodo.required' => 'Informe a data de início.',
+            'data_inicio_periodo.date' => 'Data de início inválida.',
+            'data_final_previsto_periodo.required' => 'Informe a data de previsão.',
+            'data_final_previsto_periodo.date' => 'Data de previsão inválida.',
+            'data_final_previsto_periodo.after' => 'A data de previsão deve ser posterior à data de início.',
+            'data_final_realizado_periodo.date' => 'Data de finalização inválida.',
+            'data_final_realizado_periodo.after_or_equal' => 'A data de finalização não pode ser anterior à data de início.',
+            'valor_diaria.required' => 'Informe o valor da diária.',
+            'valor_diaria.numeric' => 'Valor da diária deve ser numérico.',
+            'valor_diaria.min' => 'Valor da diária não pode ser negativo.',
+            'km_final.integer' => 'Km final deve ser um número inteiro.',
+        ];
+    }
 }

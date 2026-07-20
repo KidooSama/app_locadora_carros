@@ -48,6 +48,9 @@
                             <span v-if="titulos[chaveValor].tipo == 'status'">
                                 <span :class="statusBadgeClass(d)">{{ d || '—' }}</span>
                             </span>
+                            <span v-if="titulos[chaveValor].tipo == 'km'">
+                                <span :class="statusBadgeClass(d)">{{  d | formataKmGlobal }}</span>
+                            </span>
                             <span v-if="titulos[chaveValor].tipo == 'money'" class="table-cell-money">
                                 {{ formatMoney(d) }}
                             </span>
@@ -61,11 +64,11 @@
                                     <button v-if="visualizar.visivel" class="dropdown-item" type="button" :data-toggle="visualizar.dataToggle" :data-target="visualizar.dataTarget" @click="setStore(obj.id)">
                                         <i class="bi bi-eye dropdown-icon"></i> Visualizar
                                     </button>
-                                    <button v-if="atualizar.visivel" class="dropdown-item" type="button" :data-toggle="atualizar.dataToggle" :data-target="atualizar.dataTarget" @click="setStore(obj.id)">
+                                    <button v-if="atualizar.visivel && obj.status !== 'Finalizada'" class="dropdown-item" type="button" :data-toggle="atualizar.dataToggle" :data-target="atualizar.dataTarget" @click="setStore(obj.id)">
                                         <i class="bi bi-pencil-square dropdown-icon"></i> Atualizar
                                     </button>
                                     <div v-if="(remover.visivel || (finalizar && finalizar.visivel)) && (visualizar.visivel || atualizar.visivel)" class="dropdown-divider"></div>
-                                    <button v-if="finalizar && finalizar.visivel" class="dropdown-item text-success" type="button" :data-toggle="finalizar.dataToggle" :data-target="finalizar.dataTarget" @click="setStore(obj.id)">
+                                    <button v-if="finalizar && finalizar.visivel && obj.status !== 'Finalizada'" class="dropdown-item text-success" type="button" :data-toggle="finalizar.dataToggle" :data-target="finalizar.dataTarget" @click="setStore(obj.id)">
                                         <i class="bi bi-check2-circle dropdown-icon"></i> Finalizar
                                     </button>
                                     <button v-if="remover.visivel" class="dropdown-item text-danger" type="button" :data-toggle="remover.dataToggle" :data-target="remover.dataTarget" @click="setStore(obj.id)">
@@ -150,6 +153,7 @@
                         this.$store.state.item = response.data
                         this.$emit('load-marca-options')
                         this.$emit('load-modelo-options')
+                        
                     })
                     .catch(errors => {
                         console.log(errors)

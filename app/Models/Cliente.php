@@ -9,8 +9,14 @@ class Cliente extends Model
 {
     use HasFactory;
     protected $fillable = ['nome'];
+    protected $appends = ['quantidade_locacoes'];
     
     public function locacoes(){
         return $this->hasMany(Locacao::class);   
+    }
+    
+    public function getQuantidadeLocacoesAttribute()
+    {
+        return $this->locacoes->count();
     }
 }

@@ -7,14 +7,27 @@
                     <template v-slot:conteudo>
                         <div class="row">
                             <div class="mb-3 col-md-6">
-                                <input-component titulo="ID" id="inputId" id-help="idHelp" help-text="Informe o ID do Locacao.">
-                                    <input type="number" id="inputId" class="form-control" placeholder="Ex.01" v-model="busca.id">
-                                </input-component>                            
+                                <input-component titulo="ID" id="inputId" id-help="idHelp" help-text="Informe o ID da locação.">
+                                    <input type="number" id="inputId" class="form-control" placeholder="Ex. 1" v-model="busca.id">
+                                </input-component>
                             </div>
                             <div class="mb-3 col">
-                                <input-component titulo="Numero da placa" id="inputNome" id-help="nomeHelp" help-text="Informe a placa do locacao.">
-                                    <input type="text" id="inputNome" class="form-control" placeholder="Ex. ABC1D23" v-model="busca.placa">
-                                </input-component>                       
+                                <input-component titulo="Nome do Cliente" id="inputCliente" id-help="clienteHelp" help-text="Informe parte do nome do cliente da locação.">
+                                    <input type="text" id="inputCliente" class="form-control" placeholder="Ex. Maria" v-model="busca.cliente_nome">
+                                </input-component>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="mb-3 col-md-6">
+                                <input-component titulo="Placa do Carro" id="inputPlaca" id-help="placaHelp" help-text="Informe a placa do carro da locação.">
+                                    <input type="text" id="inputPlaca" class="form-control" placeholder="Ex. ABC1D23" v-model="busca.carro_placa">
+                                </input-component>
+                            </div>
+                            <div class="mb-3 col">
+                                <input-component titulo="Status" id="inputStatus" id-help="statusHelp" help-text="Informe parte do status da locação.">
+                                    <input type="text" id="inputStatus" class="form-control" placeholder="Ex. andamento" v-model="busca.status">
+                                </input-component>
                             </div>
                         </div>
 
@@ -48,7 +61,7 @@
                                         data_inicio_periodo: {titulo: 'Início', tipo: 'date'},
                                         data_final_previsto_periodo: {titulo: 'Previsão', tipo: 'date'},
                                         valor_diaria: {titulo: 'Diária', tipo: 'money'},
-                                        km_final: {titulo: 'Km Final', tipo: 'text'},
+                                        km_final: {titulo: 'Km Final', tipo: 'km'},
                                         data_final_realizado_periodo: {titulo: 'Finalizado', tipo: 'date'},
                                     }">
                             </table-component>  
@@ -94,7 +107,7 @@
                             <input-component titulo="Carro"  id="carroId" id-help="carroIdHelp" help-text="Informe o carro da locacao.">
                                 <select v-model="carro_id" id="carroId" class="form-control">  
                                     <option disabled value="" >Selecione o Carro</option> 
-                                    <option v-for="carro in carros" :key="carro.id" :value="carro.id">{{carro.descricao}}</option>
+                                    <option v-for="carro in carros" :key="carro.id" :value="carro.id">{{nomeCarro(carro)}}</option>
                                 </select>
                             </input-component>
                         </div>
@@ -153,10 +166,10 @@
                                 <input type="text" class="form-control" :value="$store.state.item.data_final_realizado_periodo | formataDataGlobal" disabled> 
                             </input-component>
                             <input-component titulo="Km Inicial">
-                                <input type="text" class="form-control" :value="$store.state.item.km_inicial " disabled> 
+                                <input type="text" class="form-control" :value="$store.state.item.km_inicial | formataKmGlobal " disabled> 
                             </input-component>
                             <input-component titulo="Km Final">
-                                <input type="text" class="form-control" :value="$store.state.item.km_final " disabled> 
+                                <input type="text" class="form-control" :value="$store.state.item.km_final | formataKmGlobal" disabled> 
                             </input-component>
 
                         </div>
@@ -228,35 +241,35 @@
                    
                     <template v-slot:conteudo >
                         <div class="form-group">
-                            <input-component titulo="Valor Diária"  id="novoPlaca" id-help="novoPlacaHelp" help-text="Informe placa do locacao no padrão mercosul.">
-                                <input type="number" v-model="$store.state.item.valor_diaria" id="novoPlaca" class="form-control" placeholder="Ex: R$: 500,00">
+                            <input-component titulo="Valor Diária"  id="edtValorDiaria" id-help="edtValorDiariaHelp" help-text="Informe o valor da diária.">
+                                <input type="number" v-model="editar.valor_diaria" id="edtValorDiaria" class="form-control" placeholder="Ex: R$: 500,00">
                             </input-component>
                         </div>
                         <div class="form-group">
-                            <input-component titulo="Cliente"  id="clienteId" id-help="clienteIdHelp" help-text="Informe o cliente da locacao.">
-                                <select v-model="$store.state.item.cliente_id" id="clienteId" class="form-control">  
+                            <input-component titulo="Cliente"  id="edtClienteId" id-help="edtClienteIdHelp" help-text="Informe o cliente da locacao.">
+                                <select v-model="editar.cliente_id" id="edtClienteId" class="form-control">  
                                     <option value="" disabled>Selecione o Cliente</option> 
                                     <option v-for="cliente in clientes" :key="cliente.id" :value="cliente.id">{{cliente.nome}}</option>
                                 </select>
                             </input-component>
                         </div>
                         <div class="form-group">
-                            <input-component titulo="Carro"  id="carroId" id-help="carroIdHelp" help-text="Informe o carro da locacao.">
-                                <select v-model="$store.state.item.carro_id" id="carroId" class="form-control">  
+                            <input-component titulo="Carro"  id="edtCarroId" id-help="edtCarroIdHelp" help-text="Informe o carro da locacao.">
+                                <select v-model="editar.carro_id" id="edtCarroId" class="form-control">  
                                     <option disabled value="" >Selecione o Carro</option> 
-                                    <option v-for="carro in carros" :key="carro.id" :value="carro.id">{{carro.descricao}}</option>
+                                    <option v-for="carro in carros" :key="carro.id" :value="carro.id">{{nomeCarro(carro)}}</option>
                                 </select>
                             </input-component>
                         </div>
                         
                         <div class="form-group">
-                            <input-component titulo="Data de Inicio"  id="dataIni" id-help="dataIniHelp" help-text="Informe a data de inicio.">
-                                <input type="date" v-model="$store.state.item.data_inicio_periodo" id="dataIni" class="form-control">
+                            <input-component titulo="Data de Inicio"  id="edtDataIni" id-help="edtDataIniHelp" help-text="Informe a data de inicio.">
+                                <input type="date" v-model="editar.data_inicio_periodo" id="edtDataIni" class="form-control">
                             </input-component>
                         </div>
                         <div class="form-group">
-                            <input-component titulo="Data de previsao"  id="dataPrev" id-help="dataPrevHelp" help-text="Informe a data de previsao.">
-                                <input type="date" v-model="$store.state.item.data_final_previsto_periodo" id="dataPrev" class="form-control">
+                            <input-component titulo="Data de previsao"  id="edtDataPrev" id-help="edtDataPrevHelp" help-text="Informe a data de previsao.">
+                                <input type="date" v-model="editar.data_final_previsto_periodo" id="edtDataPrev" class="form-control">
                             </input-component>
                         </div>
 
@@ -268,6 +281,65 @@
                     </template>
                 </modal-component>
                  <!---------- Mdodal Atualizar ---------->
+
+                <!---------- Modal Finalizar ---------->
+                <modal-component id="modalLocacaoFinalizar" title="Finalizar Locacao">
+                    <template v-slot:alertas>
+                        <alert-component tipo="success" :detalhes="$store.state.transacao" titulo="Finalização realizada com sucesso!" v-if="$store.state.transacao.status == 'sucesso'" ></alert-component>
+                        <alert-component tipo="danger" :detalhes="$store.state.transacao" titulo="Erro ao tentar finalizar:" v-if="$store.state.transacao.status == 'erro'"></alert-component>
+                    </template>
+
+                    <template v-slot:conteudo>
+                        <div class="d-flex justify-content-center" v-if="!$store.state.item.id">
+                            <div class="spinner-border" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </div>
+                        <div v-else>
+                            <input-component titulo="ID">
+                                <input type="text" class="form-control" :value="$store.state.item.id" disabled>
+                            </input-component>
+                            <input-component titulo="Status">
+                                <input type="text" class="form-control" :value="$store.state.item.status" disabled>
+                            </input-component>
+                            <input-component titulo="Cliente">
+                                <input type="text" class="form-control" :value="$store.state.item.cliente.nome" disabled>
+                            </input-component>
+                            <input-component titulo="Carro">
+                                <input type="text" class="form-control" :value="$store.state.item.carro.descricao" disabled>
+                            </input-component>
+                            <input-component titulo="Valor da Diária">
+                                <input type="text" class="form-control" :value="$store.state.item.valor_diaria" disabled>
+                            </input-component>
+                            <input-component titulo="Data de Inicio">
+                                <input type="text" class="form-control" :value="$store.state.item.data_inicio_periodo | formataDataGlobal" disabled>
+                            </input-component>
+                            <input-component titulo="Data de Previsao">
+                                <input type="text" class="form-control" :value="$store.state.item.data_final_previsto_periodo | formataDataGlobal" disabled>
+                            </input-component>
+                            <input-component titulo="Km Inicial">
+                                <input type="text" class="form-control" :value="$store.state.item.km_inicial" disabled>
+                            </input-component>
+
+                            <div class="form-group">
+                                <input-component titulo="Data de Finalização"  id="dataFinal" id-help="dataFinalHelp" help-text="Informe a data final realizada.">
+                                    <input type="date" v-model="finalizacao.data_final_realizado_periodo" id="dataFinal" class="form-control">
+                                </input-component>
+                            </div>
+                            <div class="form-group">
+                                <input-component titulo="Km Final"  id="kmFinal" id-help="kmFinalHelp" help-text="Informe a quilometragem final.">
+                                    <input type="number" v-model="finalizacao.km_final" id="kmFinal" class="form-control" placeholder="Ex: 12345">
+                                </input-component>
+                            </div>
+                        </div>
+                    </template>
+
+                    <template v-slot:rodape>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" @click="finalizar()">Finalizar</button>
+                    </template>
+                </modal-component>
+                <!---------- Modal Finalizar ---------->
 
             </div>
         </div>
@@ -281,13 +353,23 @@ import { error } from 'jquery';
     export default{
         data(){
             return{
+                editar: {
+                    valor_diaria: null,
+                    cliente_id: '',
+                    carro_id: '',
+                    data_inicio_periodo: '',
+                    data_final_previsto_periodo: '',
+                    data_final_realizado_periodo: '',
+                },
+                finalizacao: {
+                    km_final: null,
+                    data_final_realizado_periodo: ''
+                },
                 cliente_id: '',
                 carro_id:  '',
                 data_inicio_periodo: '',
                 data_final_previsto_periodo: '', 
-                data_final_realizado_periodo: '', 
                 valor_diaria: null, 
-                km_final: null, 
                 urlBase: 'http://localhost:8000/api/v1/locacao',
                 urlPaginate: '',
                 urlFiltro: '',
@@ -299,7 +381,41 @@ import { error } from 'jquery';
                 clientes: false,
             }           
         },
+        watch: {
+            '$store.state.item': {
+                handler: function (item) {
+                    if (!item || !item.id) {
+                        return
+                    }
+
+                    this.editar.valor_diaria = this.definirSeNumero(item.valor_diaria)
+                    this.editar.cliente_id = item.cliente_id || ''
+                    this.editar.carro_id = item.carro_id || ''
+                    this.editar.data_inicio_periodo = this.formatarDataParaInput(item.data_inicio_periodo)
+                    this.editar.data_final_previsto_periodo = this.formatarDataParaInput(item.data_final_previsto_periodo)
+                    this.editar.data_final_realizado_periodo = this.formatarDataParaInput(item.data_final_realizado_periodo)
+                    this.finalizacao.data_final_realizado_periodo = this.formatarDataParaInput(item.data_final_realizado_periodo)
+                    this.finalizacao.km_final = this.definirSeNumero(item.km_final)
+                },
+                deep: true,
+                immediate: true
+            }
+        },
         methods: {
+            definirSeNumero(valor){
+                if (valor === '' || valor === undefined || valor === null) return null
+                return Number(valor)
+            },
+            nomeCarro(carro){
+                if (!carro) return ''
+                return carro.disponivel ? carro.descricao : `${carro.descricao} (Indisponível)`
+            },
+            formatarDataParaInput(d){
+                if (!d) return ''
+                d = String(d).split(' ')[0]
+                d = String(d).split('T')[0]
+                return d
+            },
             load_Options(){
                 this.$store.commit('limparTransacao')
                 if (this.clientes.length && this.carros.length) {
@@ -319,10 +435,10 @@ import { error } from 'jquery';
                     //console.log(errors.response)
                 })      
 
-                axios.get('/api/v1/carro/disponiveis')
+                axios.get('/api/v1/carro')
                 .then(response =>{
-                    this.carros_disp = response.data
-                    //console.log(this.clientes)
+                    this.carros = response.data.data
+                    //console.log(this.carros)
                 })
                 .catch(errors =>{
                     this.transacaoStatus = 'erro'
@@ -331,7 +447,7 @@ import { error } from 'jquery';
                         dados: errors.response.data.errors
                     } 
                     //console.log(errors.response)
-                })          
+                })            
             },
 
             salvar(){
@@ -365,12 +481,17 @@ import { error } from 'jquery';
                 let url = this.urlBase + '/' + this.$store.state.item.id
                 
                 let dados = {
-                    'modelo_id': this.$store.state.item.modelo_id,
-                    'placa': this.$store.state.item.placa,
-                    'disponivel': this.$store.state.item.disponivel,
-                    'km': this.$store.state.item.km
+                    valor_diaria: this.editar.valor_diaria,
+                    cliente_id: this.editar.cliente_id,
+                    carro_id: this.editar.carro_id,
+                    data_inicio_periodo: this.editar.data_inicio_periodo,
+                    data_final_previsto_periodo: this.editar.data_final_previsto_periodo,
                 }
 
+                if (this.editar.data_final_realizado_periodo) {
+                    dados.data_final_realizado_periodo = this.editar.data_final_realizado_periodo
+                }
+                
                 axios.put(url, dados)
                     .then(response =>{
                         console.log(response.data)
@@ -383,6 +504,28 @@ import { error } from 'jquery';
                         this.$store.state.transacao.mensagem = errors.response.data.message
                         this.$store.state.transacao.dados = errors.response.data.errors
                         //errors.response.data.message
+                    })
+                this.loadLocacoes()
+            },
+            finalizar(){
+                let url = this.urlBase + '/' + this.$store.state.item.id
+
+                let dados = {
+                    km_final: this.finalizacao.km_final,
+                    data_final_realizado_periodo: this.finalizacao.data_final_realizado_periodo,
+                }
+
+                axios.put(url, dados)
+                    .then(response =>{
+                        console.log(response.data)
+                        this.$store.state.transacao.status = 'sucesso'
+                        this.$store.state.transacao.mensagem = 'Locação finalizada com sucesso!'
+                    })
+                    .catch(errors =>{
+                        console.log('Erro ao finalizar: ', errors.response)
+                        this.$store.state.transacao.status = 'erro'
+                        this.$store.state.transacao.mensagem = errors.response.data.message
+                        this.$store.state.transacao.dados = errors.response.data.errors
                     })
                 this.loadLocacoes()
             },

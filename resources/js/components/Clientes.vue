@@ -12,8 +12,8 @@
                                 </input-component>                            
                             </div>
                             <div class="mb-3 col">
-                                <input-component titulo="Nome do Cliente" id="inputNome" id-help="nomeHelp" help-text="Informe a placa do cliente.">
-                                    <input type="text" id="inputNome" class="form-control" placeholder="Ex. Corolla" v-model="busca.nome">
+                                <input-component titulo="Nome do Cliente" id="inputNome" id-help="nomeHelp" help-text="Informe o nome do cliente.">
+                                    <input type="text" id="inputNome" class="form-control" placeholder="Ex. João" v-model="busca.nome">
                                 </input-component>                       
                             </div>
                         </div>
@@ -41,6 +41,7 @@
                                     {
                                         id: {titulo: 'ID', tipo: 'text'},
                                         nome: {titulo: 'Cliente', tipo: 'text'}, 
+                                        quantidade_locacoes: {titulo: 'Quantidade Locações', tipo: 'text'}, 
                                         created_at:{titulo: 'Criado', tipo: 'data'}
                                      
                                     }">
@@ -71,7 +72,7 @@
                         
                         <div class="form-group">
                             <input-component titulo="Nome do Cliente"  id="novoNome" id-help="novoNomeHelp" help-text="Informe nome do cliente no padrão mercosul.">
-                                <input type="text" v-model="nome" id="novoNome" class="form-control" placeholder="Ex: ABC1D23">
+                                <input type="text" v-model="nome" id="novoNome" class="form-control" placeholder="Ex: Claudio Cesar">
                             </input-component>
                         </div>
 
@@ -109,7 +110,7 @@
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                     </template>
                 </modal-component>
-                 <!---------- Modal Visualizar ---------->
+                 <!---------- Modal Visualizar ------------>
 
                  <!---------- Mdodal Remover ------------>
                 <modal-component id="modalClienteRemover" title="Remover Cliente">
@@ -211,7 +212,7 @@ import { error } from 'jquery';
             //             dados: errors.response.data.errors
             //         } 
             //         //console.log(errors.response)
-            //     })              
+            //     })             
             // },
             salvar(){
                 
@@ -286,7 +287,7 @@ import { error } from 'jquery';
                             filtro += ";"
                         }
                         filtro += chave + ':like:' + '%' +this.busca[chave]+'%'  
-                    }                    
+                    }                   
                 }
                 if (filtro != '') {
                     this.urlPaginate = 'page=1'

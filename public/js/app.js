@@ -3678,13 +3678,6 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    imgUrl: function imgUrl(path) {
-      if (!path) return '';
-      if (path.startsWith('http://') || path.startsWith('https://')) return path;
-      if (path.startsWith('/storage/')) return path;
-      if (path.startsWith('storage/')) return '/' + path;
-      return '/storage/' + path.replace(/^\/+/, '');
-    },
     loadModeloOptions: function loadModeloOptions() {
       var _this = this;
       this.$store.commit('limparTransacao');
@@ -3998,6 +3991,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -4034,7 +4028,7 @@ __webpack_require__.r(__webpack_exports__);
     //             dados: errors.response.data.errors
     //         } 
     //         //console.log(errors.response)
-    //     })              
+    //     })             
     // },
     salvar: function salvar() {
       var _this = this;
@@ -4170,8 +4164,13 @@ __webpack_require__.r(__webpack_exports__);
 /*!***********************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Home.vue?vue&type=script&lang=js& ***!
   \***********************************************************************************************************************************************************************************************************/
-() {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
 //
 //
 //
@@ -4224,6 +4223,170 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  data: function data() {
+    return {
+      carregando: false,
+      item: null,
+      erro: '',
+      urlBase: '/api/v1/dashboard'
+    };
+  },
+  methods: {
+    loadDashboard: function loadDashboard() {
+      var _this = this;
+      this.carregando = true;
+      this.erro = '';
+      axios.get(this.urlBase).then(function (response) {
+        _this.item = response.data;
+      })["catch"](function (error) {
+        _this.erro = error.response && error.response.data && error.response.data.message ? error.response.data.message : 'Erro ao carregar o painel.';
+      })["finally"](function () {
+        _this.carregando = false;
+      });
+    },
+    formatarNumero: function formatarNumero(valor) {
+      return valor === undefined || valor === null ? '-' : valor;
+    },
+    formatarMoeda: function formatarMoeda(valor) {
+      if (valor === undefined || valor === null) return '-';
+      return Number(valor).toLocaleString('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+      });
+    }
+  },
+  mounted: function mounted() {
+    this.loadDashboard();
+  }
+});
 
 /***/ },
 
@@ -4542,18 +4705,100 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
+      editar: {
+        valor_diaria: null,
+        cliente_id: '',
+        carro_id: '',
+        data_inicio_periodo: '',
+        data_final_previsto_periodo: '',
+        data_final_realizado_periodo: ''
+      },
+      finalizacao: {
+        km_final: null,
+        data_final_realizado_periodo: ''
+      },
       cliente_id: '',
       carro_id: '',
       data_inicio_periodo: '',
       data_final_previsto_periodo: '',
-      data_final_realizado_periodo: '',
       valor_diaria: null,
-      km_final: null,
       urlBase: 'http://localhost:8000/api/v1/locacao',
       urlPaginate: '',
       urlFiltro: '',
@@ -4570,7 +4815,40 @@ __webpack_require__.r(__webpack_exports__);
       clientes: false
     };
   },
+  watch: {
+    '$store.state.item': {
+      handler: function handler(item) {
+        if (!item || !item.id) {
+          return;
+        }
+        this.editar.valor_diaria = this.definirSeNumero(item.valor_diaria);
+        this.editar.cliente_id = item.cliente_id || '';
+        this.editar.carro_id = item.carro_id || '';
+        this.editar.data_inicio_periodo = this.formatarDataParaInput(item.data_inicio_periodo);
+        this.editar.data_final_previsto_periodo = this.formatarDataParaInput(item.data_final_previsto_periodo);
+        this.editar.data_final_realizado_periodo = this.formatarDataParaInput(item.data_final_realizado_periodo);
+        this.finalizacao.data_final_realizado_periodo = this.formatarDataParaInput(item.data_final_realizado_periodo);
+        this.finalizacao.km_final = this.definirSeNumero(item.km_final);
+      },
+      deep: true,
+      immediate: true
+    }
+  },
   methods: {
+    definirSeNumero: function definirSeNumero(valor) {
+      if (valor === '' || valor === undefined || valor === null) return null;
+      return Number(valor);
+    },
+    nomeCarro: function nomeCarro(carro) {
+      if (!carro) return '';
+      return carro.disponivel ? carro.descricao : "".concat(carro.descricao, " (Indispon\xEDvel)");
+    },
+    formatarDataParaInput: function formatarDataParaInput(d) {
+      if (!d) return '';
+      d = String(d).split(' ')[0];
+      d = String(d).split('T')[0];
+      return d;
+    },
     load_Options: function load_Options() {
       var _this = this;
       this.$store.commit('limparTransacao');
@@ -4588,9 +4866,9 @@ __webpack_require__.r(__webpack_exports__);
         };
         //console.log(errors.response)
       });
-      axios.get('/api/v1/carro/disponiveis').then(function (response) {
-        _this.carros_disp = response.data;
-        //console.log(this.clientes)
+      axios.get('/api/v1/carro').then(function (response) {
+        _this.carros = response.data.data;
+        //console.log(this.carros)
       })["catch"](function (errors) {
         _this.transacaoStatus = 'erro';
         _this.transacaoDetalhes = {
@@ -4628,11 +4906,15 @@ __webpack_require__.r(__webpack_exports__);
       var _this3 = this;
       var url = this.urlBase + '/' + this.$store.state.item.id;
       var dados = {
-        'modelo_id': this.$store.state.item.modelo_id,
-        'placa': this.$store.state.item.placa,
-        'disponivel': this.$store.state.item.disponivel,
-        'km': this.$store.state.item.km
+        valor_diaria: this.editar.valor_diaria,
+        cliente_id: this.editar.cliente_id,
+        carro_id: this.editar.carro_id,
+        data_inicio_periodo: this.editar.data_inicio_periodo,
+        data_final_previsto_periodo: this.editar.data_final_previsto_periodo
       };
+      if (this.editar.data_final_realizado_periodo) {
+        dados.data_final_realizado_periodo = this.editar.data_final_realizado_periodo;
+      }
       axios.put(url, dados).then(function (response) {
         console.log(response.data);
         _this3.$store.state.transacao.status = 'sucesso';
@@ -4646,8 +4928,27 @@ __webpack_require__.r(__webpack_exports__);
       });
       this.loadLocacoes();
     },
-    remover: function remover() {
+    finalizar: function finalizar() {
       var _this4 = this;
+      var url = this.urlBase + '/' + this.$store.state.item.id;
+      var dados = {
+        km_final: this.finalizacao.km_final,
+        data_final_realizado_periodo: this.finalizacao.data_final_realizado_periodo
+      };
+      axios.put(url, dados).then(function (response) {
+        console.log(response.data);
+        _this4.$store.state.transacao.status = 'sucesso';
+        _this4.$store.state.transacao.mensagem = 'Locação finalizada com sucesso!';
+      })["catch"](function (errors) {
+        console.log('Erro ao finalizar: ', errors.response);
+        _this4.$store.state.transacao.status = 'erro';
+        _this4.$store.state.transacao.mensagem = errors.response.data.message;
+        _this4.$store.state.transacao.dados = errors.response.data.errors;
+      });
+      this.loadLocacoes();
+    },
+    remover: function remover() {
+      var _this5 = this;
       var confirmacao = confirm('Tem certeza que deseja remover esse registro?');
       if (!confirmacao) {
         return false;
@@ -4656,13 +4957,13 @@ __webpack_require__.r(__webpack_exports__);
       var formData = new FormData();
       axios["delete"](url, formData).then(function (response) {
         console.log(' Removido com sucesso', response);
-        _this4.$store.state.transacao.status = 'sucesso';
-        _this4.$store.state.transacao.mensagem = 'O locacao foi atualizada com sucesso!';
-        _this4.loadLocacoes();
+        _this5.$store.state.transacao.status = 'sucesso';
+        _this5.$store.state.transacao.mensagem = 'O locacao foi atualizada com sucesso!';
+        _this5.loadLocacoes();
       })["catch"](function (errors) {
         console.log('erro', errors.data);
-        _this4.$store.state.transacao.status = 'erro';
-        _this4.$store.state.transacao.mensagem = errors.response.data.message;
+        _this5.$store.state.transacao.status = 'erro';
+        _this5.$store.state.transacao.mensagem = errors.response.data.message;
       });
     },
     search: function search() {
@@ -4690,11 +4991,11 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     loadLocacoes: function loadLocacoes() {
-      var _this5 = this;
+      var _this6 = this;
       var url = this.urlBase + '?' + this.urlPaginate + this.urlFiltro;
       axios.get(url).then(function (response) {
-        _this5.locacoes = response.data;
-        console.log(_this5.locacoes);
+        _this6.locacoes = response.data;
+        console.log(_this6.locacoes);
       })["catch"](function (errors) {
         console.log(errors);
       });
@@ -4983,6 +5284,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -5004,13 +5307,6 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    imgUrl: function imgUrl(path) {
-      if (!path) return '';
-      if (path.startsWith('http://') || path.startsWith('https://')) return path;
-      if (path.startsWith('/storage/')) return path;
-      if (path.startsWith('storage/')) return '/' + path;
-      return '/storage/' + path.replace(/^\/+/, '');
-    },
     atualizar: function atualizar() {
       var _this = this;
       var url = this.urlBase + '/' + this.$store.state.item.id;
@@ -5046,13 +5342,18 @@ __webpack_require__.r(__webpack_exports__);
       console.log(url);
       axios.post(url, formData).then(function (response) {
         console.log(' Removido com sucesso', response);
-        _this2.$store.state.transacao.status = 'sucesso';
-        _this2.$store.state.transacao.mensagem = 'A marca foi atualizada com sucesso!';
+        _this2.transacaoStatus = 'adicionado';
+        _this2.transacaoDetalhes = {
+          mensagem: 'A marca foi atualizada com sucesso!'
+        };
         _this2.loadMarcas();
       })["catch"](function (errors) {
         console.log('erro', errors.data);
-        _this2.$store.state.transacao.status = 'erro';
-        _this2.$store.state.transacao.mensagem = errors.response.data.message;
+        _this2.transacaoStatus = 'erro';
+        _this2.transacaoDetalhes = {
+          mensagem: errors.response.data.message,
+          dados: errors.response.data.errors
+        };
       });
     },
     search: function search() {
@@ -5735,6 +6036,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['dados', 'titulos', 'visualizar', 'atualizar', 'remover', 'finalizar', 'url'],
@@ -5886,9 +6190,9 @@ Vue.component('locacoes-component', (__webpack_require__(/*! ./components/Locaco
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
-Vue.filter('formataKm', function (km) {
-  if (!d) return '';
-  km = km.split();
+Vue.filter('formataKmGlobal', function (valor) {
+  if (valor == null || valor == '') return ' - ';
+  return Number(valor).toLocaleString('pt-BR') + ' km';
 });
 Vue.filter('formataDataGlobal', function (d) {
   if (!d) return '';
@@ -5903,9 +6207,25 @@ Vue.filter('formataDataTempoGlobal', function (d) {
   var data = d[0].split('-');
   data = data[2] + '/' + data[1] + '/' + data[0];
   var tempo = d[1].split('.')[0];
-  console.log(data + tempo);
   return data + ' - ' + tempo;
 });
+Vue.prototype.$imgUrl = function (path) {
+  if (!path) return '';
+  if (path.startsWith('http://') || path.startsWith('https://')) return path;
+  if (path.startsWith('/storage/')) return path;
+  if (path.startsWith('storage/')) return '/' + path;
+  return '/storage/' + path.replace(/^\/+/, '');
+};
+Vue.prototype.$formatarNumero = function (valor) {
+  return valor === undefined || valor === null ? '-' : valor;
+};
+Vue.prototype.$formatarMoeda = function (valor) {
+  if (valor === undefined || valor === null) return '-';
+  return Number(valor).toLocaleString('pt-BR', {
+    style: 'currency',
+    currency: 'BRL'
+  });
+};
 var app = new Vue({
   el: '#app',
   store: store
@@ -41398,9 +41718,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _Home_vue_vue_type_template_id_f2b6376c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Home.vue?vue&type=template&id=f2b6376c& */ "./resources/js/components/Home.vue?vue&type=template&id=f2b6376c&");
 /* harmony import */ var _Home_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Home.vue?vue&type=script&lang=js& */ "./resources/js/components/Home.vue?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ var __WEBPACK_REEXPORT_OBJECT__ = {};
-/* harmony reexport (unknown) */ for(const __WEBPACK_IMPORT_KEY__ in _Home_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== "default") __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = () => _Home_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[__WEBPACK_IMPORT_KEY__]
-/* harmony reexport (unknown) */ __webpack_require__.d(__webpack_exports__, __WEBPACK_REEXPORT_OBJECT__);
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -41840,11 +42157,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Home_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Home.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Home.vue?vue&type=script&lang=js&");
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Home_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Home_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__);
-/* harmony reexport (unknown) */ var __WEBPACK_REEXPORT_OBJECT__ = {};
-/* harmony reexport (unknown) */ for(const __WEBPACK_IMPORT_KEY__ in _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Home_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== "default") __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = () => _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Home_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__[__WEBPACK_IMPORT_KEY__]
-/* harmony reexport (unknown) */ __webpack_require__.d(__webpack_exports__, __WEBPACK_REEXPORT_OBJECT__);
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Home_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0___default())); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Home_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ },
 
@@ -42499,7 +42812,7 @@ var render = function () {
                                 titulo: "Disponível",
                                 tipo: "bool",
                               },
-                              km: { titulo: "Quilometros", tipo: "text" },
+                              km: { titulo: "Quilometros", tipo: "km" },
                             },
                           },
                           on: { "load-modelo-options": _vm.loadModeloOptions },
@@ -42939,7 +43252,7 @@ var render = function () {
                                   ? _c("img", {
                                       staticClass: "app-modal-img",
                                       attrs: {
-                                        src: _vm.imgUrl(
+                                        src: _vm.$imgUrl(
                                           _vm.$store.state.item.modelo.imagem
                                         ),
                                         alt: _vm.$store.state.item.modelo.nome,
@@ -43674,7 +43987,7 @@ var render = function () {
                                 titulo: "Nome do Cliente",
                                 id: "inputNome",
                                 "id-help": "nomeHelp",
-                                "help-text": "Informe a placa do cliente.",
+                                "help-text": "Informe o nome do cliente.",
                               },
                             },
                             [
@@ -43691,7 +44004,7 @@ var render = function () {
                                 attrs: {
                                   type: "text",
                                   id: "inputNome",
-                                  placeholder: "Ex. Corolla",
+                                  placeholder: "Ex. João",
                                 },
                                 domProps: { value: _vm.busca.nome },
                                 on: {
@@ -43771,6 +44084,10 @@ var render = function () {
                             titulos: {
                               id: { titulo: "ID", tipo: "text" },
                               nome: { titulo: "Cliente", tipo: "text" },
+                              quantidade_locacoes: {
+                                titulo: "Quantidade Locações",
+                                tipo: "text",
+                              },
                               created_at: { titulo: "Criado", tipo: "data" },
                             },
                           },
@@ -43903,7 +44220,7 @@ var render = function () {
                               attrs: {
                                 type: "text",
                                 id: "novoNome",
-                                placeholder: "Ex: ABC1D23",
+                                placeholder: "Ex: Claudio Cesar",
                               },
                               domProps: { value: _vm.nome },
                               on: {
@@ -44419,103 +44736,410 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "app-dashboard-page" }, [
+    _c("div", { staticClass: "app-dashboard-wrapper" }, [
+      _vm._m(0),
+      _vm._v(" "),
+      !_vm.carregando && _vm.item
+        ? _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "col-md-6 col-xl-3 mb-4" }, [
+              _c("div", { staticClass: "card app-dashboard-card h-100" }, [
+                _c("div", { staticClass: "card-body" }, [
+                  _c("div", { staticClass: "d-flex align-items-center" }, [
+                    _vm._m(1),
+                    _vm._v(" "),
+                    _c("div", [
+                      _c("small", { staticClass: "text-muted" }, [
+                        _vm._v("Total de Veículos"),
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "dash-value" }, [
+                        _vm._v(
+                          _vm._s(_vm.$formatarNumero(_vm.item.total_carros))
+                        ),
+                      ]),
+                    ]),
+                  ]),
+                ]),
+              ]),
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-md-6 col-xl-3 mb-4" }, [
+              _c("div", { staticClass: "card app-dashboard-card h-100" }, [
+                _c("div", { staticClass: "card-body" }, [
+                  _c("div", { staticClass: "d-flex align-items-center" }, [
+                    _vm._m(2),
+                    _vm._v(" "),
+                    _c("div", [
+                      _c("small", { staticClass: "text-muted" }, [
+                        _vm._v("Disponíveis"),
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "dash-value" }, [
+                        _vm._v(
+                          _vm._s(
+                            _vm.$formatarNumero(_vm.item.carros_disponiveis)
+                          )
+                        ),
+                      ]),
+                    ]),
+                  ]),
+                ]),
+              ]),
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-md-6 col-xl-3 mb-4" }, [
+              _c("div", { staticClass: "card app-dashboard-card h-100" }, [
+                _c("div", { staticClass: "card-body" }, [
+                  _c("div", { staticClass: "d-flex align-items-center" }, [
+                    _vm._m(3),
+                    _vm._v(" "),
+                    _c("div", [
+                      _c("small", { staticClass: "text-muted" }, [
+                        _vm._v("Locados"),
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "dash-value" }, [
+                        _vm._v(
+                          _vm._s(_vm.$formatarNumero(_vm.item.carros_locados))
+                        ),
+                      ]),
+                    ]),
+                  ]),
+                ]),
+              ]),
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-md-6 col-xl-3 mb-4" }, [
+              _c("div", { staticClass: "card app-dashboard-card h-100" }, [
+                _c("div", { staticClass: "card-body" }, [
+                  _c("div", { staticClass: "d-flex align-items-center" }, [
+                    _vm._m(4),
+                    _vm._v(" "),
+                    _c("div", [
+                      _c("small", { staticClass: "text-muted" }, [
+                        _vm._v("Clientes"),
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "dash-value" }, [
+                        _vm._v(
+                          _vm._s(_vm.$formatarNumero(_vm.item.total_clientes))
+                        ),
+                      ]),
+                    ]),
+                  ]),
+                ]),
+              ]),
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-md-6 col-xl-6 mb-4" }, [
+              _c(
+                "div",
+                { staticClass: "card app-dashboard-card dash-card-lg h-100" },
+                [
+                  _c("div", { staticClass: "card-body" }, [
+                    _c("div", { staticClass: "d-flex align-items-center" }, [
+                      _vm._m(5),
+                      _vm._v(" "),
+                      _c("div", [
+                        _c("small", { staticClass: "text-muted" }, [
+                          _vm._v("Receita Total"),
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "dash-value" }, [
+                          _vm._v(
+                            _vm._s(_vm.$formatarMoeda(_vm.item.receita_total))
+                          ),
+                        ]),
+                      ]),
+                    ]),
+                  ]),
+                ]
+              ),
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-md-6 col-xl-6 mb-4" }, [
+              _c(
+                "div",
+                { staticClass: "card app-dashboard-card dash-card-lg h-100" },
+                [
+                  _c("div", { staticClass: "card-body" }, [
+                    _c("div", { staticClass: "d-flex align-items-center" }, [
+                      _vm._m(6),
+                      _vm._v(" "),
+                      _c("div", [
+                        _c("small", { staticClass: "text-muted" }, [
+                          _vm._v("Em Andamento"),
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "dash-value" }, [
+                          _vm._v(
+                            _vm._s(
+                              _vm.$formatarNumero(
+                                _vm.item.locacoes_andamento_qt
+                              )
+                            )
+                          ),
+                        ]),
+                      ]),
+                    ]),
+                  ]),
+                ]
+              ),
+            ]),
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      !_vm.carregando &&
+      _vm.item &&
+      _vm.item.locacoes_proximas &&
+      _vm.item.locacoes_proximas.length
+        ? _c("div", { staticClass: "mb-4" }, [
+            _c("div", { staticClass: "card app-dashboard-table-card" }, [
+              _vm._m(7),
+              _vm._v(" "),
+              _c("div", { staticClass: "card-body p-0" }, [
+                _c("div", { staticClass: "table-responsive" }, [
+                  _c("table", { staticClass: "table table-hover mb-0" }, [
+                    _vm._m(8),
+                    _vm._v(" "),
+                    _c(
+                      "tbody",
+                      _vm._l(_vm.item.locacoes_proximas, function (loc) {
+                        return _c("tr", { key: loc.id }, [
+                          _c("td", [
+                            _c("span", { staticClass: "table-cell-text" }, [
+                              _vm._v("#" + _vm._s(loc.id)),
+                            ]),
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _c(
+                              "div",
+                              { staticClass: "d-flex align-items-center" },
+                              [
+                                _c("i", {
+                                  staticClass:
+                                    "bi bi-person-circle mr-2 text-muted",
+                                }),
+                                _vm._v(" "),
+                                _c("span", [
+                                  _vm._v(
+                                    _vm._s(
+                                      loc.cliente && loc.cliente.nome
+                                        ? loc.cliente.nome
+                                        : "-"
+                                    )
+                                  ),
+                                ]),
+                              ]
+                            ),
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _c(
+                              "div",
+                              { staticClass: "d-flex align-items-center" },
+                              [
+                                _c("i", {
+                                  staticClass:
+                                    "bi bi-car-front mr-2 text-muted",
+                                }),
+                                _vm._v(" "),
+                                _c("span", [
+                                  _vm._v(
+                                    _vm._s(
+                                      loc.carro &&
+                                        loc.carro.modelo &&
+                                        loc.carro.modelo.nome
+                                        ? loc.carro.modelo.nome
+                                        : "-"
+                                    )
+                                  ),
+                                ]),
+                              ]
+                            ),
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _c("i", {
+                              staticClass: "bi bi-calendar3 mr-1 text-muted",
+                            }),
+                            _vm._v(
+                              "\n                                        " +
+                                _vm._s(
+                                  _vm._f("formataDataGlobal")(
+                                    loc.data_final_previsto_periodo
+                                  )
+                                ) +
+                                "\n                                    "
+                            ),
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _c(
+                              "span",
+                              {
+                                staticClass: "app-dashboard-badge",
+                                class: loc.data_final_realizado_periodo
+                                  ? "badge-success"
+                                  : "badge-warning",
+                              },
+                              [
+                                _vm._v(
+                                  "\n                                            " +
+                                    _vm._s(
+                                      loc.data_final_realizado_periodo
+                                        ? "Finalizada"
+                                        : "Em andamento"
+                                    ) +
+                                    "\n                                        "
+                                ),
+                              ]
+                            ),
+                          ]),
+                        ])
+                      }),
+                      0
+                    ),
+                  ]),
+                ]),
+              ]),
+            ]),
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.carregando
+        ? _c("div", { staticClass: "text-center py-5" }, [_vm._m(9)])
+        : _vm._e(),
+      _vm._v(" "),
+      !_vm.carregando && _vm.erro
+        ? _c("div", { staticClass: "alert alert-danger mt-2" }, [
+            _vm._v("\n            " + _vm._s(_vm.erro) + "\n        "),
+          ])
+        : _vm._e(),
+    ]),
+  ])
 }
 var staticRenderFns = [
   function () {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "container" }, [
-      _c("div", { staticClass: "row justify-content-center" }, [
-        _c("div", { staticClass: "col-lg-10" }, [
-          _c("div", { staticClass: "card app-welcome-card mb-4" }, [
-            _c("div", { staticClass: "card-header" }, [
-              _c("i", { staticClass: "bi bi-speedometer2 mr-2" }),
-              _vm._v(" Bem-vindo ao sistema\n                "),
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "card-body py-4" }, [
-              _c("p", { staticClass: "text-muted mb-4" }, [
-                _vm._v(
-                  "Gerencie clientes, locações e veículos de forma centralizada."
-                ),
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "row" }, [
-                _c("div", { staticClass: "col-md-4 mb-3 mb-md-0" }, [
-                  _c("div", { staticClass: "d-flex align-items-start" }, [
-                    _c(
-                      "div",
-                      {
-                        staticClass:
-                          "app-feature-icon bg-primary text-white mr-3",
-                      },
-                      [_c("i", { staticClass: "bi bi-people-fill" })]
-                    ),
-                    _vm._v(" "),
-                    _c("div", [
-                      _c("h6", { staticClass: "font-weight-bold mb-1" }, [
-                        _vm._v("Clientes"),
-                      ]),
-                      _vm._v(" "),
-                      _c("p", { staticClass: "text-muted small mb-0" }, [
-                        _vm._v("Cadastre e gerencie os clientes da locadora."),
-                      ]),
-                    ]),
-                  ]),
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "col-md-4 mb-3 mb-md-0" }, [
-                  _c("div", { staticClass: "d-flex align-items-start" }, [
-                    _c(
-                      "div",
-                      {
-                        staticClass:
-                          "app-feature-icon bg-success text-white mr-3",
-                      },
-                      [_c("i", { staticClass: "bi bi-truck" })]
-                    ),
-                    _vm._v(" "),
-                    _c("div", [
-                      _c("h6", { staticClass: "font-weight-bold mb-1" }, [
-                        _vm._v("Veículos"),
-                      ]),
-                      _vm._v(" "),
-                      _c("p", { staticClass: "text-muted small mb-0" }, [
-                        _vm._v("Controle marcas, modelos e frota disponível."),
-                      ]),
-                    ]),
-                  ]),
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "col-md-4" }, [
-                  _c("div", { staticClass: "d-flex align-items-start" }, [
-                    _c(
-                      "div",
-                      {
-                        staticClass: "app-feature-icon bg-info text-white mr-3",
-                      },
-                      [_c("i", { staticClass: "bi bi-calendar2-check-fill" })]
-                    ),
-                    _vm._v(" "),
-                    _c("div", [
-                      _c("h6", { staticClass: "font-weight-bold mb-1" }, [
-                        _vm._v("Locações"),
-                      ]),
-                      _vm._v(" "),
-                      _c("p", { staticClass: "text-muted small mb-0" }, [
-                        _vm._v("Acompanhe contratos, status e devoluções."),
-                      ]),
-                    ]),
-                  ]),
-                ]),
-              ]),
-            ]),
+    return _c(
+      "div",
+      { staticClass: "page-header-custom d-flex align-items-end" },
+      [
+        _c("div", [
+          _c("h1", { staticClass: "page-title mb-1" }, [_vm._v("Painel")]),
+          _vm._v(" "),
+          _c("p", { staticClass: "page-subtitle mb-0" }, [
+            _vm._v("Visão geral da locadora em um só lugar."),
           ]),
         ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "ml-auto d-none d-sm-block" }, [
+          _c(
+            "span",
+            {
+              staticClass: "text-muted",
+              staticStyle: { "font-size": "0.85rem" },
+            },
+            [
+              _c("i", { staticClass: "bi bi-clock mr-1" }),
+              _vm._v(
+                "\n                    Atualizado agora\n                "
+              ),
+            ]
+          ),
+        ]),
+      ]
+    )
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "dash-icon bg-primary mr-3" }, [
+      _c("i", { staticClass: "bi bi-car-front-fill" }),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "dash-icon bg-success mr-3" }, [
+      _c("i", { staticClass: "bi bi-check-circle-fill" }),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "dash-icon bg-warning mr-3" }, [
+      _c("i", { staticClass: "bi bi-x-circle-fill" }),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "dash-icon bg-info mr-3" }, [
+      _c("i", { staticClass: "bi bi-people-fill" }),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "dash-icon bg-dark mr-3" }, [
+      _c("i", { staticClass: "bi bi-currency-dollar" }),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "dash-icon bg-danger mr-3" }, [
+      _c("i", { staticClass: "bi bi-hourglass-split" }),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "card-header" }, [
+      _c("i", { staticClass: "bi bi-calendar-event mr-2" }),
+      _vm._v(" Próximas Devoluções\n                "),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", { staticClass: "thead-light" }, [
+      _c("tr", [
+        _c("th", [_vm._v("#")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Cliente")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Carro")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Previsão")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Status")]),
       ]),
     ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "spinner-border text-primary", attrs: { role: "status" } },
+      [_c("span", { staticClass: "sr-only" }, [_vm._v("Carregando...")])]
+    )
   },
 ]
 render._withStripped = true
@@ -44611,7 +45235,7 @@ var render = function () {
                                 titulo: "ID",
                                 id: "inputId",
                                 "id-help": "idHelp",
-                                "help-text": "Informe o ID do Locacao.",
+                                "help-text": "Informe o ID da locação.",
                               },
                             },
                             [
@@ -44628,7 +45252,7 @@ var render = function () {
                                 attrs: {
                                   type: "number",
                                   id: "inputId",
-                                  placeholder: "Ex.01",
+                                  placeholder: "Ex. 1",
                                 },
                                 domProps: { value: _vm.busca.id },
                                 on: {
@@ -44658,10 +45282,11 @@ var render = function () {
                             "input-component",
                             {
                               attrs: {
-                                titulo: "Numero da placa",
-                                id: "inputNome",
-                                "id-help": "nomeHelp",
-                                "help-text": "Informe a placa do locacao.",
+                                titulo: "Nome do Cliente",
+                                id: "inputCliente",
+                                "id-help": "clienteHelp",
+                                "help-text":
+                                  "Informe parte do nome do cliente da locação.",
                               },
                             },
                             [
@@ -44670,17 +45295,17 @@ var render = function () {
                                   {
                                     name: "model",
                                     rawName: "v-model",
-                                    value: _vm.busca.placa,
-                                    expression: "busca.placa",
+                                    value: _vm.busca.cliente_nome,
+                                    expression: "busca.cliente_nome",
                                   },
                                 ],
                                 staticClass: "form-control",
                                 attrs: {
                                   type: "text",
-                                  id: "inputNome",
-                                  placeholder: "Ex. ABC1D23",
+                                  id: "inputCliente",
+                                  placeholder: "Ex. Maria",
                                 },
-                                domProps: { value: _vm.busca.placa },
+                                domProps: { value: _vm.busca.cliente_nome },
                                 on: {
                                   input: function ($event) {
                                     if ($event.target.composing) {
@@ -44688,7 +45313,111 @@ var render = function () {
                                     }
                                     _vm.$set(
                                       _vm.busca,
-                                      "placa",
+                                      "cliente_nome",
+                                      $event.target.value
+                                    )
+                                  },
+                                },
+                              }),
+                            ]
+                          ),
+                        ],
+                        1
+                      ),
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "row" }, [
+                      _c(
+                        "div",
+                        { staticClass: "mb-3 col-md-6" },
+                        [
+                          _c(
+                            "input-component",
+                            {
+                              attrs: {
+                                titulo: "Placa do Carro",
+                                id: "inputPlaca",
+                                "id-help": "placaHelp",
+                                "help-text":
+                                  "Informe a placa do carro da locação.",
+                              },
+                            },
+                            [
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.busca.carro_placa,
+                                    expression: "busca.carro_placa",
+                                  },
+                                ],
+                                staticClass: "form-control",
+                                attrs: {
+                                  type: "text",
+                                  id: "inputPlaca",
+                                  placeholder: "Ex. ABC1D23",
+                                },
+                                domProps: { value: _vm.busca.carro_placa },
+                                on: {
+                                  input: function ($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      _vm.busca,
+                                      "carro_placa",
+                                      $event.target.value
+                                    )
+                                  },
+                                },
+                              }),
+                            ]
+                          ),
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        { staticClass: "mb-3 col" },
+                        [
+                          _c(
+                            "input-component",
+                            {
+                              attrs: {
+                                titulo: "Status",
+                                id: "inputStatus",
+                                "id-help": "statusHelp",
+                                "help-text":
+                                  "Informe parte do status da locação.",
+                              },
+                            },
+                            [
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.busca.status,
+                                    expression: "busca.status",
+                                  },
+                                ],
+                                staticClass: "form-control",
+                                attrs: {
+                                  type: "text",
+                                  id: "inputStatus",
+                                  placeholder: "Ex. andamento",
+                                },
+                                domProps: { value: _vm.busca.status },
+                                on: {
+                                  input: function ($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      _vm.busca,
+                                      "status",
                                       $event.target.value
                                     )
                                   },
@@ -44778,7 +45507,7 @@ var render = function () {
                                 tipo: "date",
                               },
                               valor_diaria: { titulo: "Diária", tipo: "money" },
-                              km_final: { titulo: "Km Final", tipo: "text" },
+                              km_final: { titulo: "Km Final", tipo: "km" },
                               data_final_realizado_periodo: {
                                 titulo: "Finalizado",
                                 tipo: "date",
@@ -45074,7 +45803,7 @@ var render = function () {
                                       key: carro.id,
                                       domProps: { value: carro.id },
                                     },
-                                    [_vm._v(_vm._s(carro.descricao))]
+                                    [_vm._v(_vm._s(_vm.nomeCarro(carro)))]
                                   )
                                 }),
                               ],
@@ -45364,7 +46093,9 @@ var render = function () {
                                   staticClass: "form-control",
                                   attrs: { type: "text", disabled: "" },
                                   domProps: {
-                                    value: _vm.$store.state.item.km_inicial,
+                                    value: _vm._f("formataKmGlobal")(
+                                      _vm.$store.state.item.km_inicial
+                                    ),
                                   },
                                 }),
                               ]
@@ -45378,7 +46109,9 @@ var render = function () {
                                   staticClass: "form-control",
                                   attrs: { type: "text", disabled: "" },
                                   domProps: {
-                                    value: _vm.$store.state.item.km_final,
+                                    value: _vm._f("formataKmGlobal")(
+                                      _vm.$store.state.item.km_final
+                                    ),
                                   },
                                 }),
                               ]
@@ -45713,10 +46446,9 @@ var render = function () {
                           {
                             attrs: {
                               titulo: "Valor Diária",
-                              id: "novoPlaca",
-                              "id-help": "novoPlacaHelp",
-                              "help-text":
-                                "Informe placa do locacao no padrão mercosul.",
+                              id: "edtValorDiaria",
+                              "id-help": "edtValorDiariaHelp",
+                              "help-text": "Informe o valor da diária.",
                             },
                           },
                           [
@@ -45725,26 +46457,24 @@ var render = function () {
                                 {
                                   name: "model",
                                   rawName: "v-model",
-                                  value: _vm.$store.state.item.valor_diaria,
-                                  expression: "$store.state.item.valor_diaria",
+                                  value: _vm.editar.valor_diaria,
+                                  expression: "editar.valor_diaria",
                                 },
                               ],
                               staticClass: "form-control",
                               attrs: {
                                 type: "number",
-                                id: "novoPlaca",
+                                id: "edtValorDiaria",
                                 placeholder: "Ex: R$: 500,00",
                               },
-                              domProps: {
-                                value: _vm.$store.state.item.valor_diaria,
-                              },
+                              domProps: { value: _vm.editar.valor_diaria },
                               on: {
                                 input: function ($event) {
                                   if ($event.target.composing) {
                                     return
                                   }
                                   _vm.$set(
-                                    _vm.$store.state.item,
+                                    _vm.editar,
                                     "valor_diaria",
                                     $event.target.value
                                   )
@@ -45766,8 +46496,8 @@ var render = function () {
                           {
                             attrs: {
                               titulo: "Cliente",
-                              id: "clienteId",
-                              "id-help": "clienteIdHelp",
+                              id: "edtClienteId",
+                              "id-help": "edtClienteIdHelp",
                               "help-text": "Informe o cliente da locacao.",
                             },
                           },
@@ -45779,12 +46509,12 @@ var render = function () {
                                   {
                                     name: "model",
                                     rawName: "v-model",
-                                    value: _vm.$store.state.item.cliente_id,
-                                    expression: "$store.state.item.cliente_id",
+                                    value: _vm.editar.cliente_id,
+                                    expression: "editar.cliente_id",
                                   },
                                 ],
                                 staticClass: "form-control",
-                                attrs: { id: "clienteId" },
+                                attrs: { id: "edtClienteId" },
                                 on: {
                                   change: function ($event) {
                                     var $$selectedVal = Array.prototype.filter
@@ -45800,7 +46530,7 @@ var render = function () {
                                         return val
                                       })
                                     _vm.$set(
-                                      _vm.$store.state.item,
+                                      _vm.editar,
                                       "cliente_id",
                                       $event.target.multiple
                                         ? $$selectedVal
@@ -45844,8 +46574,8 @@ var render = function () {
                           {
                             attrs: {
                               titulo: "Carro",
-                              id: "carroId",
-                              "id-help": "carroIdHelp",
+                              id: "edtCarroId",
+                              "id-help": "edtCarroIdHelp",
                               "help-text": "Informe o carro da locacao.",
                             },
                           },
@@ -45857,12 +46587,12 @@ var render = function () {
                                   {
                                     name: "model",
                                     rawName: "v-model",
-                                    value: _vm.$store.state.item.carro_id,
-                                    expression: "$store.state.item.carro_id",
+                                    value: _vm.editar.carro_id,
+                                    expression: "editar.carro_id",
                                   },
                                 ],
                                 staticClass: "form-control",
-                                attrs: { id: "carroId" },
+                                attrs: { id: "edtCarroId" },
                                 on: {
                                   change: function ($event) {
                                     var $$selectedVal = Array.prototype.filter
@@ -45878,7 +46608,7 @@ var render = function () {
                                         return val
                                       })
                                     _vm.$set(
-                                      _vm.$store.state.item,
+                                      _vm.editar,
                                       "carro_id",
                                       $event.target.multiple
                                         ? $$selectedVal
@@ -45901,7 +46631,7 @@ var render = function () {
                                       key: carro.id,
                                       domProps: { value: carro.id },
                                     },
-                                    [_vm._v(_vm._s(carro.descricao))]
+                                    [_vm._v(_vm._s(_vm.nomeCarro(carro)))]
                                   )
                                 }),
                               ],
@@ -45922,8 +46652,8 @@ var render = function () {
                           {
                             attrs: {
                               titulo: "Data de Inicio",
-                              id: "dataIni",
-                              "id-help": "dataIniHelp",
+                              id: "edtDataIni",
+                              "id-help": "edtDataIniHelp",
                               "help-text": "Informe a data de inicio.",
                             },
                           },
@@ -45933,17 +46663,14 @@ var render = function () {
                                 {
                                   name: "model",
                                   rawName: "v-model",
-                                  value:
-                                    _vm.$store.state.item.data_inicio_periodo,
-                                  expression:
-                                    "$store.state.item.data_inicio_periodo",
+                                  value: _vm.editar.data_inicio_periodo,
+                                  expression: "editar.data_inicio_periodo",
                                 },
                               ],
                               staticClass: "form-control",
-                              attrs: { type: "date", id: "dataIni" },
+                              attrs: { type: "date", id: "edtDataIni" },
                               domProps: {
-                                value:
-                                  _vm.$store.state.item.data_inicio_periodo,
+                                value: _vm.editar.data_inicio_periodo,
                               },
                               on: {
                                 input: function ($event) {
@@ -45951,7 +46678,7 @@ var render = function () {
                                     return
                                   }
                                   _vm.$set(
-                                    _vm.$store.state.item,
+                                    _vm.editar,
                                     "data_inicio_periodo",
                                     $event.target.value
                                   )
@@ -45973,8 +46700,8 @@ var render = function () {
                           {
                             attrs: {
                               titulo: "Data de previsao",
-                              id: "dataPrev",
-                              "id-help": "dataPrevHelp",
+                              id: "edtDataPrev",
+                              "id-help": "edtDataPrevHelp",
                               "help-text": "Informe a data de previsao.",
                             },
                           },
@@ -45984,19 +46711,15 @@ var render = function () {
                                 {
                                   name: "model",
                                   rawName: "v-model",
-                                  value:
-                                    _vm.$store.state.item
-                                      .data_final_previsto_periodo,
+                                  value: _vm.editar.data_final_previsto_periodo,
                                   expression:
-                                    "$store.state.item.data_final_previsto_periodo",
+                                    "editar.data_final_previsto_periodo",
                                 },
                               ],
                               staticClass: "form-control",
-                              attrs: { type: "date", id: "dataPrev" },
+                              attrs: { type: "date", id: "edtDataPrev" },
                               domProps: {
-                                value:
-                                  _vm.$store.state.item
-                                    .data_final_previsto_periodo,
+                                value: _vm.editar.data_final_previsto_periodo,
                               },
                               on: {
                                 input: function ($event) {
@@ -46004,7 +46727,7 @@ var render = function () {
                                     return
                                   }
                                   _vm.$set(
-                                    _vm.$store.state.item,
+                                    _vm.editar,
                                     "data_final_previsto_periodo",
                                     $event.target.value
                                   )
@@ -46045,6 +46768,320 @@ var render = function () {
                         },
                       },
                       [_vm._v("Salvar")]
+                    ),
+                  ]
+                },
+                proxy: true,
+              },
+            ]),
+          }),
+          _vm._v(" "),
+          _c("modal-component", {
+            attrs: { id: "modalLocacaoFinalizar", title: "Finalizar Locacao" },
+            scopedSlots: _vm._u([
+              {
+                key: "alertas",
+                fn: function () {
+                  return [
+                    _vm.$store.state.transacao.status == "sucesso"
+                      ? _c("alert-component", {
+                          attrs: {
+                            tipo: "success",
+                            detalhes: _vm.$store.state.transacao,
+                            titulo: "Finalização realizada com sucesso!",
+                          },
+                        })
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.$store.state.transacao.status == "erro"
+                      ? _c("alert-component", {
+                          attrs: {
+                            tipo: "danger",
+                            detalhes: _vm.$store.state.transacao,
+                            titulo: "Erro ao tentar finalizar:",
+                          },
+                        })
+                      : _vm._e(),
+                  ]
+                },
+                proxy: true,
+              },
+              {
+                key: "conteudo",
+                fn: function () {
+                  return [
+                    !_vm.$store.state.item.id
+                      ? _c(
+                          "div",
+                          { staticClass: "d-flex justify-content-center" },
+                          [
+                            _c(
+                              "div",
+                              {
+                                staticClass: "spinner-border",
+                                attrs: { role: "status" },
+                              },
+                              [
+                                _c("span", { staticClass: "sr-only" }, [
+                                  _vm._v("Loading..."),
+                                ]),
+                              ]
+                            ),
+                          ]
+                        )
+                      : _c(
+                          "div",
+                          [
+                            _c("input-component", { attrs: { titulo: "ID" } }, [
+                              _c("input", {
+                                staticClass: "form-control",
+                                attrs: { type: "text", disabled: "" },
+                                domProps: { value: _vm.$store.state.item.id },
+                              }),
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "input-component",
+                              { attrs: { titulo: "Status" } },
+                              [
+                                _c("input", {
+                                  staticClass: "form-control",
+                                  attrs: { type: "text", disabled: "" },
+                                  domProps: {
+                                    value: _vm.$store.state.item.status,
+                                  },
+                                }),
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "input-component",
+                              { attrs: { titulo: "Cliente" } },
+                              [
+                                _c("input", {
+                                  staticClass: "form-control",
+                                  attrs: { type: "text", disabled: "" },
+                                  domProps: {
+                                    value: _vm.$store.state.item.cliente.nome,
+                                  },
+                                }),
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "input-component",
+                              { attrs: { titulo: "Carro" } },
+                              [
+                                _c("input", {
+                                  staticClass: "form-control",
+                                  attrs: { type: "text", disabled: "" },
+                                  domProps: {
+                                    value:
+                                      _vm.$store.state.item.carro.descricao,
+                                  },
+                                }),
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "input-component",
+                              { attrs: { titulo: "Valor da Diária" } },
+                              [
+                                _c("input", {
+                                  staticClass: "form-control",
+                                  attrs: { type: "text", disabled: "" },
+                                  domProps: {
+                                    value: _vm.$store.state.item.valor_diaria,
+                                  },
+                                }),
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "input-component",
+                              { attrs: { titulo: "Data de Inicio" } },
+                              [
+                                _c("input", {
+                                  staticClass: "form-control",
+                                  attrs: { type: "text", disabled: "" },
+                                  domProps: {
+                                    value: _vm._f("formataDataGlobal")(
+                                      _vm.$store.state.item.data_inicio_periodo
+                                    ),
+                                  },
+                                }),
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "input-component",
+                              { attrs: { titulo: "Data de Previsao" } },
+                              [
+                                _c("input", {
+                                  staticClass: "form-control",
+                                  attrs: { type: "text", disabled: "" },
+                                  domProps: {
+                                    value: _vm._f("formataDataGlobal")(
+                                      _vm.$store.state.item
+                                        .data_final_previsto_periodo
+                                    ),
+                                  },
+                                }),
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "input-component",
+                              { attrs: { titulo: "Km Inicial" } },
+                              [
+                                _c("input", {
+                                  staticClass: "form-control",
+                                  attrs: { type: "text", disabled: "" },
+                                  domProps: {
+                                    value: _vm.$store.state.item.km_inicial,
+                                  },
+                                }),
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              { staticClass: "form-group" },
+                              [
+                                _c(
+                                  "input-component",
+                                  {
+                                    attrs: {
+                                      titulo: "Data de Finalização",
+                                      id: "dataFinal",
+                                      "id-help": "dataFinalHelp",
+                                      "help-text":
+                                        "Informe a data final realizada.",
+                                    },
+                                  },
+                                  [
+                                    _c("input", {
+                                      directives: [
+                                        {
+                                          name: "model",
+                                          rawName: "v-model",
+                                          value:
+                                            _vm.finalizacao
+                                              .data_final_realizado_periodo,
+                                          expression:
+                                            "finalizacao.data_final_realizado_periodo",
+                                        },
+                                      ],
+                                      staticClass: "form-control",
+                                      attrs: { type: "date", id: "dataFinal" },
+                                      domProps: {
+                                        value:
+                                          _vm.finalizacao
+                                            .data_final_realizado_periodo,
+                                      },
+                                      on: {
+                                        input: function ($event) {
+                                          if ($event.target.composing) {
+                                            return
+                                          }
+                                          _vm.$set(
+                                            _vm.finalizacao,
+                                            "data_final_realizado_periodo",
+                                            $event.target.value
+                                          )
+                                        },
+                                      },
+                                    }),
+                                  ]
+                                ),
+                              ],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              { staticClass: "form-group" },
+                              [
+                                _c(
+                                  "input-component",
+                                  {
+                                    attrs: {
+                                      titulo: "Km Final",
+                                      id: "kmFinal",
+                                      "id-help": "kmFinalHelp",
+                                      "help-text":
+                                        "Informe a quilometragem final.",
+                                    },
+                                  },
+                                  [
+                                    _c("input", {
+                                      directives: [
+                                        {
+                                          name: "model",
+                                          rawName: "v-model",
+                                          value: _vm.finalizacao.km_final,
+                                          expression: "finalizacao.km_final",
+                                        },
+                                      ],
+                                      staticClass: "form-control",
+                                      attrs: {
+                                        type: "number",
+                                        id: "kmFinal",
+                                        placeholder: "Ex: 12345",
+                                      },
+                                      domProps: {
+                                        value: _vm.finalizacao.km_final,
+                                      },
+                                      on: {
+                                        input: function ($event) {
+                                          if ($event.target.composing) {
+                                            return
+                                          }
+                                          _vm.$set(
+                                            _vm.finalizacao,
+                                            "km_final",
+                                            $event.target.value
+                                          )
+                                        },
+                                      },
+                                    }),
+                                  ]
+                                ),
+                              ],
+                              1
+                            ),
+                          ],
+                          1
+                        ),
+                  ]
+                },
+                proxy: true,
+              },
+              {
+                key: "rodape",
+                fn: function () {
+                  return [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-secondary",
+                        attrs: { type: "button", "data-dismiss": "modal" },
+                      },
+                      [_vm._v("Cancelar")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-primary",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function ($event) {
+                            return _vm.finalizar()
+                          },
+                        },
+                      },
+                      [_vm._v("Finalizar")]
                     ),
                   ]
                 },
@@ -46447,6 +47484,7 @@ var render = function () {
                               dataToggle: "modal",
                               dataTarget: "#modalMarcaAtualizar",
                             },
+                            url: _vm.urlBase,
                             titulos: {
                               id: { titulo: "ID", tipo: "text" },
                               nome: { titulo: "Nome", tipo: "text" },
@@ -46695,7 +47733,7 @@ var render = function () {
                         ? _c("img", {
                             staticClass: "app-modal-img",
                             attrs: {
-                              src: _vm.imgUrl(_vm.$store.state.item.imagem),
+                              src: _vm.$imgUrl(_vm.$store.state.item.imagem),
                               alt: _vm.$store.state.item.nome,
                             },
                           })
@@ -46801,7 +47839,7 @@ var render = function () {
                               ? _c("img", {
                                   staticClass: "app-modal-img",
                                   attrs: {
-                                    src: _vm.imgUrl(
+                                    src: _vm.$imgUrl(
                                       _vm.$store.state.item.imagem
                                     ),
                                     alt: _vm.$store.state.item.nome,
@@ -47306,7 +48344,11 @@ var render = function () {
                                 titulo: "Carros Registrados",
                                 tipo: "text",
                               },
-                              marca: { titulo: "Marca", tipo: "fk" },
+                              marca: {
+                                titulo: "Marca",
+                                tipo: "fk",
+                                chave: "nome",
+                              },
                             },
                           },
                           on: { "load-marca-options": _vm.loadMarcaOptions },
@@ -48875,6 +49917,14 @@ var render = function () {
                             ])
                           : _vm._e(),
                         _vm._v(" "),
+                        _vm.titulos[chaveValor].tipo == "km"
+                          ? _c("span", [
+                              _c("span", { class: _vm.statusBadgeClass(d) }, [
+                                _vm._v(_vm._s(_vm._f("formataKmGlobal")(d))),
+                              ]),
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
                         _vm.titulos[chaveValor].tipo == "money"
                           ? _c("span", { staticClass: "table-cell-money" }, [
                               _vm._v(
@@ -48931,7 +49981,8 @@ var render = function () {
                                   )
                                 : _vm._e(),
                               _vm._v(" "),
-                              _vm.atualizar.visivel
+                              _vm.atualizar.visivel &&
+                              obj.status !== "Finalizada"
                                 ? _c(
                                     "button",
                                     {
@@ -48965,7 +50016,9 @@ var render = function () {
                                 ? _c("div", { staticClass: "dropdown-divider" })
                                 : _vm._e(),
                               _vm._v(" "),
-                              _vm.finalizar && _vm.finalizar.visivel
+                              _vm.finalizar &&
+                              _vm.finalizar.visivel &&
+                              obj.status !== "Finalizada"
                                 ? _c(
                                     "button",
                                     {

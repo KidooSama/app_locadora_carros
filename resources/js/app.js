@@ -58,9 +58,10 @@ Vue.component('locacoes-component', require('./components/Locacoes.vue').default
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
-Vue.filter('formataKm', function(km){
-    if (!d) return ''
-    km = km.split()
+Vue.filter('formataKmGlobal', function(valor) {
+    if (valor == null || valor == '') return ' - '
+
+    return Number(valor).toLocaleString('pt-BR') + ' km'
 })
 
 Vue.filter('formataDataGlobal', function(d){
@@ -77,9 +78,30 @@ Vue.filter('formataDataTempoGlobal', function(d){
     let data = d[0].split('-')
     data = data[2]+'/'+data[1]+'/'+data[0]
     let tempo = d[1].split('.')[0]
-    console.log(data + tempo)
     return data + ' - ' + tempo
 })
+
+Vue.prototype.$imgUrl = function(path) {
+    if (!path) return ''
+
+    if (path.startsWith('http://') || path.startsWith('https://')) return path
+
+    if (path.startsWith('/storage/')) return path
+
+    if (path.startsWith('storage/')) return '/' + path
+
+    return '/storage/' + path.replace(/^\/+/, '')
+}
+
+Vue.prototype.$formatarNumero = function(valor) {
+    return valor === undefined || valor === null ? '-' : valor
+}
+
+Vue.prototype.$formatarMoeda = function(valor) {
+    if (valor === undefined || valor === null) return '-'
+    return Number(valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+}
+
 const app = new Vue({
     el: '#app',
     store

@@ -106,12 +106,12 @@ class LocacaoController extends Controller
 
         if ($locacao === null) {
             return response()->json([
-                'erro' => 'Impossível realizar a atualização. O recurso solicitado não existe'
+                'message' => 'Impossível realizar a atualização. O recurso solicitado não existe'
             ], 404);
         }
         if ($locacao->data_final_realizado_periodo !== null) {
             return response()->json([
-                'erro' => 'Locação finalizada não pode ser alterada'
+                'message' => 'Locação finalizada não pode ser alterada'
             ], 422);
         }
 
@@ -143,17 +143,23 @@ class LocacaoController extends Controller
         // -----------------------------------------
         // FINALIZAÇÃO
         // -----------------------------------------
-        if ($request->has('km_final') && !$request->has('data_final_realizado_periodo')){
-            return response()->json(['erro' => "O campo data final realizado é necessario "], 422);
-        }
-
         if ($request->has('data_final_realizado_periodo') && $locacao->data_final_realizado_periodo === null){
-
+            /* FINALIZAÇÃO DE LOCAÇÃO
+             *
+             * Aqui o update funciona também como ação de finalizar:
+             * quando o front enviar `data_final_realizado_periodo` e a locação ainda
+             * não tiver sido finalizada, o sistema entende que é o fechamento.
+             *
+             * Regras aplicadas:
+             *  - data final >= data inicial
+             *  - km_final >= km_inicial
+             *  - o carro recebe o km final e volta a ficar disponível
+             */
             if ($request->data_final_realizado_periodo < $locacao->data_inicio_periodo) {
-                return response()->json(['erro' => 'A data final realizada não pode ser menor que a data inicial'], 422);
+                return response()->json(['message' => 'A data final realizada não pode ser menor que a data inicial'], 422);
             }
             if ($request->km_final < $locacao->km_inicial) {
-                return response()->json(['erro' => "O valor final da quilometragem precisa ser maior que {$locacao->km_inicial}"], 422);
+                return response()->json(['message' => "O valor final da quilometragem precisa ser maior que {$locacao->km_inicial}"], 422);
             }
 
             $carro = $locacao->carro;
