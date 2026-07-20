@@ -1,62 +1,201 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# 🚗 Sistema de Locação de Veículos
+
+![PHP](https://img.shields.io/badge/PHP-8.1-blue?logo=php)
+![Laravel](https://img.shields.io/badge/Laravel-8-red?logo=laravel)
+![Vue](https://img.shields.io/badge/Vue-2-brightgreen?logo=vue.js)
+![MySQL](https://img.shields.io/badge/MySQL-8.0-orange?logo=mysql)
+![JWT](https://img.shields.io/badge/JWT-Auth-black)
+![License](https://img.shields.io/badge/License-MIT-green)
 
 <p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel">
 </p>
 
-## About Laravel
+## 📌 Sobre o projeto
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Aplicação web completa para gerenciamento de locação de veículos, desenvolvida como projeto de portfólio para demonstrar domínio de **Back-end + Front-end integrados**.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+O foco não é quantidade de funcionalidades, e sim código limpo, estrutura clara e fluxo real de cadastro, busca, edição, exclusão e finalização de locações.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 🎯 Objetivo
 
-## Learning Laravel
+- Praticar Laravel 8 com PHP 8.1
+- Consolidar relacionamentos Eloquent e autenticação
+- Integrar API Laravel + Vue 2 sem dependências desnecessárias
+- Entregar um projeto didático, organizado e fácil de entender
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 🔁 Funcionalidades principais
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 🏢 Cadastros básicos
 
-## Laravel Sponsors
+| Recurso | Ações |
+|--------|-------|
+| 🏭 Marcas | CRUD |
+| 🚙 Modelos | CRUD |
+| 🚗 Carros | CRUD |
+| 👤 Clientes | CRUD |
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+### 📋 Aluguéis
 
-### Premium Partners
+| Recurso | Ações |
+|--------|-------|
+| ✅ Listagem de locações | Pesquisa + paginação |
+| ➕ Nova locação | Seleciona cliente + carro disponível |
+| ✏️ Alterar locação | Modifica dados da reserva |
+| 🏁 Finalizar locação | Registra km final + data final realizada |
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/)**
-- **[OP.GG](https://op.gg)**
+### 📊 Painel
 
-## Contributing
+- Médias e totais de negócio
+- Locações próximas a devolver
+- Visão rápida do status da frota
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 🧩 Stack utilizada
 
-## Code of Conduct
+```text
+Back-end
+- Laravel 8
+- PHP 8.1
+- MySQL
+- JWT Authentication
+- Repositórios
+- Form Requests
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Front-end
+- Vue 2
+- Axios
+- Bootstrap 4
+- SASS / app.scss
 
-## Security Vulnerabilities
+Padrões
+- API REST
+- Vuex Store
+- Componentes reutilizáveis
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## 🗂️ Estrutura do projeto
 
-## License
+```text
+app/
+├── Http/
+│   ├── Controllers/
+│   └── Requests/
+├── Models/
+└── repositories/
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+resources/js/
+├── app.js
+├── components/
+│   ├── Marcas.vue
+│   ├── Modelos.vue
+│   ├── Carros.vue
+│   ├── Clientes.vue
+│   ├── Locacoes.vue
+│   ├── Table.vue
+│   ├── Card.vue
+│   ├── Modal.vue
+│   ├── Alert.vue
+│   └── Home.vue
+└── sass/
+
+routes/
+└── api.php
+```
+
+## 🔎 Regras de negócio importantes
+
+- Carro precisa estar **disponível** para ser alugado
+- Locação finalizada **não pode ser alterada**
+- Finalização só aceita `km_final` >= `km_inicial`
+- Ao finalizar, o carro volta a ficar disponível automaticamente
+- Modelo com carros vinculados **não pode ser excluído**
+
+## 🚀 Como rodar o projeto
+
+```bash
+# 1. Clone o repositório
+git clone https://github.com/<seu-usuario>/app_locadora_carros.git
+cd app_locadora_carros
+
+# 2. Instale dependências
+composer install
+npm install
+
+# 3. Copie o arquivo de ambiente
+cp .env.example .env
+
+# 4. Gere a key
+php artisan key:generate
+
+# 5. Configure o banco de dados no .env
+DB_DATABASE=lc
+DB_USERNAME=root
+DB_PASSWORD=
+
+# 6. Rode as migrations
+php artisan migrate
+
+# 7. Popule o banco com dados de exemplo
+php artisan db:seed
+
+# 8. Compile os assets
+npm run dev
+
+# 9. Inicie o servidor
+php artisan serve
+```
+
+Acesse:
+- Front-end: `http://127.0.0.1:8000`
+- API: `http://127.0.0.1:8000/api/v1`
+
+## 🔑 Usuário padrão
+
+| Campo | Valor |
+|------|------|
+| Email | admin@teste.com |
+| Senha | 123456 |
+
+## 📦 Executar seeders
+
+```bash
+php artisan db:seed
+```
+
+Scripts úteis:
+- `DatabaseSeeder` carrega `Marcas`, `Modelos`, `Clientes`, `Carros`, `Locações` e `User`
+
+## ✅ Checklist do que já está funcionando
+
+- [x] Cadastro de Marcas
+- [x] Cadastro de Modelos
+- [x] Cadastro de Carros
+- [x] Cadastro de Clientes
+- [x] Listagem com paginação
+- [x] Pesquisa por campos
+- [x] Aluguel de carros
+- [x] Finalização de locação
+- [x] Painel com métricas
+
+## 📌 Melhorias planejadas
+
+- [ ] Emails com Resend
+- [ ] Utilização de cache com Redis
+- [ ] Maior personalização com a UI
+- [ ] Integração de login com google
+- [ ] Deploy público para apresentação
+- [ ] Filtros avançados
+- [ ] Relatórios de faturamento
+
+## 📸 Preview
+
+> Em breve: GIFs ou prints das principais telas.
+
+## 👨‍💻 Autor
+
+Desenvolvido por Talles Emanuel  
+Projeto com fins didáticos e portfólio.
+
+## 📄 Licença
+
+Este projeto está licenciado sob a MIT License.
