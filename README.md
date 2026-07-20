@@ -187,13 +187,9 @@ Scripts úteis:
 - [ ] Filtros avançados
 - [ ] Relatórios de faturamento
 
-## 📸 Preview
-
-> Em breve: GIFs ou prints das principais telas.
-
 ## 👨‍💻 Autor
 
-Desenvolvido por Talles Emanuel  
+Desenvolvido por Talles Braga  
 Projeto com fins didáticos e portfólio.
 
 ## 📄 Licença
